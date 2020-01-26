@@ -22,5 +22,8 @@ namespace Provodnik
                 Current.Dispatcher.BeginInvoke((Action)(() => { Mouse.OverrideCursor = Cursors.AppStarting; }));
             Current.Dispatcher.BeginInvoke((Action)(() => { Mouse.OverrideCursor = wait ? Cursors.Wait : null; }));
         }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+        }
     }
 }

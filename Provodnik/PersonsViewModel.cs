@@ -1,4 +1,5 @@
-﻿using ReactiveValidation.Attributes;
+﻿using Ninject;
+using ReactiveValidation.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -232,9 +233,9 @@ private RelayCommand _FindCommand;
             foreach (var p in PersonList)
                 p.IsSelected = false;
 
-                PersonList.Clear();
+            PersonList.Clear();
 
-            var db = new ProvodnikContext();
+            var db = NinjectContext.Get<ProvodnikContext>();//new ProvodnikContext();
             var query = db.Persons.AsQueryable();
             if (!string.IsNullOrWhiteSpace(PersonSearch))
             {
@@ -250,76 +251,86 @@ private RelayCommand _FindCommand;
             }
             else
             {
-            if (ExceptVibil.HasValue)
+                if (ExceptVibil.HasValue)
                     query = query.Where(pp => pp.IsVibil == !ExceptVibil.Value);
                 if (PasportEntered.HasValue)
                     query = query.Where(pp => pp.AllPasport == PasportEntered.Value);
                 if (SanknizkaExist.HasValue)
-                    query = query.Where(pp => pp.IsSanKnizka== SanknizkaExist.Value);
+                    query = query.Where(pp => pp.IsSanKnizka == SanknizkaExist.Value);
                 if (PsihExist.HasValue)
-                    query = query.Where(pp => PsihExist.Value==( pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.Психосвидетельствование).FileName != null));                
+                    query = query.Where(pp => PsihExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.Психосвидетельствование).FileName != null));
                 if (MedKommExist.HasValue)
                     query = query.Where(pp => PsihExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.ЗаключениеВЭК).FileName != null));
                 //query = query.Where(pp => pp.IsMedKomm== MedKommExist.Value);
                 if (PraktikaExist.HasValue)
-                    query = query.Where(pp => pp.IsPraktika== PraktikaExist.Value);
+                    query = query.Where(pp => pp.IsPraktika == PraktikaExist.Value);
                 if (ExamenExist.HasValue)
                     query = query.Where(pp => PsihExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.СвидетельствоПрофессии).FileName != null));
                 //query = query.Where(pp => pp.IsExamen== ExamenExist.Value);
                 if (AllScansExist.HasValue)
-                    query = query.Where(pp => pp.AllScans== AllScansExist.Value);
+                    query = query.Where(pp => pp.AllScans == AllScansExist.Value);
 
                 if (!string.IsNullOrWhiteSpace(Gorod))
-                    query = query.Where(pp => pp.Gorod ==null || pp.Gorod == Gorod);
+                    query = query.Where(pp => pp.Gorod == null || pp.Gorod == Gorod);
 
                 if (VihodDat.HasValue)
-                    query = query.Where(pp => pp.VihodDat == null || (pp.VihodDat >= VihodDat && pp.VihodDat.Value.Year==DateTime.Today.Year));               
+                    query = query.Where(pp => pp.VihodDat == null || (pp.VihodDat >= VihodDat && pp.VihodDat.Value.Year == DateTime.Today.Year));
 
             }
 
             foreach (var ec in ExtendedChecks)
                 if (ec.IsChecked.HasValue)
-                switch (ec.DocType)
-                {
-                    case DocConsts.Паспорт:
-                        query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.Паспорт || ppp.DocTypeId == DocConsts.Прописка).All(ppp => ppp.FileName != null)));
-                        break;
-                    case DocConsts.СНИЛС:
-                        query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.СНИЛС).All(ppp => ppp.FileName != null)));
-                        break;
-                    case DocConsts.ИНН:
-                        query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.ИНН).All(ppp => ppp.FileName != null)));
-                        break;
-                    /*case DocConsts.Психосвидетельствование:
-                        query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.Психосвидетельствование).All(ppp => ppp.FileName != null)));
-                        break;
-                    case DocConsts.ЗаключениеВЭК:
-                        query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.ЗаключениеВЭК).All(ppp => ppp.FileName != null)));
-                        break;*/
-                    case DocConsts.СогласиеПерс:
-                        query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.СогласиеПерс).All(ppp => ppp.FileName != null)));
-                        break;
-                    /*case DocConsts.СвидетельствоПрофессии:
-                        query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.СвидетельствоПрофессии).All(ppp => ppp.FileName != null)));
-                        break;*/
-                    case DocConsts.РеквизитыКарты:
-                        query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.РеквизитыКарты).All(ppp => ppp.FileName != null)));
-                        break;
-                    case DocConsts.ВоенныйБилет:
+                    switch (ec.DocType)
+                    {
+                        case DocConsts.Паспорт:
+                            query = query.Where(pp => ec.IsChecked.Value == db.PersonDocs.Where(ppp => ppp.PersonId == pp.Id && (ppp.DocTypeId == DocConsts.Паспорт || ppp.DocTypeId == DocConsts.Прописка)).All(ppp => ppp.FileName != null));
+                            //query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.Паспорт || ppp.DocTypeId == DocConsts.Прописка).All(ppp => ppp.FileName != null)));
+                            break;
+                        case DocConsts.СНИЛС:
+                            query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.СНИЛС).All(ppp => ppp.FileName != null)));
+                            break;
+                        case DocConsts.ИНН:
+                            query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.ИНН).All(ppp => ppp.FileName != null)));
+                            break;
+                        /*case DocConsts.Психосвидетельствование:
+                            query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.Психосвидетельствование).All(ppp => ppp.FileName != null)));
+                            break;
+                        case DocConsts.ЗаключениеВЭК:
+                            query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.ЗаключениеВЭК).All(ppp => ppp.FileName != null)));
+                            break;*/
+                        case DocConsts.СогласиеПерс:
+                            query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.СогласиеПерс).All(ppp => ppp.FileName != null)));
+                            break;
+                        /*case DocConsts.СвидетельствоПрофессии:
+                            query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.СвидетельствоПрофессии).All(ppp => ppp.FileName != null)));
+                            break;*/
+                        case DocConsts.РеквизитыКарты:
+                            query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.РеквизитыКарты).All(ppp => ppp.FileName != null)));
+                            break;
+                        case DocConsts.ВоенныйБилет:
                             if (ec.IsChecked.Value)
                             {
-                                query = query.Where(pp => 
-                                (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.Приписное1 || ppp.DocTypeId == DocConsts.Приписное2)
-                                .All(ppp => ppp.FileName != null))==true
-                        || (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.ВоенныйБилет).All(ppp => ppp.FileName != null))
-                        );
+                                query = query.Where(pp =>
+                                db.PersonDocs.Where(ppp => ppp.PersonId == pp.Id && (ppp.DocTypeId == DocConsts.Приписное1 || ppp.DocTypeId == DocConsts.Приписное2) && ppp.FileName != null)
+                                .Count() == 2
+                                ||
+                                db.PersonDocs.Where(ppp => ppp.PersonId == pp.Id && (ppp.DocTypeId == DocConsts.ВоенныйБилет) && ppp.FileName != null)
+                                .Count() == 1
+                                );
                             }
                             else
-                            query = query.Where(pp => pp.Pol== "мужской" &&
-                            false==(pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.Приписное1 || ppp.DocTypeId == DocConsts.Приписное2).All(ppp => ppp.FileName != null))
-                        && false == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.ВоенныйБилет).All(ppp => ppp.FileName != null))
-                        );
-                        break;
+                            {
+                                query = query.Where(pp => pp.Pol == "мужской" 
+                                &&
+                                db.PersonDocs.Where(ppp => ppp.PersonId == pp.Id && (ppp.DocTypeId == DocConsts.Приписное1 || ppp.DocTypeId == DocConsts.Приписное2) && ppp.FileName != null)
+                                .Count() != 2
+                                && 
+                                db.PersonDocs.Where(ppp => ppp.PersonId == pp.Id && (ppp.DocTypeId == DocConsts.ВоенныйБилет) && ppp.FileName != null)
+                                .Count() != 1   
+                                );
+                            }
+
+                            break;
                         case DocConsts.СправкаУчебы:
                             query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.СправкаУчебы).All(ppp => ppp.FileName != null)));
                             break;
@@ -327,31 +338,42 @@ private RelayCommand _FindCommand;
                             query = query.Where(pp => ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.СправкаРСО).All(ppp => ppp.FileName != null)));
                             break;
                         case DocConsts.Миграционная1:
-                            query = query.Where(pp => pp.Grazdanstvo=="КЗ" && ec.IsChecked.Value == (pp.PersonDocs.Where(ppp => ppp.DocTypeId == DocConsts.Миграционная1
-                            || ppp.DocTypeId == DocConsts.Миграционная2 || ppp.DocTypeId == DocConsts.ВремРегистрация1 || ppp.DocTypeId == DocConsts.ВремРегистрация2
-                            ).All(ppp => ppp.FileName != null)));
+                            if (ec.IsChecked.Value)
+                            {
+                                query = query.Where(pp =>
+                                db.PersonDocs.Where(ppp => ppp.PersonId == pp.Id && (ppp.DocTypeId == DocConsts.Миграционная1 || ppp.DocTypeId == DocConsts.Миграционная2 || ppp.DocTypeId == DocConsts.ВремРегистрация1 || ppp.DocTypeId == DocConsts.ВремРегистрация2) && ppp.FileName != null)
+                                .Count() == 4
+                                );
+                            }
+                            else
+                            {
+                                query = query.Where(pp => pp.Grazdanstvo == "КЗ" &&
+                                db.PersonDocs.Where(ppp => ppp.PersonId == pp.Id && (ppp.DocTypeId == DocConsts.Миграционная1 || ppp.DocTypeId == DocConsts.Миграционная2 || ppp.DocTypeId == DocConsts.ВремРегистрация1 || ppp.DocTypeId == DocConsts.ВремРегистрация2) && ppp.FileName != null)
+                                .Count() != 4
+                                );
+                            }
                             break;
                     }
-                
+
             if (IsNovichok.HasValue)
-                query = query.Where(pp => pp.IsNovichok== IsNovichok.Value);
+                query = query.Where(pp => pp.IsNovichok == IsNovichok.Value);
             if (!string.IsNullOrWhiteSpace(Otryad))
-                query = query.Where(pp => pp.Otryad== Otryad);
+                query = query.Where(pp => pp.Otryad == Otryad);
             if (!string.IsNullOrWhiteSpace(UchZavedenie))
                 query = query.Where(pp => pp.UchZavedenie == UchZavedenie);
             if (!string.IsNullOrWhiteSpace(Grazdanstvo))
                 query = query.Where(pp => pp.Grazdanstvo == Grazdanstvo);
             if (BirthFrom.HasValue)
-                query = query.Where(pp => pp.BirthDat>= BirthFrom);
+                query = query.Where(pp => pp.BirthDat >= BirthFrom);
             if (BirthTo.HasValue)
                 query = query.Where(pp => pp.BirthDat <= BirthTo);
 
 
             int index = 0;
-            foreach (var i in query.OrderBy(pp=>pp.Fio))
+            foreach (var i in query.OrderBy(pp => pp.Fio))
             {
                 //select new PersonShortViewModel() { Id = p.Id, Fio = p.Fio, Phone = p.Phone })) // IdName { Id = p.Id, Name = p.Fio }))
-                var pe=MainWindow.Mapper.Value.Map<PersonShortViewModel>(i);
+                var pe = MainWindow.Mapper.Value.Map<PersonShortViewModel>(i);
                 pe.Index = ++index;
                 PersonList.Add(pe);
 
