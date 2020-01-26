@@ -389,6 +389,7 @@ int            ri = 1;
                             var fileName = $@"{path}\{fioInic}\{fioInic}_{d.Description}.jpg";
                             using (var client = new FtpClient("31.31.196.80", new System.Net.NetworkCredential("u0920601", "XP83yno_")))
                             {
+                                client.RetryAttempts = 3;
                                 client.Connect();
                                 client.DownloadFile(fileName, d.FileName, FtpLocalExists.Overwrite);//, true, FtpVerify.Retry);
                             }

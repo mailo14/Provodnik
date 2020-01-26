@@ -31,7 +31,6 @@ namespace Provodnik
             this.groupId = groupId;
             if (!groupId.HasValue)
                 AddToGroupButton.Visibility = Visibility.Collapsed;
-
         }
         private void ComboBox_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -45,8 +44,9 @@ namespace Provodnik
             if (pw.ShowDialog() == true)
             {
                 vm.PersonSearch = pw.vm.Fio;//run find, should be last                vm.RefreshPersonList();
-                
+
                 //TODO goto if exist or add anyway and goto
+                vm.InitCollectionsForCombo();
             }
 
 
@@ -88,6 +88,7 @@ namespace Provodnik
                     vm.PersonList.Insert(ind, p);
                     //vm.RefreshPersonList();
                     //TODO goto if exist or add anyway and goto
+                    vm.InitCollectionsForCombo();
                 }
             }
         }

@@ -92,6 +92,7 @@ namespace Provodnik
                 {
                     using (var client = new FluentFTP.FtpClient("31.31.196.80", new System.Net.NetworkCredential("u0920601", "XP83yno_")))
                     {
+                        client.RetryAttempts = 5;
                         client.Connect();
                         client.Download(out bytes, d.FileName);
                         //Thread.Sleep(2000);

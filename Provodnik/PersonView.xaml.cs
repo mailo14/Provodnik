@@ -52,41 +52,46 @@ namespace Provodnik
                 return stream.ToArray();
             }
         }
-         List<string> GetErrors(){
-
-            vm = this.DataContext as PersonViewModel;
+         List<string> GetErrors(PersonViewModel vm){
             List<string> errors = new List<string>();
             if (!vm.Validator.IsValid)
             {
                 foreach (var ve in vm.Validator.ValidationMessages) errors.Add(ve.Message);
             }
-            errors.AddRange(GetScanErrors());
+            errors.AddRange(GetScanErrors(vm));
 
             return errors;
         }
 
-        List<string> GetScanErrors() {
-
-            vm = this.DataContext as PersonViewModel;
+        List<string> GetScanErrors(PersonViewModel vm) {
+            
             List<string> errors = new List<string>();
 
             foreach (var d in vm.Documents)
             {
 
-                if (d.Bitmap.Source == null)
+                ImageSource source = null;
+                Application.Current.Dispatcher.Invoke((Action)(() => {
+                    source = d.Bitmap.Source;
+                }));
+                if (source == null)
                 { bool voenPripisEmpty = false;
                     if (d.DocTypeId == 14)
                     {
+                Application.Current.Dispatcher.Invoke((Action)(() => {
                         var emptyPripisnoe = (from pdd in vm.Documents where (pdd.DocTypeId == 12 || pdd.DocTypeId == 13) && pdd.Bitmap.Source == null select pdd);
                         if (emptyPripisnoe.Any())
                             voenPripisEmpty = true;
+                }));
                     }
                     else
                     if (d.DocTypeId == 12 || d.DocTypeId == 13)
                     {
+                Application.Current.Dispatcher.Invoke((Action)(() => {
                         var emptyVoennik = (from pdd in vm.Documents where pdd.DocTypeId == 14 && pdd.Bitmap.Source == null select pdd);
                         if (emptyVoennik.Any())
                             voenPripisEmpty = true;
+                }));
                     }
                     else errors.Add($"Не прикреплен скан документа: {d.Description}");
                     if (voenPripisEmpty) errors.Add($"Не прикреплен скан документа: Приписное или военнный билет");
@@ -98,80 +103,109 @@ namespace Provodnik
         public PersonViewModel vm;
         bool IsChanged = true;//TODO
 
-        private  void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-             vm = this.DataContext as PersonViewModel;
-            List<string> errors = GetErrors();
-                //MessageBox.Show(string.Join(Environment.NewLine, errors));
-                vm.Messages= string.Join(Environment.NewLine, errors);
+            if (Save())
+                DialogResult = true; 
+        }
+        private bool Save()
+        {
+                        vm = this.DataContext as PersonViewModel;
+                        List<string> errors = GetErrors(vm);
+            var enterErrors = errors.Where(pp => !pp.StartsWith("Не прикреплен скан документа") && !pp.EndsWith(" не заполнено"));
+            if (enterErrors.Any() && MessageBox.Show(string.Join(Environment.NewLine,enterErrors)+ Environment.NewLine+"Чтобы поправить, нажмите Отмена", "", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
+                return false;
 
-            var db = new ProvodnikContext();
-
-            Person p;
-            if (vm.Id.HasValue)
+            try
             {
-                p = db.Persons.Single(pp => pp.Id == vm.Id.Value);
+                //await new ProgressRunner().RunAsync(
+                //    new Action<ProgressHandler>((progressChanged) =>
+                    {
 
-                MainWindow.Mapper.Value.Map(vm, p);
-                var currents = vm.Documents.Where(pp=>pp.Id.HasValue).Select(pp => pp.Id.Value).ToList();
-                var toDelete = (from pd in db.PersonDocs
-                                where pd.PersonId == p.Id && !currents.Contains(pd.Id)
-                                select pd);
-                db.PersonDocs.RemoveRange(toDelete);
-                db.SaveChanges();
-            }
-            else
-            {
-                db.Persons.Add(p = new Person());// { Fio = vm.Fio });
-                MainWindow.Mapper.Value.Map(vm, p);
-                db.SaveChanges();
-            }
+                        //progressChanged(1, "Сохранение");
 
-            var allPasports=new string[]{ p.Fio,p.Phone,p.UchZavedenie,p.UchForma,p.Grazdanstvo//,p.Otryad
+
+                        //MessageBox.Show(string.Join(Environment.NewLine, errors));
+                        vm.Messages = string.Join(Environment.NewLine, errors);
+                        
+
+                        var db = new ProvodnikContext();
+
+                        Person p;
+                        if (vm.Id.HasValue)
+                        {
+                            p = db.Persons.Single(pp => pp.Id == vm.Id.Value);
+
+                            MainWindow.Mapper.Value.Map(vm, p);
+                            var currents = vm.Documents.Where(pp => pp.Id.HasValue).Select(pp => pp.Id.Value).ToList();
+                            var toDelete = (from pd in db.PersonDocs
+                                            where pd.PersonId == p.Id && !currents.Contains(pd.Id)
+                                            select pd);
+                            db.PersonDocs.RemoveRange(toDelete);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            db.Persons.Add(p = new Person());// { Fio = vm.Fio });
+                            MainWindow.Mapper.Value.Map(vm, p);
+                            db.SaveChanges();
+                        }
+
+                        var allPasports = new string[]{ p.Fio,p.Phone,p.UchZavedenie,p.UchForma,p.Grazdanstvo//,p.Otryad
                 ,p.UchebCentr,(p.ExamenDat.HasValue) ? p.ExamenDat.ToString(): p.UchebEndDat.ToString()//TODO
                 ,p.RodPhone,p.RodFio
                 ,p.BirthDat.ToString(),p.MestoRozd,p.PaspNomer,p.PaspSeriya,p.PaspAdres,p.Snils };
-            p.AllPasport = !allPasports.Any(pp => string.IsNullOrWhiteSpace(pp));
-            db.SaveChanges();
+                        p.AllPasport = !allPasports.Any(pp => string.IsNullOrWhiteSpace(pp));
+                        db.SaveChanges();
 
-            //ProgressChanged(30, "Загрузка сканов");
-            foreach (var d in vm.Documents)
-            {
-                PersonDoc pd;
-                if (d.Id.HasValue)
-                {
-                    pd = db.PersonDocs.Single(pp => pp.Id == d.Id.Value);
-                }
-                else
-                {
-                    db.PersonDocs.Add(pd = new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = d.DocTypeId, FileName = d.FileName });
-                    db.SaveChanges();
-                }
-
-                if (d.FileName == null)
-                {
-                    if (d.Bitmap.Source != null)
-                    {
-                        using (var client = new FtpClient("31.31.196.80", new System.Net.NetworkCredential("u0920601", "XP83yno_")))
+                        //progressChanged(29, "Загрузка сканов");
+                        var share = 70.0 / vm.Documents.Count;
+                        foreach (var d in vm.Documents)
                         {
-                            client.Connect();
-                            var remotePath = $@"ProvodnikDocs/{p.Id.ToString()}/{DateTime.Now.Ticks}.jpg";// "/1_Иванов";
+                            PersonDoc pd;
+                            if (d.Id.HasValue)
+                            {
+                                pd = db.PersonDocs.Single(pp => pp.Id == d.Id.Value);
+                            }
+                            else
+                            {
+                                db.PersonDocs.Add(pd = new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = d.DocTypeId, FileName = d.FileName });
+                                db.SaveChanges();
+                            }
 
-                            client.Upload(ToByteArray(d.Bitmap.Source as BitmapSource), remotePath, FtpExists.Overwrite, true);//, FtpVerify.Retry);
-                            pd.FileName = remotePath;
+                            if (d.FileName == null)
+                            {
+                                ImageSource source = null;
+                                Application.Current.Dispatcher.Invoke((Action)(() => {
+                                    source = d.Bitmap.Source;
+                                }));
+                                if (source != null)
+                                {
+                                    using (var client = new FtpClient("31.31.196.80", new System.Net.NetworkCredential("u0920601", "XP83yno_")))
+                                {
+                                    client.RetryAttempts = 3;
+                                    client.Connect();
+                                        var remotePath = $@"ProvodnikDocs/{p.Id.ToString()}/{DateTime.Now.Ticks}.jpg";// "/1_Иванов";
+
+                                        client.Upload(ToByteArray(source as BitmapSource), remotePath, FtpExists.Overwrite, true);//, FtpVerify.Retry);
+                                        pd.FileName = remotePath;
+                                    }
+                                }
+                                else pd.FileName = null;
+                                db.SaveChanges();
+                            }
+                            //progressChanged(share);
                         }
-                    }
-                    else pd.FileName = null;
-                    db.SaveChanges();
-                }
-            }
 
-            p.AllScans = !GetScanErrors().Any();
-                db.SaveChanges();
+                        p.AllScans = !GetScanErrors(vm).Any();
+                        db.SaveChanges();
+                    }//));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
 
             //ProgressChanged(100);
             IsChanged = false;
-            DialogResult = true;
+            return true;
         }
 
         private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
@@ -220,12 +254,20 @@ namespace Provodnik
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-           // var vm = (DataContext as SanknizkiViewModel);
+            // var vm = (DataContext as SanknizkiViewModel);
             if (IsChanged)
                 switch (MessageBox.Show("Сохранить изменения?", "", MessageBoxButton.YesNoCancel))
                 {
-                    case MessageBoxResult.Yes: Button_Click(null, null); break;
-                    case MessageBoxResult.Cancel: e.Cancel = true; break;
+                    case MessageBoxResult.Yes:
+                       if (Save())
+                            DialogResult = true;
+                       else
+                            e.Cancel = true;
+                        //else 
+                        break;
+                    case MessageBoxResult.Cancel:
+                        e.Cancel = true;
+                        break;
                 }
         }
 
@@ -282,8 +324,9 @@ namespace Provodnik
 
         private void CheckErrorsButton_Click(object sender, RoutedEventArgs e)
         {
-
-            List<string> errors = GetErrors();
+            
+            var vm = this.DataContext as PersonViewModel;
+            List<string> errors = GetErrors(vm);
             if (errors.Any())
             MessageBox.Show(string.Join(Environment.NewLine, errors));
             else MessageBox.Show("Все данные введены!");

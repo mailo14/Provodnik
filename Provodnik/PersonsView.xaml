@@ -12,7 +12,7 @@
     
     x:Class="Provodnik.PersonsView"
         mc:Ignorable="d"
-        Title="Бойцы" Width="800" SizeToContent="Height" WindowStartupLocation="CenterScreen" Height="722" WindowState="Maximized">
+        Title="Бойцы"  WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Window.Resources>
         <local:DelimitedStringToMultilineConverter x:Key="splitConverter" />
         <local:ShortStringConverter x:Key="shortStringConverter" />
@@ -99,49 +99,50 @@
         </Grid>
 
 
-        <ListView x:Name="PersonsListView" SelectionMode="Single"  Grid.Row="2" Margin="0" MinHeight="203"
-                  ItemsSource="{Binding PersonList}"  MouseDoubleClick="ListView_MouseDoubleClick" KeyUp="PersonsListView_KeyUp">
-            <ListView.View>
-                <GridView>
+        <DataGrid Margin="3" Name="PersonsListView"  Grid.Row="2" MinHeight="203" AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch" 
+                   RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionMode="Single" VerticalAlignment="Stretch" 
+                          
+                           ItemsSource="{Binding PersonList}"  MouseDoubleClick="ListView_MouseDoubleClick" KeyUp="PersonsListView_KeyUp"
+                          >
+            <DataGrid.Columns>
 
-                    <GridViewColumn Width="auto" >
-                        <GridViewColumn.Header>
-                            <CheckBox IsChecked="False"/>
-                        </GridViewColumn.Header>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                <DataGridTemplateColumn Width="auto" >
+                    <DataGridTemplateColumn.Header>
+                        <CheckBox IsChecked="False" HorizontalAlignment="Center"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                    <GridViewColumn Header="#" DisplayMemberBinding="{Binding Id}"/>
-                    <GridViewColumn Header="ФИО" Width="auto" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock  Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                <DataGridTextColumn Header="№" Width="39" Binding="{Binding Index}"/>
+                <DataGridTextColumn Header="Номер договора" Binding="{Binding Dogovor}"/>
+                <DataGridTemplateColumn Header="ФИО" Width="auto" CanUserSort="True" SortMemberPath="Fio">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                    <GridViewColumn Header="Дата рождения" DisplayMemberBinding="{Binding Path=BirthDat,StringFormat=\{0:dd.MM.yyyy\}}" Width="auto"/>
-                    <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding Phone}"/>
+                <DataGridTextColumn Header="Дата рождения" Binding="{Binding Path=BirthDat,StringFormat=\{0:dd.MM.yyyy\}}" Width="auto"/>
+                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}"/>
+                <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}"/>
+                <DataGridTextColumn Header="Учебное заведение" Binding="{Binding UchZavedenie}"/>
 
-                    <GridViewColumn Header="Примечания" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Messages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource shortStringConverter}}"
+                <DataGridTemplateColumn Header="Примечания" CanUserSort="True" SortMemberPath="Messages" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Messages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource shortStringConverter}}"
                                            ToolTip="{Binding Messages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource splitConverter}}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-            <!--ListView.Items>
-                            <local:PersonDocument Name="Паспорт"  />
-                            <local:PersonDocument Name="Прописка"  />
-                        </ListView.Items-->
-        </ListView>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Заметки" Width="*" Binding="{Binding Zametki}"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
         <Button Name="AddToGroupButton" Content="Добавить выбранных в группу" Grid.Row="3" HorizontalAlignment="Right" Click="AddToGroupButton_Click"/>
 

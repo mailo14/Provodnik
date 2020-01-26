@@ -19,7 +19,6 @@ namespace Provodnik
             if (PropertyChanged != null)
                 PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(prop));
         }
-        public List<string> Cities { get; set; }
         //public  List<(string DisplayName, bool? IsChecked)> ExtendedChecks;
         public class ScanCheck : System.ComponentModel.INotifyPropertyChanged
         { public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
@@ -54,9 +53,10 @@ namespace Provodnik
         public List<ScanCheck> ExtendedChecks { get; set; }
 
 
-        public List<string> Otryadi { get; set; }
-        public List<string> Grazdanstva { get; set; }
-        public List<string> UchZavedeniya { get; set; }
+        public ObservableCollection<string> Cities { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> Otryadi { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> Grazdanstva { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> UchZavedeniya { get; set; } = new ObservableCollection<string>();
 
         string _UchZavedenie;
         [DisplayName(DisplayName = "Учебное заведение")]
@@ -124,12 +124,12 @@ namespace Provodnik
             }
         }
 
-        void InitCollectionsForCombo()
+       public void InitCollectionsForCombo()
         {
-            Cities = new Repository().GetCities();
-            Otryadi = repository.GetOtryadi();
-            Grazdanstva = repository.GetGrazdanstva();
-            UchZavedeniya = repository.GetUchZavedeniya();
+            Cities.Clear(); foreach (var pp in repository.GetCities()) Cities.Add(pp);
+            Otryadi.Clear(); foreach (var pp in repository.GetOtryadi()) Otryadi.Add(pp);
+            Grazdanstva.Clear(); foreach (var pp in repository.GetGrazdanstva()) Grazdanstva.Add(pp);
+            UchZavedeniya.Clear(); foreach (var pp in repository.GetUchZavedeniya()) UchZavedeniya.Add(pp);
         }
 
         Repository repository = new Repository();
@@ -260,12 +260,12 @@ private RelayCommand _FindCommand;
                 if (PsihExist.HasValue)
                     query = query.Where(pp => PsihExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.Психосвидетельствование).FileName != null));
                 if (MedKommExist.HasValue)
-                    query = query.Where(pp => PsihExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.ЗаключениеВЭК).FileName != null));
+                    query = query.Where(pp => MedKommExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.ЗаключениеВЭК).FileName != null));
                 //query = query.Where(pp => pp.IsMedKomm== MedKommExist.Value);
                 if (PraktikaExist.HasValue)
                     query = query.Where(pp => pp.IsPraktika == PraktikaExist.Value);
                 if (ExamenExist.HasValue)
-                    query = query.Where(pp => PsihExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.СвидетельствоПрофессии).FileName != null));
+                    query = query.Where(pp => ExamenExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.СвидетельствоПрофессии).FileName != null));
                 //query = query.Where(pp => pp.IsExamen== ExamenExist.Value);
                 if (AllScansExist.HasValue)
                     query = query.Where(pp => pp.AllScans == AllScansExist.Value);

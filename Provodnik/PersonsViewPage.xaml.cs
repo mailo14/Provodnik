@@ -44,8 +44,9 @@ namespace Provodnik
             if (pw.ShowDialog() == true)
             {
                 vm.PersonSearch = pw.vm.Fio; //vm.RefreshPersonList();
-                
+
                 //TODO goto if exist or add anyway and goto
+                vm.InitCollectionsForCombo();
             }
 
 
@@ -76,6 +77,7 @@ namespace Provodnik
                     vm.PersonList.Insert(ind, p);
                     //vm.RefreshPersonList();
                     //TODO goto if exist or add anyway and goto
+                    vm.InitCollectionsForCombo();
                 }
             }
         }

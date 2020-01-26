@@ -94,54 +94,55 @@
             </TextBlock>
         </Grid>
 
+        <DataGrid Margin="3" Name="PersonsListView"  Grid.Row="2" MinHeight="203" AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch" 
+                   RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionMode="Single" VerticalAlignment="Stretch" 
+                          
+                           ItemsSource="{Binding PersonList}"  MouseDoubleClick="ListView_MouseDoubleClick" KeyUp="PersonsListView_KeyUp"
+                          >
+            <DataGrid.Columns>
 
-        <ListView Margin="3" x:Name="PersonsListView" SelectionMode="Single"  Grid.Row="2" MinHeight="203"
-                  ItemsSource="{Binding PersonList}"  MouseDoubleClick="ListView_MouseDoubleClick" KeyUp="PersonsListView_KeyUp">
-            <ListView.View>
-                <GridView>
+                <DataGridTemplateColumn Width="auto" >
+                    <DataGridTemplateColumn.Header>
+                        <CheckBox IsChecked="False" HorizontalAlignment="Center"/>
+                    </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                    <GridViewColumn Width="auto" >
-                        <GridViewColumn.Header>
-                            <CheckBox IsChecked="False"/>
-                        </GridViewColumn.Header>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                <DataGridTextColumn Header="№" Width="39" Binding="{Binding Index}"/>
+                <DataGridTextColumn Header="Номер договора" Binding="{Binding Dogovor}"/>
+                <DataGridTemplateColumn Header="ФИО" Width="auto" CanUserSort="True" SortMemberPath="Fio">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
-                    <GridViewColumn Header="№" Width="39" DisplayMemberBinding="{Binding Index}"/>
-                    <GridViewColumn Header="Номер договора" DisplayMemberBinding="{Binding Dogovor}"/>
-                    <GridViewColumn Header="ФИО" Width="auto" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock  Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                <DataGridTextColumn Header="Дата рождения" Binding="{Binding Path=BirthDat,StringFormat=\{0:dd.MM.yyyy\}}" Width="auto"/>
+                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}"/>
+                <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}"/>
+                <DataGridTextColumn Header="Учебное заведение" Binding="{Binding UchZavedenie}"/>
 
-                    <GridViewColumn Header="Дата рождения" DisplayMemberBinding="{Binding Path=BirthDat,StringFormat=\{0:dd.MM.yyyy\}}" Width="auto"/>
-                    <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding Phone}"/>
-                    <GridViewColumn Header="Отряд" DisplayMemberBinding="{Binding Otryad}"/>
-                    <GridViewColumn Header="Учебное заведение" DisplayMemberBinding="{Binding UchZavedenie}"/>
-
-                    <GridViewColumn Header="Примечания" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Messages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource shortStringConverter}}"
+                <DataGridTemplateColumn Header="Примечания" CanUserSort="True" SortMemberPath="Messages" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Messages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource shortStringConverter}}"
                                            ToolTip="{Binding Messages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource splitConverter}}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Заметки" DisplayMemberBinding="{Binding Zametki}"/>
-                </GridView>
-            </ListView.View>
-            <!--ListView.Items>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Заметки" Width="*" Binding="{Binding Zametki}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--ListView.Items>
                             <local:PersonDocument Name="Паспорт"  />
                             <local:PersonDocument Name="Прописка"  />
                         </ListView.Items-->
-        </ListView>
+        
         <Button Name="ExcelButton" Content="Экспорт в Excel" Grid.Row="3" HorizontalAlignment="Left" Click="ExcelButton_Click"/>
 
         <Button Name="AddToGroupButton" Content="Добавить выбранных в группу" Grid.Row="3" HorizontalAlignment="Right" Click="AddToGroupButton_Click"/>
