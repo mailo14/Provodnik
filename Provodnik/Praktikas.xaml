@@ -1,0 +1,123 @@
+﻿<Window x:Class="Provodnik.Praktikas"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Provodnik"
+        
+             xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation"
+             xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
+        xmlns:Behaviors="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation" 
+    xmlns:Templates="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
+        
+        mc:Ignorable="d"
+        Title="Группы на прохождение практики" Width="800" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="426.314">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="10,3,0,3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="CheckBox" TargetType="CheckBox">
+            <Setter Property="Margin" Value="10,3,0,3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="TextBox" TargetType="TextBox">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+        </Style>
+        <Style x:Key="DatePicker" TargetType="DatePicker">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="90"/>
+
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+        </Style>
+
+        <Style  TargetType="Button">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Calendar Name="GroupCalendar" Margin="3"
+                  SelectedDatesChanged="GroupCalendar_SelectedDatesChanged"
+                  SelectedDate="{Binding SelectedDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                  />
+        <Grid Grid.Column="1" Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Button Content="Добавить из списка" Click="AddFromListButton_Click"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+                <Button Content="Отмена" Click="CancelButton_Click" />
+                <Button Content="Сохранить" Click="SaveButton_Click"/>
+            </StackPanel>
+            <ListView x:Name="PersonsListView" Margin="3" SelectionMode="Single" ItemsSource="{Binding Persons}" 
+            KeyUp="PersonsListView_KeyUp"   MouseDoubleClick="ListView_MouseDoubleClick" PreviewMouseDown="PersonsListView_PreviewMouseDown" Grid.Row="1">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="#" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Header="ФИО" DisplayMemberBinding="{Binding Fio}"/>
+                        <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding Phone}"/>
+
+                        <GridViewColumn Header="Санкнижка" Width="auto" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsSanKnizka, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Псих.освид." Width="auto" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsPsihZabral, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Мед.комиссия" Width="auto" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Практика пройдена" Width="auto" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsPraktika, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <!--ListView.Items>
+                            <local:PersonDocument Name="Паспорт"  />
+                            <local:PersonDocument Name="Прописка"  />
+                        </ListView.Items-->
+            </ListView>
+            <Grid HorizontalAlignment="Right" Margin="3" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="21*"/>
+                    <ColumnDefinition Width="59*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox TextWrapping="Wrap" Text="{Binding SelectedDate, StringFormat=\{0:dd.MM.yyyy\}}" Grid.Column="1" IsReadOnly="True"  MinWidth="50" Style="{DynamicResource TextBox}"/>
+                <TextBlock  Text="Дата"/>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Window>

@@ -1,0 +1,27 @@
+﻿<Window x:Class="Provodnik.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Provodnik"
+        mc:Ignorable="d"
+        Title="АСУ Проводник" Height="450" Width="800"  WindowStartupLocation="CenterScreen" WindowState="Maximized">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+
+            <MenuItem Visibility="Collapsed" Header="Бойцы" Click="PersonsMenuItem_Click"/>
+            <MenuItem Header="Группы подготовки" >
+                <MenuItem Header="Группы на псих.освидетельствование" Click="PsihOsvidsMenuItem_Click"/>
+                <MenuItem Header="Группы на санкнижки" Click="SanknizkiMenuItem_Click"/>
+                <MenuItem Header="Группы на мед.комиссию" Click="MedKommsMenuItem_Click"/>
+                <MenuItem Header="Группы на практику" Click="PraktikasMenuItem_Click"/>
+                <MenuItem Header="Группы на обучение" Click="ExamensMenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="Группы для отправки" Click="SendGroupsMenuItem_Click"/>
+            <MenuItem Header="О программе" Click="MenuItem_Click" />
+            <MenuItem Header="Test" Click="TestMenuItem_Click" Visibility="Collapsed" />
+        </Menu>
+        <Frame Name="MainFrame" Margin="3" Grid.Row="1" NavigationUIVisibility="Hidden"/>
+
+    </DockPanel>
+</Window>

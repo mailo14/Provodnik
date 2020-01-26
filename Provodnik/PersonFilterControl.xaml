@@ -1,0 +1,179 @@
+﻿<UserControl x:Class="Provodnik.PersonFilterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Provodnik"
+                 xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation"
+             xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
+        xmlns:Behaviors="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation" 
+    xmlns:Templates="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
+             mc:Ignorable="d" >
+    <UserControl.Resources>
+        <local:DelimitedStringToMultilineConverter x:Key="splitConverter" />
+        <local:ShortStringConverter x:Key="shortStringConverter" />
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="10,3,0,3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="CheckBox" TargetType="CheckBox">
+            <Setter Property="Margin" Value="10,3,0,3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="ComboBox" TargetType="{x:Type ComboBox}">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="IsEditable" Value="True"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <EventSetter Event="UIElement.GotFocus" Handler="ComboBox_GotFocus"/>
+
+            <Setter Property="Behaviors:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="Behaviors:ReactiveValidation.ErrorTemplate" Value="{x:Static Templates:ErrorTemplates.ExtendedErrorTemplate}" />
+        </Style>
+
+        <Style  TargetType="CheckBox">
+            <Setter Property="Margin" Value="10,3,0,3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style  TargetType="Button">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style x:Key="TextBox" TargetType="TextBox">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+        </Style>
+
+        <Style x:Key="DatePicker" TargetType="DatePicker">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="90"/>
+
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+        </Style>
+
+        <!--Style x:Key="itemstyle" TargetType="{x:Type ListViewItem}">
+            <EventSetter Event="MouseDoubleClick" Handler="HandleDoubleClick" />
+        </-->
+    </UserControl.Resources>
+    <Expander Grid.ColumnSpan="2" Header="Фильтры" IsExpanded="True" Name="FilterExpander">
+        <Grid Background="#FFE5E5E5" Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <CheckBox Content="Только ГОТОВЫЕ" IsChecked="{Binding ReadyOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top" IsThreeState="True" />
+            <WrapPanel Grid.Row="1" Margin="15,3,3,3">
+                <CheckBox Content="Исключить выбывших" IsChecked="{Binding ExceptVibil, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
+                <CheckBox Content="Введены данные для ВСОП" IsChecked="{Binding PasportEntered, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
+                <CheckBox Content="Получена санкнижка" IsChecked="{Binding SanknizkaExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
+                <CheckBox Content="Пройдено псих.освидетельствование" IsChecked="{Binding PsihExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
+                <CheckBox Content="Получено заключение ВЭК" IsChecked="{Binding MedKommExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
+                <CheckBox Content="Пройдена практика" IsChecked="{Binding PraktikaExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
+                <CheckBox Content="Получено свидетельство" IsChecked="{Binding ExamenExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
+                <CheckBox Content="Добавлены все сканы" IsChecked="{Binding AllScansExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
+                <!--CheckBox Content="Только актуализированные" IsChecked="{Binding ActualOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/-->
+            </WrapPanel>
+
+            <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="2" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="24*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Отряд" Grid.Column="0"/>
+                <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="80" Style="{DynamicResource ComboBox}"
+                       IsEditable="True" ItemsSource="{Binding Otryadi}" IsReadOnly="False"/>
+                <TextBlock Text="Учебное заведение" Grid.Column="2"/>
+                <ComboBox Name="UchZavedenieComboBox" Text="{Binding UchZavedenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="70" Style="{DynamicResource ComboBox}"
+                          ItemsSource="{Binding UchZavedeniya}" IsReadOnly="False"/>
+
+                <TextBlock Text="Гражданство" Grid.Column="4"/>
+                <ComboBox Name="GrazdanstvoComboBox" Text="{Binding Grazdanstvo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="50" Style="{DynamicResource ComboBox}"
+                      ItemsSource="{Binding Grazdanstva}"  IsReadOnly="False"/>
+                <CheckBox Content="Новичок" IsChecked="{Binding IsNovichok, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="6" Style="{DynamicResource CheckBox}" IsThreeState="True"/>
+
+            </Grid>
+
+            <Expander Grid.Row="3" IsExpanded="False" Header="Расширенный фильтр">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition MinHeight="20" />
+                        <RowDefinition/>
+                        <RowDefinition  />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Сканы:" HorizontalAlignment="Left"/>
+                    <ItemsControl ItemsSource="{Binding ExtendedChecks}" Margin="50,3,3,3" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Grid Grid.Row="1" VerticalAlignment="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="111*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Дата рождения"/>
+                        <DatePicker  SelectedDate="{Binding BirthFrom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
+                        <TextBlock Text="-" Grid.Column="2" Margin="3"/>
+                        <DatePicker  SelectedDate="{Binding BirthTo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{DynamicResource DatePicker}"/>
+
+                    </Grid>
+                    <Grid VerticalAlignment="Top" Grid.Row="2" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="268*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Желаемый город работы"/>
+                        <ComboBox x:Name="CityComboBox1" SelectedItem="{Binding Gorod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource ComboBox}" MinWidth="150" 
+                              ItemsSource="{Binding Cities}" Grid.Column="1"/>
+                        <TextBlock Text="Предварительная дата выхода" Grid.Column="2"/>
+                        <DatePicker  SelectedDate="{Binding VihodDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{DynamicResource DatePicker}"/>
+
+                    </Grid>
+                </Grid>
+
+            </Expander>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="5" VerticalAlignment="Bottom">
+                <Button Content="Очистить фильтр" Grid.Row="3"  Command="{Binding ClearFilterCommand}"/>
+                <Button Content="Найти" Grid.Row="3"  Command="{Binding FindCommand}"/>
+            </StackPanel>
+        </Grid>
+    </Expander>
+</UserControl>
