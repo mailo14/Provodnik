@@ -172,7 +172,7 @@ namespace Provodnik
                                 db.PersonDocs.Add(pd = new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = d.DocTypeId, FileName = d.FileName });
                                 db.SaveChanges();
                             }
-
+                            
                             if (d.FileName == null)
                             {
                                 ImageSource source = null;
@@ -194,6 +194,8 @@ namespace Provodnik
                                 else pd.FileName = null;
                                 db.SaveChanges();
                             }
+                        pd.PrinesetK = d.PrinesetK;
+                        db.SaveChanges();
                             //progressChanged(share);
                         }
 

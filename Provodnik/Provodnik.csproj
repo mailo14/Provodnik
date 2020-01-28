@@ -30,7 +30,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://u0920601.plsk.regruhosting.ru/ProvodnikUpdate/</UpdateUrl>
     <ProductName>АСУ Проводник</ProductName>
-    <MinimumRequiredVersion>1.0.0.11</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.0.12</MinimumRequiredVersion>
     <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>

@@ -104,7 +104,7 @@
             <TextBlock Text="ФИО"/>
             <TextBlock Text="Отряд" Grid.Column="11"/>
             <TextBlock Text="Гражданство" Grid.Column="8"/>
-            <TextBox Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="200" Style="{DynamicResource TextBox}"/>
+            <TextBox Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="250" Style="{DynamicResource TextBox}"/>
             <ComboBox Name="GrazdanstvoComboBox" Text="{Binding Grazdanstvo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" MinWidth="50" Style="{DynamicResource ComboBox}"
                       ItemsSource="{Binding Grazdanstva}"/>
             <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="12" MinWidth="80" Style="{DynamicResource ComboBox}"
@@ -426,7 +426,7 @@
                                                 <Border Padding="10" BorderThickness="2" BorderBrush="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}">
                                                     <Image Source="{Binding Bitmap.Source, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
                                                 </Border>
-                                                <Button Content="x" Style="{x:Null}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="14" Height="14" Background="Red" Click="ClearScan_Button_Click" />
+                                                <Button Content="x" Style="{x:Null}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="14" Height="14" Background="Red" Click="ClearScan_Button_Click" Padding="0,-3,0,0" />
                                             </Grid>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -437,7 +437,7 @@
                                 <GridViewColumn Header="Предоставит к" Width="auto" >
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <DatePicker SelectedDate="{Binding PrinesetK, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            <DatePicker SelectedDate="{Binding PrinesetK, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource DatePicker}"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

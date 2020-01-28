@@ -75,6 +75,7 @@ namespace Provodnik
 
                     p = MainWindow.Mapper.Value.Map<PersonShortViewModel>(new ProvodnikContext().Persons.First(pp => pp.Id == p.Id));
                     vm.PersonList.Insert(ind, p);
+                    p.Index = ind + 1;
                     //vm.RefreshPersonList();
                     //TODO goto if exist or add anyway and goto
                     vm.InitCollectionsForCombo();
