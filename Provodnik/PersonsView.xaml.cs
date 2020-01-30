@@ -91,6 +91,7 @@ namespace Provodnik
                     //TODO goto if exist or add anyway and goto
                     vm.InitCollectionsForCombo();
                 }
+                MainWindow.p.CheckAlarms();
             }
         }
 

@@ -75,7 +75,7 @@
                         <GridViewColumn Header="Место рождения" DisplayMemberBinding="{Binding MestoRozd}"/>
                         <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding Phone}"/>
 
-                        <GridViewColumn Header="Санкнижка" Width="auto" >
+                        <GridViewColumn Header="Санкнижка получена" Width="auto" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox IsEnabled="False" IsChecked="{Binding IsSanKnizka, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -85,7 +85,7 @@
                         <GridViewColumn Header="Заключение ВЭК получено" Width="auto" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsSanKnizka, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <CheckBox IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

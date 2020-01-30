@@ -11,7 +11,7 @@
     xmlns:Templates="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
         
         mc:Ignorable="d"
-        Title="Группы на обучение" Width="800" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="426.314">
+        Title="Группы записи на экзамен" Width="800" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="426.314">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="10,3,0,3"/>
@@ -77,7 +77,7 @@
                         <GridViewColumn Header="Практика" Width="auto" >
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsPraktika, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <CheckBox IsEnabled="False" IsChecked="{Binding IsPraktika, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

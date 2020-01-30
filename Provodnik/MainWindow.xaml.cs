@@ -165,6 +165,7 @@ namespace Provodnik
 
             MainFrame.Navigate(psw);
 
+            CheckAlarms();
             return;
 
             /*
@@ -461,6 +462,21 @@ namespace Provodnik
         Thread.Sleep(1000);
             progressChanged(80, "Загрузка сканов");
             progressChanged(100,"");
+        }
+
+        private void AlarmsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            new AlarmsView().ShowDialog();
+            CheckAlarms();
+        }
+        public void CheckAlarms()
+        {
+            using (var db = new ProvodnikContext())
+            {
+                var qq = new Repository().GetAlarmsCount();
+                AlarmsMenuItem.Visibility = (qq > 0) ? Visibility.Visible : Visibility.Collapsed;
+                AlarmsCountTextBlock.Text = qq.ToString();
+            }
         }
     }
 }

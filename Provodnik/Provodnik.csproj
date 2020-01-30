@@ -31,7 +31,7 @@
     <UpdateUrl>http://u0920601.plsk.regruhosting.ru/ProvodnikUpdate/</UpdateUrl>
     <ProductName>АСУ Проводник</ProductName>
     <MinimumRequiredVersion>1.0.0.12</MinimumRequiredVersion>
-    <ApplicationRevision>12</ApplicationRevision>
+    <ApplicationRevision>13</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -135,6 +135,9 @@
     <Compile Include="AboutBox1.designer.cs">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </Compile>
+    <Compile Include="AlarmsView.xaml.cs">
+      <DependentUpon>AlarmsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NinjectContext.cs" />
     <Compile Include="LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
@@ -237,6 +240,10 @@
     </Compile>
     <Compile Include="ProvodnikContext.cs" />
     <Compile Include="SendGroupViewModel.cs" />
+    <Page Include="AlarmsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

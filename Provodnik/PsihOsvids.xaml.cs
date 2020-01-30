@@ -78,10 +78,11 @@ namespace Provodnik
             {
                 var toDelete = (from pd in db.Persons
                                 where pd.PsihDat == dat && !currents.Contains(pd.Id)
-                                select pd);
+                                select pd).ToList(); 
                 if (toDelete.Any())
                 {
-                    MessageBox.Show("Данные о псих.освидетельствовании будут очищены у удаленных: " + string.Join(", ", toDelete.Select(pp => pp.Fio)));
+                    MessageBox.Show("Данные о псих.освидетельствовании будут очищены у удаленных: " 
+                        +Environment.NewLine+ string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
                     foreach (var pd in toDelete)
                     {
                         pd.PsihDat = null;

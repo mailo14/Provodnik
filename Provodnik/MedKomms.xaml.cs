@@ -70,49 +70,57 @@ namespace Provodnik
 
         public void Save()
         {
-
-            var db = new ProvodnikContext();
             var dat = SelectedDate.Value;
 
             var currents = Persons.Select(pp => pp.Id).ToList();
-            var toDelete = (from pd in db.Persons
-                            where pd.MedKommDat == dat && !currents.Contains(pd.Id)
-                            select pd);
-            if (toDelete.Any())
+            using (var db = new ProvodnikContext())
             {
-                MessageBox.Show("Данные о мед.комиссии будут очищены у удаленных: " + string.Join(", ", toDelete.Select(pp => pp.Fio)));
-                foreach (var pd in toDelete)
+                var toDelete = (from pd in db.Persons
+                                where pd.MedKommDat == dat && !currents.Contains(pd.Id)
+                                select pd).ToList();
+                if (toDelete.Any())
                 {
-                    pd.MedKommDat = null;
-                    pd.IsMedKomm = false;
-                    
+                    MessageBox.Show("Данные о мед.комиссии будут очищены у удаленных: "
+                        + Environment.NewLine + string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
+                    foreach (var pd in toDelete)
+                    {
+                        pd.MedKommDat = null;
+                        pd.IsMedKomm = false;
+
+                        foreach (var pdo in (from pdo in db.PersonDocs
+                                             where pdo.PersonId == pd.Id && pdo.DocTypeId >= 6 && pdo.DocTypeId <= 8
+                                             select pdo))
+                            pdo.FileName = null;
+                    }
+                    db.SaveChanges();
+                }
+            }
+
+            using (var db = new ProvodnikContext())
+            {
+                var news = (from pd in db.Persons
+                            where pd.PsihDat != dat && currents.Contains(pd.Id)
+                            select pd).ToList();
+                foreach (var p in news)
+                {
                     foreach (var pdo in (from pdo in db.PersonDocs
-                                         where pdo.PersonId == pd.Id && pdo.DocTypeId>=6 && pdo.DocTypeId <= 8
+                                         where pdo.PersonId == p.Id && pdo.DocTypeId >= 6 && pdo.DocTypeId <= 8
                                          select pdo))
                         pdo.FileName = null;
+                    db.SaveChanges();
+                }
+            }
+
+            using (var db = new ProvodnikContext())
+            {
+                foreach (var p in Persons)
+                {
+                    var pe = db.Persons.First(pp => pp.Id == p.Id);
+                    pe.MedKommDat = dat;
+                    pe.IsMedKomm = p.IsMedKomm;
                 }
                 db.SaveChanges();
             }
-
-            var news = (from pd in db.Persons
-                        where pd.PsihDat != dat && currents.Contains(pd.Id)
-                        select pd).ToList();
-            foreach (var p in news)
-            {
-                foreach (var pdo in (from pdo in db.PersonDocs
-                                     where pdo.PersonId == p.Id && pdo.DocTypeId >= 6 && pdo.DocTypeId <= 8
-                                     select pdo))
-                    pdo.FileName = null;
-                db.SaveChanges();
-            }
-
-            foreach (var p in Persons)
-            {
-                var pe = db.Persons.First(pp => pp.Id == p.Id);
-                pe.MedKommDat = dat;
-                pe.IsMedKomm = p.IsMedKomm;
-            }
-            db.SaveChanges();
             IsChanged = false;
         }
 

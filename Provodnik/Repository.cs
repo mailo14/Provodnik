@@ -64,9 +64,53 @@ public    class Repository
             return new ProvodnikContext().SendGroups.Select(pp => pp.Marshrut).Distinct().OrderBy(pp => pp).ToList();
         }
 
-        internal List<string> GetOtryadi()
+        public List<string> GetOtryadi()
         {
             return new ProvodnikContext().Persons.Select(pp => pp.Otryad).Distinct().ToList();
         }
-    }
+
+        public int GetAlarmsCount()
+        {
+            using (var db = new ProvodnikContext())
+            {
+                return (from p in db.Persons
+                         join pd in db.PersonDocs on p.Id equals pd.PersonId                         
+                         where pd.PrinesetK <= DateTime.Today
+                         select 1                         ).Count();
+            }
+        }
+        public List<AlarmViewModel> GetAlarms()
+        {
+            using (var db = new ProvodnikContext())
+            {
+                return (from p in db.Persons
+                        join pd in db.PersonDocs on p.Id equals pd.PersonId
+                        join pdt in db.DocTypes on pd.DocTypeId equals pdt.Id
+                        where pd.PrinesetK < DateTime.Today
+                        orderby pd.PrinesetK, p.Fio
+                        select new {p.Id, p.Fio, p.Phone, p.BirthDat, pdt.Description, pd.PrinesetK }).ToList()
+                        .Select(p=> new AlarmViewModel(p.Id, p.Fio, p.Phone, p.BirthDat, p.Description, p.PrinesetK)).ToList();
+            }
+        }
+       
+
+    } public class AlarmViewModel
+        {
+            public AlarmViewModel(int id, string fio, string phone, DateTime? birthDat, string description, DateTime? prinesetK)
+            {
+                Id = id;
+                Fio = fio;
+                Phone = phone;
+                BirthDat = birthDat;
+                DocType = description;
+                PrinesetK = prinesetK;
+            }
+
+            public int Id { get; set; }
+            public string Fio { get; set; }
+            public string Phone { get; set; }
+            public string  DocType { get; set; }
+           public DateTime? BirthDat { get; set; }
+           public DateTime? PrinesetK { get; set; }
+        }
 }

@@ -70,32 +70,39 @@ namespace Provodnik
 
         public void Save()
         {
-
-            var db = new ProvodnikContext();
             var dat = SelectedDate.Value;
 
             var currents = Persons.Select(pp => pp.Id).ToList();
-            var toDelete = (from pd in db.Persons
-                            where pd.SanKnizkaDat == dat && !currents.Contains(pd.Id)
-                            select pd);
-            if (toDelete.Any())
+
+            using (var db = new ProvodnikContext())
             {
-                MessageBox.Show("Данные о санкнижке будут очищены у удаленных: " + string.Join(", ", toDelete.Select(pp => pp.Fio)));
-                foreach (var pd in toDelete)
+                var toDelete = (from pd in db.Persons
+                                where pd.SanKnizkaDat == dat && !currents.Contains(pd.Id)
+                                select pd).ToList();
+                if (toDelete.Any())
                 {
-                    pd.SanKnizkaDat = null;
-                    pd.IsSanKnizka = false;
+                    MessageBox.Show("Данные о санкнижке будут очищены у удаленных: "
+                        + Environment.NewLine + string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
+                    foreach (var pd in toDelete)
+                    {
+                        pd.SanKnizkaDat = null;
+                        pd.IsSanKnizka = false;
+                    }
+                    db.SaveChanges();
+                }
+            }
+
+
+            using (var db = new ProvodnikContext())
+            {
+                foreach (var p in Persons)
+                {
+                    var pe = db.Persons.First(pp => pp.Id == p.Id);
+                    pe.SanKnizkaDat = dat;
+                    pe.IsSanKnizka = p.IsSanKnizka;
                 }
                 db.SaveChanges();
             }
-
-            foreach (var p in Persons)
-            {
-                var pe = db.Persons.First(pp => pp.Id == p.Id);
-                pe.SanKnizkaDat = dat;
-                pe.IsSanKnizka = p.IsSanKnizka;
-            }
-            db.SaveChanges();
             IsChanged = false;
         }
 
