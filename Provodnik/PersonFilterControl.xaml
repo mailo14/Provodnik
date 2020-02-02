@@ -95,11 +95,13 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="24*"/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Отряд" Grid.Column="0"/>
                 <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="80" Style="{DynamicResource ComboBox}"
@@ -113,6 +115,9 @@
                       ItemsSource="{Binding Grazdanstva}"  IsReadOnly="False"/>
                 <CheckBox Content="Новичок" IsChecked="{Binding IsNovichok, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="6" Style="{DynamicResource CheckBox}" IsThreeState="True"/>
 
+                <TextBlock Text="Группа обучения" Grid.Column="7"/>
+                <ComboBox Text="{Binding Obuchenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" MinWidth="50" Style="{DynamicResource ComboBox}"
+                      ItemsSource="{Binding Obucheniyas}"  IsReadOnly="False"/>
             </Grid>
 
             <Expander Grid.Row="3" IsExpanded="False" Header="Расширенный фильтр">

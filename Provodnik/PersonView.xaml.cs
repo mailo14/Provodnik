@@ -181,7 +181,7 @@ namespace Provodnik
                                 }));
                                 if (source != null)
                                 {
-                                    using (var client = new FtpClient("31.31.196.80", new System.Net.NetworkCredential("u0920601", "XP83yno_")))
+                                    using (var client = new FluentFTP.FtpClient(App.CurrentConfig.FtpAdress, new System.Net.NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw)))
                                 {
                                     client.RetryAttempts = 3;
                                     client.Connect();
@@ -348,6 +348,12 @@ namespace Provodnik
             w.Height = k*s.Height; //w.Width = k*s.Width;
             w.Show();
             
+        }
+
+        private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var vm = this.DataContext as PersonViewModel;
+            vm.SelectedUchebGruppa = null;
         }
     }
 }

@@ -56,6 +56,7 @@ namespace Provodnik
         public ObservableCollection<string> Cities { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Otryadi { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Grazdanstva { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> Obucheniyas { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> UchZavedeniya { get; set; } = new ObservableCollection<string>();
 
         string _UchZavedenie;
@@ -102,6 +103,16 @@ namespace Provodnik
                 OnPropertyChanged();
             }
         }
+        private string _Obuchenie;
+        public string Obuchenie
+        {
+            get => _Obuchenie;
+            set
+            {
+                _Obuchenie = value;
+                OnPropertyChanged();
+            }
+        }
 
         private DateTime? _BirthFrom;
         public DateTime? BirthFrom
@@ -130,6 +141,9 @@ namespace Provodnik
             Otryadi.Clear(); foreach (var pp in repository.GetOtryadi()) Otryadi.Add(pp);
             Grazdanstva.Clear(); foreach (var pp in repository.GetGrazdanstva()) Grazdanstva.Add(pp);
             UchZavedeniya.Clear(); foreach (var pp in repository.GetUchZavedeniya()) UchZavedeniya.Add(pp);
+
+            Obucheniyas.Clear(); foreach (var pp in repository.GetObucheniyas()) Obucheniyas.Add(pp);
+
         }
 
         Repository repository = new Repository();
@@ -207,7 +221,7 @@ new ScanCheck{DisplayName="Миграционная карта и временн
                       ReadyOnly = null;
                       foreach (var ec in ExtendedChecks) ec.IsChecked = null;
                       BirthFrom = BirthTo = null;
-                      Otryad = UchZavedenie = Grazdanstvo = null;
+                      Otryad = UchZavedenie = Grazdanstvo = Obuchenie= null;
                       IsNovichok = null;
                       Gorod = null; VihodDat = null;
 
@@ -363,6 +377,19 @@ private RelayCommand _FindCommand;
                 query = query.Where(pp => pp.UchZavedenie == UchZavedenie);
             if (!string.IsNullOrWhiteSpace(Grazdanstvo))
                 query = query.Where(pp => pp.Grazdanstvo == Grazdanstvo);
+            if (!string.IsNullOrWhiteSpace(Obuchenie))
+            {
+                if (Obuchenie == "(нет)")
+                {
+                    query = query.Where(pp => pp.UchebGruppa == null);
+                }
+                else
+                {
+                    var yearStart = DateTime.Today;
+                    yearStart = yearStart.AddDays(-yearStart.Day + 1).AddMonths(-yearStart.Month + 1);
+                    query = query.Where(pp => pp.UchebGruppa == Obuchenie && pp.UchebStartDat > yearStart);
+                }
+            }
             if (BirthFrom.HasValue)
                 query = query.Where(pp => pp.BirthDat >= BirthFrom);
             if (BirthTo.HasValue)

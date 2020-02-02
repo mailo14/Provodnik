@@ -30,7 +30,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://u0920601.plsk.regruhosting.ru/ProvodnikUpdate/</UpdateUrl>
     <ProductName>АСУ Проводник</ProductName>
-    <MinimumRequiredVersion>1.0.0.12</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.0.13</MinimumRequiredVersion>
     <ApplicationRevision>13</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
@@ -138,6 +138,12 @@
     <Compile Include="AlarmsView.xaml.cs">
       <DependentUpon>AlarmsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Obuchenie.xaml.cs">
+      <DependentUpon>Obuchenie.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Obucheniyas.xaml.cs">
+      <DependentUpon>Obucheniyas.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NinjectContext.cs" />
     <Compile Include="LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
@@ -243,6 +249,14 @@
     <Page Include="AlarmsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Obuchenie.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Obucheniyas.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="LoginView.xaml">
       <SubType>Designer</SubType>

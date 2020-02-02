@@ -288,11 +288,16 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="срок окончания" Grid.Column="0"/>
                     <DatePicker SelectedDate="{Binding UchebEndDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
                     <TextBlock Text="Группа" Grid.Column="2"/>
-                    <TextBox Text="{Binding UchebGruppa, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{DynamicResource TextBox}" MinWidth="23"/>
+                    <ComboBox Grid.Column="3" Style="{DynamicResource ComboBox}" MinWidth="35"
+                              ItemsSource="{Binding UchebGruppas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              SelectedItem="{Binding SelectedUchebGruppa}"
+                              DisplayMemberPath="UchebGruppa" IsReadOnly="False" IsEditable="True"/>
+                    <TextBlock Text="x" Grid.Column="4" Margin="0,0,0,0" Foreground="Red" Padding="0,3,3,3" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
                 </Grid>
                 <TextBlock Text="Практика" Grid.Row="1"/>
                 <TextBlock Text="дата пробной поездки" Grid.Row="1" Grid.Column="1" Margin="10,3,3,3" HorizontalAlignment="Right"/>

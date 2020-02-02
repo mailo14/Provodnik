@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 
 namespace Provodnik
 {
-    public class PsihOsvidsViewModel : System.ComponentModel.INotifyPropertyChanged//: PersonDoc
+    public class ObuchenieViewModel : System.ComponentModel.INotifyPropertyChanged//: PersonDoc
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
@@ -36,32 +36,74 @@ namespace Provodnik
             }
         }
 
-        public ObservableCollection<PersonShortViewModel> Persons { get; set; } = new ObservableCollection<PersonShortViewModel>();
-
-        DateTime? _SelectedDate;
-        public DateTime? SelectedDate
+        string _UchebGruppa;
+        public string UchebGruppa
         {
-            get => _SelectedDate;
+            get => _UchebGruppa;
             set
             {
-                if (_SelectedDate != null && IsChanged)
-                    switch (MessageBox.Show("Сохранить изменения?", "", MessageBoxButton.YesNoCancel))
-                    {
-                        case MessageBoxResult.Yes: Save(); break;
-                        case MessageBoxResult.Cancel: return;
-                    }
-                _SelectedDate = value;
-                ReloadPersons();
+                _UchebGruppa = value;
                 OnPropertyChanged();
             }
         }
 
+        string _UchebCentr;
+        public string UchebCentr
+        {
+            get => _UchebCentr;
+            set
+            {
+                _UchebCentr = value;
+                OnPropertyChanged();
+            }
+        }
+
+        DateTime? _UchebStartDat;
+        public DateTime? UchebStartDat
+        {
+            get => _UchebStartDat;
+            set
+            {
+                _UchebStartDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        DateTime? _UchebEndDat;
+        private UchebGruppaViewModel BaseUchebGruppa;
+
+
+        public List<string> UchebCentri { get; set; }
+        public ObuchenieViewModel(UchebGruppaViewModel ug)
+        {
+            BaseUchebGruppa = ug;
+
+            UchebCentri = new Repository().GetUchebCentri();
+        }
+
+        public DateTime? UchebEndDat
+        {
+            get => _UchebEndDat;
+            set
+            {
+                _UchebEndDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<PersonShortViewModel> Persons { get; set; } = new ObservableCollection<PersonShortViewModel>();
+
         public void ReloadPersons()
         {
-            var dat = SelectedDate.Value;
             Persons.Clear();
+
             var db = new ProvodnikContext();
-            var qq = (from pp in db.Persons where pp.PsihDat == dat orderby pp.Fio select pp);
+            var qq = (from p in db.Persons
+                      where p.UchebGruppa == UchebGruppa && p.UchebCentr == UchebCentr
+                      && p.UchebStartDat == UchebStartDat
+                      && p.UchebEndDat == UchebEndDat
+                      orderby p.Fio
+                      select p).ToList();
             foreach (var q in qq)
                 Persons.Add(MainWindow.Mapper.Value.Map<PersonShortViewModel>(q));
 
@@ -70,45 +112,42 @@ namespace Provodnik
 
         public void Save()
         {
-                var dat = SelectedDate.Value;
-
-                var currents = Persons.Select(pp => pp.Id).ToList();
-
-            using (var db = new ProvodnikContext())
+            if (UchebGruppa == null || UchebCentr == null || UchebStartDat == null || UchebEndDat == null)
             {
-                var toDelete = (from pd in db.Persons
-                                where pd.PsihDat == dat && !currents.Contains(pd.Id)
-                                select pd).ToList(); 
-                if (toDelete.Any())
-                {
-                    MessageBox.Show("Данные о псих.освидетельствовании будут очищены у удаленных: " 
-                        +Environment.NewLine+ string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
-                    foreach (var pd in toDelete)
-                    {
-                        pd.PsihDat = null;
-                        pd.IsPsih = pd.IsPsihZabral = false;
-
-                        foreach (var pdo in (from pdo in db.PersonDocs
-                                             where pdo.PersonId == pd.Id && pdo.DocTypeId == 5
-                                             select pdo))
-                            pdo.FileName = null;
-                    }
-                    db.SaveChanges();
-                }
+                MessageBox.Show("Данные группы не заполнены!");
+                return;
+            }
+            if (Persons.Count == 0)
+            {
+                MessageBox.Show("Добавьте хотя бы одного участника!");
+                return;
             }
 
-            using (var db = new ProvodnikContext())
+
+            if (BaseUchebGruppa != null)
             {
-                var news = (from pd in db.Persons
-                            where pd.PsihDat != dat && currents.Contains(pd.Id)
-                            select pd).ToList();
-                foreach (var p in news)
+                var currents = Persons.Select(pp => pp.Id).ToList();
+                using (var db = new ProvodnikContext())
                 {
-                    foreach (var pdo in (from pdo in db.PersonDocs
-                                         where pdo.PersonId == p.Id && pdo.DocTypeId == 5
-                                         select pdo))
-                        pdo.FileName = null;
-                    db.SaveChanges();
+                    var toDelete = (from p in db.Persons
+                                    where p.UchebGruppa == BaseUchebGruppa.UchebGruppa && p.UchebCentr == BaseUchebGruppa.UchebCentr
+                                    && p.UchebStartDat == BaseUchebGruppa.UchebStartDat
+                                    && p.UchebEndDat == BaseUchebGruppa.UchebEndDat
+                                    && !currents.Contains(p.Id)
+                                    select p).ToList();
+                    if (toDelete.Any())
+                    {
+                        MessageBox.Show("Данные о обучении будут очищены у удаленных: "
+                            + Environment.NewLine + string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
+                        foreach (var p in toDelete)
+                        {
+                            p.UchebGruppa = null;
+                            p.UchebCentr = null;
+                            p.UchebStartDat = null;
+                            p.UchebEndDat = null;
+                        }
+                        db.SaveChanges();
+                    }
                 }
             }
 
@@ -117,10 +156,10 @@ namespace Provodnik
                 foreach (var p in Persons)
                 {
                     var pe = db.Persons.First(pp => pp.Id == p.Id);
-                    pe.PsihDat = dat;
-                    pe.IsPsih = p.IsPsih;
-                    pe.IsPsihZabral = p.IsPsihZabral;
-
+                    pe.UchebGruppa = UchebGruppa;
+                    pe.UchebCentr = UchebCentr;
+                    pe.UchebStartDat = UchebStartDat;
+                    pe.UchebEndDat = UchebEndDat;
                 }
                 db.SaveChanges();
             }
@@ -135,8 +174,6 @@ namespace Provodnik
                 if (Persons.FirstOrDefault(pp => pp.Id == id) != null) continue;
 
                 var np = MainWindow.Mapper.Value.Map<PersonShortViewModel>(db.Persons.First(pp => pp.Id == id));
-                np.IsPsih =np.IsPsihZabral= false;
-
                 Persons.Add(np);
             }
             IsChanged = true;
@@ -144,23 +181,26 @@ namespace Provodnik
     }
 
     /// <summary>
-    /// Логика взаимодействия для PsihOsvids.xaml
+    /// Логика взаимодействия для Obuchenie.xaml
     /// </summary>
-    public partial class PsihOsvids : Window
+    public partial class Obuchenie : Window
     {
-        public PsihOsvids()
+        public Obuchenie(UchebGruppaViewModel ug)
         {
             InitializeComponent();
-            //GroupCalendar.SelectedDate = DateTime.Today;
-            var vm = new PsihOsvidsViewModel();
+
+            var vm = new ObuchenieViewModel(ug);
+            if (ug != null)
+            {
+                vm.UchebGruppa = ug.UchebGruppa;
+                vm.UchebCentr = ug.UchebCentr;
+                vm.UchebStartDat = ug.UchebStartDat;
+                vm.UchebEndDat = ug.UchebEndDat;
+
+                vm.ReloadPersons();
+            }
             DataContext = vm;
-            vm.SelectedDate= DateTime.Today;
         }
-
-
-       
-
-        
 
         void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -178,7 +218,7 @@ namespace Provodnik
                     var ppp = new ProvodnikContext().Persons.First(pp => pp.Id == pe.Id);
                     var tmp = MainWindow.Mapper.Value.Map(ppp, pe);
 
-                    var vm = (DataContext as PsihOsvidsViewModel);
+                    var vm = (DataContext as ObuchenieViewModel);
                     var ind = vm.Persons.IndexOf(pe);
                     vm.Persons.RemoveAt(ind);
                     vm.Persons.Insert(ind, pe);
@@ -195,8 +235,8 @@ namespace Provodnik
                 MessageBox.Show("Удалить?", "Подтверждение удаления", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {                    
                     var p = PersonsListView.SelectedItem as PersonShortViewModel;
-                    (DataContext as PsihOsvidsViewModel).Persons.Remove(p);
-                    (DataContext as PsihOsvidsViewModel).IsChanged = true;
+                    (DataContext as ObuchenieViewModel).Persons.Remove(p);
+                    (DataContext as ObuchenieViewModel).IsChanged = true;
                 }
         }
 
@@ -204,45 +244,42 @@ namespace Provodnik
         {            
             var psw = new PersonsView(1);
             var pswVm=psw.DataContext as PersonsViewModel; pswVm.ReadyOnly = null;
-            pswVm.PsihExist = false;
+            pswVm.ExamenExist = false;
+            pswVm.PraktikaExist =false;
             pswVm.ExceptVibil = true;
  pswVm.PersonSearch = null; //run find, should be last            pswVm.FindCommand.Execute(null);//psw.FindButton_Click(null, null);    
 
 
             if (psw.ShowDialog() == true)
             {
-                (DataContext as PsihOsvidsViewModel).AddPersons(psw.vm.PersonList.Where(pp => pp.IsSelected).Select(pp => pp.Id));
+                (DataContext as ObuchenieViewModel).AddPersons(psw.vm.PersonList.Where(pp => pp.IsSelected).Select(pp => pp.Id));
                
             }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            (DataContext as PsihOsvidsViewModel).Save();
+            (DataContext as ObuchenieViewModel).Save();
+            DialogResult = true;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            (DataContext as PsihOsvidsViewModel).ReloadPersons();
+            (DataContext as ObuchenieViewModel).ReloadPersons();
+            DialogResult = true;
         }
-
-        
-
-        private void GroupCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
+                
 
 
         private void PersonsListView_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            (DataContext as PsihOsvidsViewModel).IsChanged = true;
+            (DataContext as ObuchenieViewModel).IsChanged = true;
 
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var vm = (DataContext as PsihOsvidsViewModel);
+            var vm = (DataContext as ObuchenieViewModel);
             if (vm.IsChanged)
                 switch (MessageBox.Show("Сохранить изменения?", "", MessageBoxButton.YesNoCancel))
                 {
@@ -250,10 +287,14 @@ namespace Provodnik
                     case MessageBoxResult.Cancel: e.Cancel=true; break;
                 }
         }
+        private void ComboBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            (sender as ComboBox).IsDropDownOpen = true;
+        }
 
         private async void ExcelButton_Click(object sender, RoutedEventArgs e)
         {
-            var vm = (DataContext as PsihOsvidsViewModel);
+            var vm = (DataContext as ObuchenieViewModel);
             new Reporter().ExportToExcel(vm.Persons.Select(pp => pp.Id).ToList());
         }
     }

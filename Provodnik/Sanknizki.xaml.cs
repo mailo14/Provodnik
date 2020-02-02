@@ -228,5 +228,11 @@ pswVm.PersonSearch = null; //run find, should be last            pswVm.FindComma
                     case MessageBoxResult.Cancel: e.Cancel=true; break;
                 }
         }
+
+        private async void ExcelButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (DataContext as SanknizkiViewModel);
+            new Reporter().ExportToExcel(vm.Persons.Select(pp => pp.Id).ToList());
+        }
     }
 }

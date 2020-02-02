@@ -53,6 +53,20 @@ public    class Repository
             //return new List<string> { "СГУПС" };
         }
 
+        public List<string> GetObucheniyas()
+        {
+            var yearStart = DateTime.Today;
+            yearStart = yearStart.AddDays(-yearStart.Day + 1).AddMonths(-yearStart.Month + 1);
+            var qq = (from p in new ProvodnikContext().Persons
+                      where p.UchebStartDat > yearStart && 
+                      p.UchebGruppa != null
+                      orderby p.UchebGruppa descending
+                      select p.UchebGruppa).Distinct().ToList();
+            qq.Insert(0, "(нет)");
+
+            return qq;
+        }
+
         public List<string> GetUchFacs(string uchZavedenie)
         {
             if (uchZavedenie == "не учится") return new List<string> { };
@@ -92,7 +106,6 @@ public    class Repository
                         .Select(p=> new AlarmViewModel(p.Id, p.Fio, p.Phone, p.BirthDat, p.Description, p.PrinesetK)).ToList();
             }
         }
-       
 
     } public class AlarmViewModel
         {

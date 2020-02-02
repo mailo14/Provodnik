@@ -9,8 +9,8 @@ namespace Provodnik
     public class ProvodnikContext : DbContext
     {
         public ProvodnikContext()
-            : base("DefaultConnection")
-        //:base("LocalConnection")
+        //    : base("DefaultConnection")
+        :base(App.CurrentConfig.DbConnection)
         {
 #if DEBUG
             Database.Log = s =>

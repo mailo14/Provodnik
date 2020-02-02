@@ -136,6 +136,9 @@ namespace Provodnik
                 .ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.Id));//.ReverseMap();
                 cfg.CreateMap<SendGroup, SendGroupViewModel>();//.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id.Value));
                 cfg.CreateMap<SendGroupViewModel, SendGroup>().ForMember(dest => dest.Id, act => act.Ignore());//.ReverseMap();
+
+                cfg.CreateMap<UchebGruppaViewModel, ObuchenieViewModel>().ReverseMap();
+
             });
             var mapper = config.CreateMapper();
             return mapper;
@@ -477,6 +480,12 @@ namespace Provodnik
                 AlarmsMenuItem.Visibility = (qq > 0) ? Visibility.Visible : Visibility.Collapsed;
                 AlarmsCountTextBlock.Text = qq.ToString();
             }
+        }
+
+        private void ObucheniyasMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            new Obucheniyas().ShowDialog();
+            (MainFrame.Content as PersonsViewPage).vm.FindCommand.Execute(null);
         }
     }
 }

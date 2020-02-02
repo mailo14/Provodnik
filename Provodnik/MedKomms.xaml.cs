@@ -247,5 +247,10 @@ namespace Provodnik
                     case MessageBoxResult.Cancel: e.Cancel=true; break;
                 }
         }
+        private async void ExcelButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (DataContext as MedKommsViewModel);
+            new Reporter().ExportToExcel(vm.Persons.Select(pp => pp.Id).ToList());
+        }
     }
 }

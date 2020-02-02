@@ -36,6 +36,11 @@ namespace Provodnik
             public static bool isWarnedThatReadOnly = false;
             public LoginView()
         {
+           /* var ppp = (from p in new List<KeyValuePair<string, string>> {
+                new KeyValuePair<string, string>("1", "2") ,new KeyValuePair<string, string>("1", "2")}
+                       select new { p.Key,p.Value}).Distinct().ToList();
+           */            
+
             //var db2 = new ProvodnikContext();
           
             Application.Current.DispatcherUnhandledException += (s, ex) =>

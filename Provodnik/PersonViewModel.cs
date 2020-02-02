@@ -27,7 +27,7 @@ namespace Provodnik
             }
         }
         Repository repository=new Repository();
-        
+
         public PersonViewModel(int? personId)
         {
             Validator = GetValidator();
@@ -78,10 +78,59 @@ namespace Provodnik
                 //  progressChanged(50);
             }
             //  LoadPersonViewModelAsync(personId);
-
+            var yearStart = DateTime.Today;
+            yearStart = yearStart.AddDays(-yearStart.Day + 1).AddMonths(-yearStart.Month + 1);
+            UchebGruppas = (from p in db.Persons
+                            where p.UchebStartDat > yearStart && p.UchebGruppa != null
+                            select new { p.UchebGruppa, p.UchebStartDat, p.UchebEndDat, p.UchebCentr }).Distinct()
+                               .Select(pp => new UchebGruppaViewModel()
+                               {
+                                   UchebCentr = pp.UchebCentr,
+                                   UchebGruppa = pp.UchebGruppa,
+                                   UchebStartDat = pp.UchebStartDat,
+                                   UchebEndDat = pp.UchebEndDat
+                               }).ToList();
+            var existed = UchebGruppas.FirstOrDefault(pp => pp.UchebGruppa == UchebGruppa && pp.UchebCentr == UchebCentr && pp.UchebStartDat == UchebStartDat);
+            if (UchebGruppa != null && existed == null)
+            {
+                UchebGruppas.Insert(0, existed = new UchebGruppaViewModel() { UchebGruppa = UchebGruppa, UchebCentr = UchebCentr, UchebStartDat = UchebStartDat, UchebEndDat = UchebEndDat });
+            }
+            //UchebGruppas.Insert(0, new UchebGruppaViewModel {UchebGruppa="нет" });
+            //if (existed == null)                existed = UchebGruppas[0];
+            SelectedUchebGruppa = existed;
+            //UchebGruppa UchebEndDat UchebStartDat UchebCentr
+            IsLoading = false;
         }
-
-
+        bool IsLoading = true;
+        private UchebGruppaViewModel _SelectedUchebGruppa;
+        public UchebGruppaViewModel SelectedUchebGruppa
+        {
+            get => _SelectedUchebGruppa;
+            set
+            {
+                if (value != null && value.UchebCentr == null) value = null;
+if (_SelectedUchebGruppa != value)
+                {
+                    _SelectedUchebGruppa = value;
+                        IsLoading = true;
+                        if (value != null)
+                        {
+                            UchebGruppa = value.UchebGruppa;
+                            UchebCentr = value.UchebCentr;
+                            UchebStartDat = value.UchebStartDat;
+                            UchebEndDat = value.UchebEndDat;
+                        }
+                        else
+                        {
+                            UchebGruppa = null;
+                            // UchebGruppa = UchebCentr = null;
+                            // UchebStartDat = UchebEndDat = null;
+                        }
+                        IsLoading = false;
+                    OnPropertyChanged();
+                }
+            }
+        }
         private async void LoadFile(PersonDocViewModel d)
         {
             d.Bitmap.Source = new BitmapImage(new Uri("pack://application:,,,/pic/loading.gif"));
@@ -90,7 +139,7 @@ namespace Provodnik
             await System.Threading.Tasks.Task.Run(
                 () =>
                 {
-                    using (var client = new FluentFTP.FtpClient("31.31.196.80", new System.Net.NetworkCredential("u0920601", "XP83yno_")))
+                    using (var client = new FluentFTP.FtpClient(App.CurrentConfig.FtpAdress, new System.Net.NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw)))
                     {
                         client.RetryAttempts = 5;
                         client.Connect();
@@ -302,7 +351,7 @@ namespace Provodnik
                     foreach (var d in Documents.Where(pp => pp.DocTypeId >= 12 && pp.DocTypeId <= 14).ToList())
                          Documents.Remove(d);
                 }
-                OnPropertyChanged();
+                OnPropertyChanged();//TODO all nameof(Pol));
             }
         }
         
@@ -744,6 +793,7 @@ namespace Provodnik
             set
             {
                 _UchebCentr = value;
+                if (!IsLoading) { IsLoading = true; SelectedUchebGruppa =null; IsLoading = false; }
                 OnPropertyChanged();
             }
         }
@@ -768,6 +818,7 @@ namespace Provodnik
             set
             {
                 _UchebStartDat = value;
+                if (!IsLoading) { IsLoading = true; SelectedUchebGruppa = null; IsLoading = false; }
                 OnPropertyChanged();
             }
         }
@@ -780,6 +831,7 @@ namespace Provodnik
             set
             {
                 _UchebEndDat = value;
+                if (!IsLoading) { IsLoading = true; SelectedUchebGruppa = null; IsLoading = false; }
                 OnPropertyChanged();
             }
         }
@@ -939,6 +991,7 @@ namespace Provodnik
       //      LastUpdated
 
         public List<string> UchZavedeniya { get; set; }
+        public List<UchebGruppaViewModel> UchebGruppas { get; set; }
         public ObservableCollection<string> UchFormas { get; set; }
         //public ObservableCollection<string> UchFacs { get;  set; }
     }
