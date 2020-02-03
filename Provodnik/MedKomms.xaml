@@ -13,6 +13,9 @@
         mc:Ignorable="d"
         Title="Группы на мед.комиссию" Width="800" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="426.314">
     <Window.Resources>
+        <Style x:Key="CenteredCell" TargetType="DataGridCell">
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="10,3,0,3"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -67,37 +70,34 @@
                 <Button Content="Отмена" Click="CancelButton_Click" />
                 <Button Content="Сохранить" Click="SaveButton_Click"/>
             </StackPanel>
-            <ListView x:Name="PersonsListView" Margin="3" SelectionMode="Single" ItemsSource="{Binding Persons}" 
-            KeyUp="PersonsListView_KeyUp"   MouseDoubleClick="ListView_MouseDoubleClick" PreviewMouseDown="PersonsListView_PreviewMouseDown" Grid.Row="1">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="#" DisplayMemberBinding="{Binding Id}"/>
-                        <GridViewColumn Header="ФИО" DisplayMemberBinding="{Binding Fio}"/>
-                        <GridViewColumn Header="Дата рождения" DisplayMemberBinding="{Binding BirthDat, StringFormat=\{0:dd.MM.yyyy\}}" Width="auto"/>
-                        <GridViewColumn Header="Место рождения" DisplayMemberBinding="{Binding MestoRozd}"/>
-                        <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding Phone}"/>
+            <DataGrid Margin="3" Name="PersonsListView" AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch"
+                      RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionMode="Single" VerticalAlignment="Stretch" 
+                      ItemsSource="{Binding Persons}" KeyUp="PersonsListView_KeyUp"   MouseDoubleClick="ListView_MouseDoubleClick" PreviewMouseDown="PersonsListView_PreviewMouseDown" Sorting="PersonsListView_Sorting"
+                      Grid.Row="1">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="№" Binding="{Binding Index}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="ФИО" Binding="{Binding Fio}" Width="*"/>
+                    <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDat, StringFormat=\{0:dd.MM.yyyy\}}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="Место рождения" Binding="{Binding MestoRozd}"/>
+                    <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" CellStyle="{StaticResource CenteredCell}"/>
 
-                        <GridViewColumn Header="Санкнижка получена" Width="auto" >
-                            <GridViewColumn.CellTemplate>
+                    <DataGridTemplateColumn Header="Санкнижка получена" SortMemberPath="IsSanKnizka">
+                        <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsEnabled="False" IsChecked="{Binding IsSanKnizka, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <CheckBox IsEnabled="False" IsChecked="{Binding IsSanKnizka, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
                                 </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Заключение ВЭК получено" Width="auto" >
-                            <GridViewColumn.CellTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Заключение ВЭК получено" SortMemberPath="IsMedKomm">
+                        <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <CheckBox IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
                                 </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-                <!--ListView.Items>
-                            <local:PersonDocument Name="Паспорт"  />
-                            <local:PersonDocument Name="Прописка"  />
-                        </ListView.Items-->
-            </ListView>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                        </DataGrid>
             <Grid HorizontalAlignment="Right" Margin="3" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="21*"/>

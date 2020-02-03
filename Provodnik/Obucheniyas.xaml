@@ -13,6 +13,9 @@
         mc:Ignorable="d"
         Title="Группы обучения" Width="800" WindowStartupLocation="CenterScreen" Height="426.314">
     <Window.Resources>
+        <Style x:Key="CenteredCell" TargetType="DataGridCell">
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="10,3,0,3"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -64,10 +67,10 @@
                            ItemsSource="{Binding List}"  MouseDoubleClick="ListView_MouseDoubleClick" KeyUp="PersonsListView_KeyUp"
                           >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Группа" Binding="{Binding UchebGruppa}"/>
-                    <DataGridTextColumn Header="Учебный центр" Binding="{Binding UchebCentr}"/>
-                    <DataGridTextColumn Header="Дата начала" Binding="{Binding Path=UchebStartDat,StringFormat=\{0:dd.MM.yyyy\}}" Width="auto"/>
-                    <DataGridTextColumn Header="Дата окончания" Binding="{Binding Path=UchebEndDat,StringFormat=\{0:dd.MM.yyyy\}}" Width="auto"/>                  
+                    <DataGridTextColumn Header="Группа" Binding="{Binding UchebGruppa}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="Учебный центр" Binding="{Binding UchebCentr}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="Дата начала" Binding="{Binding Path=UchebStartDat,StringFormat=\{0:dd.MM.yyyy\}}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="Дата окончания" Binding="{Binding Path=UchebEndDat,StringFormat=\{0:dd.MM.yyyy\}}" CellStyle="{StaticResource CenteredCell}"/>                  
                 </DataGrid.Columns>
             </DataGrid>
 

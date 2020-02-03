@@ -27,7 +27,7 @@ namespace Provodnik
         internal static User user;
 
         internal static Configuration CurrentConfig
-          // = new Configuration { DbConnection = "LocalConnection",FtpAdress= "127.0.0.1", FtpUser= "provodnikAdmin", FtpPassw= "Qwerty123" };
+         //  = new Configuration { DbConnection = "LocalConnection",FtpAdress= "127.0.0.1", FtpUser= "provodnikAdmin", FtpPassw= "Qwerty123" };
              = new Configuration { DbConnection = "DefaultConnection" ,FtpAdress= "31.31.196.80", FtpUser="u0920601",FtpPassw= "XP83yno_" };
 
     public static void setCursor(bool wait = true, bool appStart = false)

@@ -11,8 +11,11 @@
     xmlns:Templates="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
         
         mc:Ignorable="d"
-        Title="Группа на обучение" Width="800" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="426.314">
+        Title="Группа на обучение" Width="869.547" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="426.314">
     <Window.Resources>
+        <Style x:Key="CenteredCell" TargetType="DataGridCell">
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="10,3,0,3"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -104,22 +107,17 @@
                 <Button Content="Отмена" Click="CancelButton_Click" />
                 <Button Content="Сохранить" Click="SaveButton_Click"/>
             </StackPanel>
-            <ListView x:Name="PersonsListView" Margin="3" SelectionMode="Single" ItemsSource="{Binding Persons}" 
-            KeyUp="PersonsListView_KeyUp"   MouseDoubleClick="ListView_MouseDoubleClick" PreviewMouseDown="PersonsListView_PreviewMouseDown" Grid.Row="2">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="#" DisplayMemberBinding="{Binding Id}"/>
-                        <GridViewColumn Header="ФИО" DisplayMemberBinding="{Binding Fio}"/>
-                        <GridViewColumn Header="Дата рождения" DisplayMemberBinding="{Binding BirthDat, StringFormat=\{0:dd.MM.yyyy\}}" Width="auto"/>
-                        <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding Phone}"/>
-
-                    </GridView>
-                </ListView.View>
-                <!--ListView.Items>
-                            <local:PersonDocument Name="Паспорт"  />
-                            <local:PersonDocument Name="Прописка"  />
-                        </ListView.Items-->
-            </ListView>
+            <DataGrid Margin="3" Name="PersonsListView" AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch"
+                      RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionMode="Single" VerticalAlignment="Stretch" 
+                      ItemsSource="{Binding Persons}" KeyUp="PersonsListView_KeyUp"   MouseDoubleClick="ListView_MouseDoubleClick" PreviewMouseDown="PersonsListView_PreviewMouseDown" Sorting="PersonsListView_Sorting"
+                      Grid.Row="2">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="№" Binding="{Binding Index}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="ФИО" Binding="{Binding Fio}" Width="*"/>
+                    <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDat, StringFormat=\{0:dd.MM.yyyy\}}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" CellStyle="{StaticResource CenteredCell}"/>
+                </DataGrid.Columns>
+            </DataGrid>
             <Grid HorizontalAlignment="Right" Margin="3" VerticalAlignment="Top" Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="21*"/>

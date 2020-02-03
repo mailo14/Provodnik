@@ -65,6 +65,7 @@ namespace Provodnik
             foreach (var q in qq)
                 Persons.Add(MainWindow.Mapper.Value.Map<PersonShortViewModel>(q));
 
+            Helper.SetPersonShortIndexes(Persons);
             IsChanged = false;
         }
 
@@ -233,6 +234,15 @@ pswVm.PersonSearch = null; //run find, should be last            pswVm.FindComma
         {
             var vm = (DataContext as SanknizkiViewModel);
             new Reporter().ExportToExcel(vm.Persons.Select(pp => pp.Id).ToList());
+        }
+
+        private void PersonsListView_Sorting(object sender, DataGridSortingEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke((Action)delegate ()
+            {
+                //runs after sorting is done
+                Helper.SetPersonShortIndexes(PersonsListView);
+            }, null);
         }
     }
 }

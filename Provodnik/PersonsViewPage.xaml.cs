@@ -23,7 +23,7 @@ namespace Provodnik
         public PersonsViewModel vm;
         int? groupId;
         public PersonsViewPage()
-        {
+        {            
             InitializeComponent();
             vm= new PersonsViewModel();
             DataContext = vm;
@@ -75,10 +75,11 @@ namespace Provodnik
 
                     p = MainWindow.Mapper.Value.Map<PersonShortViewModel>(new ProvodnikContext().Persons.First(pp => pp.Id == p.Id));
                     vm.PersonList.Insert(ind, p);
-                    p.Index = ind + 1;
                     //vm.RefreshPersonList();
                     //TODO goto if exist or add anyway and goto
                     vm.InitCollectionsForCombo();
+
+                    Helper.SetPersonShortIndexes(PersonsListView);
                 }
             }
         }
@@ -104,8 +105,17 @@ namespace Provodnik
         }
 
         private async void ExcelButton_Click(object sender, RoutedEventArgs e)
-        {
+        {            
             new Reporter().ExportToExcel(vm.PersonList.Select(pp => pp.Id).ToList());
+        }
+
+        private void PersonsListView_Sorting(object sender, DataGridSortingEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke((Action)delegate ()
+            {
+                //runs after sorting is done
+                Helper.SetPersonShortIndexes(PersonsListView);
+            }, null);            
         }
     }
 }

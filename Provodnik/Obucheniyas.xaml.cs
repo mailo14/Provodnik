@@ -133,6 +133,5 @@ namespace Provodnik
                 vm.List.Insert(0, MainWindow.Mapper.Value.Map<UchebGruppaViewModel>(pswVm));               
             }
         }
-
     }
 }

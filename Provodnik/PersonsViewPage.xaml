@@ -13,7 +13,9 @@
         mc:Ignorable="d"
         Title="Бойцы">
     <Page.Resources>
-
+        <Style x:Key="CenteredCell" TargetType="DataGridCell">
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
         <local:DelimitedStringToMultilineConverter x:Key="splitConverter" />
         <local:ShortStringConverter x:Key="shortStringConverter" />
         <Style TargetType="TextBlock">
@@ -97,11 +99,11 @@
         <DataGrid Margin="3" Name="PersonsListView"  Grid.Row="2" MinHeight="203" AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch" 
                    RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionMode="Single" VerticalAlignment="Stretch" 
                           
-                           ItemsSource="{Binding PersonList}"  MouseDoubleClick="ListView_MouseDoubleClick" KeyUp="PersonsListView_KeyUp"
+                           ItemsSource="{Binding PersonList}"  MouseDoubleClick="ListView_MouseDoubleClick" KeyUp="PersonsListView_KeyUp" Sorting="PersonsListView_Sorting"
                           >
             <DataGrid.Columns>
 
-                <DataGridTemplateColumn Width="auto" >
+                <DataGridTemplateColumn Width="auto">
                     <DataGridTemplateColumn.Header>
                         <CheckBox IsChecked="False" HorizontalAlignment="Center"/>
                     </DataGridTemplateColumn.Header>
@@ -112,8 +114,8 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="№" Width="39" Binding="{Binding Index}"/>
-                <DataGridTextColumn Header="Номер договора" Binding="{Binding Dogovor}"/>
+                <DataGridTextColumn Header="№" Binding="{Binding Index}" CellStyle="{StaticResource CenteredCell}"/>
+                <DataGridTextColumn Header="Номер договора" Binding="{Binding Dogovor}" CellStyle="{StaticResource CenteredCell}"/>
                 <DataGridTemplateColumn Header="ФИО" Width="auto" CanUserSort="True" SortMemberPath="Fio">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -122,10 +124,10 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Дата рождения" Binding="{Binding Path=BirthDat,StringFormat=\{0:dd.MM.yyyy\}}" Width="auto"/>
-                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}"/>
-                <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}"/>
-                <DataGridTextColumn Header="Учебное заведение" Binding="{Binding UchZavedenie}"/>
+                <DataGridTextColumn Header="Дата рождения" Binding="{Binding Path=BirthDat,StringFormat=\{0:dd.MM.yyyy\}}" CellStyle="{StaticResource CenteredCell}"/>
+                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" CellStyle="{StaticResource CenteredCell}"/>
+                <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}" CellStyle="{StaticResource CenteredCell}"/>
+                <DataGridTextColumn Header="Учебное заведение" Binding="{Binding UchZavedenie}" CellStyle="{StaticResource CenteredCell}"/>
 
                 <DataGridTemplateColumn Header="Примечания" CanUserSort="True" SortMemberPath="Messages" >
                     <DataGridTemplateColumn.CellTemplate>

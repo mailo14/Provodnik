@@ -396,15 +396,13 @@ private RelayCommand _FindCommand;
                 query = query.Where(pp => pp.BirthDat <= BirthTo);
 
 
-            int index = 0;
             foreach (var i in query.OrderBy(pp => pp.Fio))
             {
                 //select new PersonShortViewModel() { Id = p.Id, Fio = p.Fio, Phone = p.Phone })) // IdName { Id = p.Id, Name = p.Fio }))
                 var pe = MainWindow.Mapper.Value.Map<PersonShortViewModel>(i);
-                pe.Index = ++index;
                 PersonList.Add(pe);
-
             }
+            Helper.SetPersonShortIndexes(PersonList);
 
             if (PersonList.Count == 1)
                 PersonList[0].IsSelected = true;

@@ -86,10 +86,11 @@ namespace Provodnik
 
                     p = MainWindow.Mapper.Value.Map<PersonShortViewModel>(new ProvodnikContext().Persons.First(pp => pp.Id == p.Id));
                     vm.PersonList.Insert(ind, p);
-                    p.Index = ind + 1;
                     //vm.RefreshPersonList();
                     //TODO goto if exist or add anyway and goto
                     vm.InitCollectionsForCombo();
+
+                    Helper.SetPersonShortIndexes(PersonsListView);
                 }
                 MainWindow.p.CheckAlarms();
             }
@@ -113,6 +114,15 @@ namespace Provodnik
                     db.Persons.Remove(db.Persons.First(pp => pp.Id == g.Id));
                     db.SaveChanges();
                 }
+        }
+
+        private void PersonsListView_Sorting(object sender, DataGridSortingEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke((Action)delegate ()
+            {
+                //runs after sorting is done
+                Helper.SetPersonShortIndexes(PersonsListView);
+            }, null);
         }
     }
 }

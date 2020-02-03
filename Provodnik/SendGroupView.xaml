@@ -14,6 +14,9 @@
         mc:Ignorable="d"
         Title="Карточка группы для отправки" Width="895.339" WindowStartupLocation="CenterScreen" SizeToContent="Height">
     <Window.Resources>
+        <Style x:Key="CenteredCell" TargetType="DataGridCell">
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
         <local:DelimitedStringToMultilineConverter x:Key="splitConverter" />
         <local:ShortStringConverter x:Key="shortStringConverter" />
         <Style TargetType="TextBlock">

@@ -11,6 +11,9 @@
         mc:Ignorable="d"
         Title="Группы для отправки" Height="462.43" Width="895.339" WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <Style x:Key="CenteredCell" TargetType="DataGridCell">
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="10,3,0,3"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -58,7 +61,7 @@
                   MouseDoubleClick="ListView_MouseDoubleClick"  KeyUp="PersonsListView_KeyUp" Grid.Row="1">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="#" DisplayMemberBinding="{Binding Id}"/>
+                    <!--GridViewColumn Header="#" DisplayMemberBinding="{Binding Id}"/-->
                     <!--GridViewColumn Header="Дата создания" DisplayMemberBinding="{Binding Path=BirthDat,StringFormat=\{0:dd.MM.yyyy\}}"/-->
                     <GridViewColumn Header="Дата отправления" DisplayMemberBinding="{Binding Path=OtprDat,StringFormat=\{0:dd.MM.yyyy\}}"/>
                     <GridViewColumn Header="Город" DisplayMemberBinding="{Binding City}"/>
