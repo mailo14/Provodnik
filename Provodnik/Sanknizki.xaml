@@ -13,6 +13,10 @@
         mc:Ignorable="d"
         Title="Группы на получение санкнижек" Width="800" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="426.314">
     <Window.Resources>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment"
+                 Value="Center" />
+        </Style>
         <Style x:Key="CenteredCell" TargetType="DataGridCell">
             <Setter Property="TextBlock.TextAlignment" Value="Center" />
         </Style>

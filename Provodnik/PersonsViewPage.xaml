@@ -13,6 +13,10 @@
         mc:Ignorable="d"
         Title="Бойцы">
     <Page.Resources>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment"
+                 Value="Center" />
+        </Style>
         <Style x:Key="CenteredCell" TargetType="DataGridCell">
             <Setter Property="TextBlock.TextAlignment" Value="Center" />
         </Style>

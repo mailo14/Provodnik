@@ -13,6 +13,10 @@
         mc:Ignorable="d"
         Title="Просрочка предоставления сканов" Height="355.614"  WindowStartupLocation="CenterScreen" SizeToContent="Width">
     <Window.Resources>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment"
+                 Value="Center" />
+        </Style>
         <Style x:Key="CenteredCell" TargetType="DataGridCell">
             <Setter Property="TextBlock.TextAlignment" Value="Center" />
         </Style>
