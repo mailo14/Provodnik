@@ -123,7 +123,8 @@ namespace Provodnik
                 cfg.CreateMap<PersonViewModel, Person>().ForMember(dest => dest.Id, act => act.Ignore());//.ReverseMap();
 
                 cfg.CreateMap<Person, PersonShortViewModel>()//.ForMember(dest => dest.Id, act => act.Ignore())
-                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id));//.ReverseMap();
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Index, act => act.Ignore());//.ReverseMap();
 
                 cfg.CreateMap<Person, SendGroupPersonViewModel>()
                 .ForMember(dest => dest.Id, act => act.Ignore())
@@ -413,6 +414,27 @@ namespace Provodnik
 
         private async void TestMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            var db = new ProvodnikContext();
+            foreach (var pe in db.Persons.Where(pp=>pp.UchebCentr==null).ToList())
+            {
+                var pvm = new PersonViewModel(pe.Id,false);
+                var m = pvm.Messages;
+                var ap = pvm.AllPasport;
+                var asc = pvm.AllScans;
+                pvm.FillMessagesAndAlls(pe);
+                bool m1=false, m2 = false, m3 = false;
+                if (m != pvm.Messages)
+                    m1=true;
+                if (ap != pvm.AllPasport)
+                    m2 = true;
+
+                if (asc != pvm.AllScans)
+                    m3 = true;
+                if (m1 || m2 || m3)
+                    db.SaveChanges();
+            }
+            return;
+
             /*     FactorialAsync(-4);
                  FactorialAsync(6);
                  return;*/

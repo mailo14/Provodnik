@@ -90,11 +90,15 @@ namespace Provodnik
                         pd.IsMedKomm = false;
 
                         foreach (var pdo in (from pdo in db.PersonDocs
-                                             where pdo.PersonId == pd.Id && pdo.DocTypeId >= 6 && pdo.DocTypeId <= 8
+                                             where pdo.PersonId == pd.Id && pdo.DocTypeId == DocConsts.ЗаключениеВЭК//>= 6 && pdo.DocTypeId <= 8
                                              select pdo))
                             pdo.FileName = null;
+                        db.SaveChanges();
+
+                        var pvm = new PersonViewModel(pd.Id, false);
+                        pvm.FillMessagesAndAlls(pd);
+                        db.SaveChanges();
                     }
-                    db.SaveChanges();
                 }
             }
 
@@ -106,7 +110,7 @@ namespace Provodnik
                 foreach (var p in news)
                 {
                     foreach (var pdo in (from pdo in db.PersonDocs
-                                         where pdo.PersonId == p.Id && pdo.DocTypeId >= 6 && pdo.DocTypeId <= 8
+                                         where pdo.PersonId == p.Id && pdo.DocTypeId == DocConsts.ЗаключениеВЭК//>= 6 && pdo.DocTypeId <= 8
                                          select pdo))
                         pdo.FileName = null;
                     db.SaveChanges();
@@ -120,8 +124,12 @@ namespace Provodnik
                     var pe = db.Persons.First(pp => pp.Id == p.Id);
                     pe.MedKommDat = dat;
                     pe.IsMedKomm = p.IsMedKomm;
+                    db.SaveChanges();
+
+                    var pvm = new PersonViewModel(pe.Id, false);
+                    pvm.FillMessagesAndAlls(pe);
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
             IsChanged = false;
         }
@@ -195,6 +203,7 @@ namespace Provodnik
                     var p = PersonsListView.SelectedItem as PersonShortViewModel;
                     (DataContext as MedKommsViewModel).Persons.Remove(p);
                     (DataContext as MedKommsViewModel).IsChanged = true;
+                    Helper.SetPersonShortIndexes(PersonsListView);
                 }
         }
 
@@ -211,7 +220,7 @@ namespace Provodnik
             if (psw.ShowDialog() == true)
             {
                 (DataContext as MedKommsViewModel).AddPersons(psw.vm.PersonList.Where(pp => pp.IsSelected).Select(pp => pp.Id));
-               
+                Helper.SetPersonShortIndexes(PersonsListView);
             }
         }
 

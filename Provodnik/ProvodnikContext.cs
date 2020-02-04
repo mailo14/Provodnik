@@ -34,15 +34,19 @@ namespace Provodnik
     public class Person
     {
         public int Id { get; set; }
+        //[Index]
         public string Fio { get; set; }
         public string Pol { get; set; }
         public string Grazdanstvo { get; set; }
         public string Phone { get; set; }
         public string Vk { get; set; }
+        //[Index]
         public string Otryad { get; set; }
+        //[Index]
         public bool IsNovichok { get; set; }
         public string Dogovor { get; set; }
         public DateTime? DogovorDat { get; set; }
+        //[Index]
         public string UchZavedenie { get; set; }
         public string UchForma { get; set; }
         public string UchFac { get; set; }
@@ -70,7 +74,9 @@ namespace Provodnik
         public bool IsSanKnizka { get; set; }
         public DateTime? MedKommDat { get; set; }
         public bool IsMedKomm { get; set; }
+        //[Index]
         public string UchebCentr { get; set; }
+        //[Index]
         public string UchebGruppa { get; set; }
         public DateTime? UchebStartDat { get; set; }
         public DateTime? UchebEndDat { get; set; }
@@ -82,6 +88,7 @@ namespace Provodnik
         public DateTime? VihodDat { get; set; }
         public string Gorod { get; set; }
         public bool IsVibil { get; set; }
+        //[Index]
         public string VibilPrichina { get; set; }
         public bool AllPasport { get; set; }
         public bool AllScans { get; set; }

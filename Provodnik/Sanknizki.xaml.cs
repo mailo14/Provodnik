@@ -88,8 +88,14 @@ namespace Provodnik
                     {
                         pd.SanKnizkaDat = null;
                         pd.IsSanKnizka = false;
-                    }
                     db.SaveChanges();
+
+                    var pvm = new PersonViewModel(pd.Id, false);
+                    pvm.FillMessagesAndAlls(pd);
+                    db.SaveChanges();
+                    }
+
+
                 }
             }
 
@@ -101,8 +107,12 @@ namespace Provodnik
                     var pe = db.Persons.First(pp => pp.Id == p.Id);
                     pe.SanKnizkaDat = dat;
                     pe.IsSanKnizka = p.IsSanKnizka;
+                    db.SaveChanges();
+
+                    var pvm = new PersonViewModel(pe.Id, false);
+                    pvm.FillMessagesAndAlls(pe);
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
             IsChanged = false;
         }
@@ -176,6 +186,7 @@ namespace Provodnik
                     var p = PersonsListView.SelectedItem as PersonShortViewModel;
                     (DataContext as SanknizkiViewModel).Persons.Remove(p);
                     (DataContext as SanknizkiViewModel).IsChanged = true;
+                    Helper.SetPersonShortIndexes(PersonsListView);
                 }
         }
 
@@ -191,7 +202,7 @@ pswVm.PersonSearch = null; //run find, should be last            pswVm.FindComma
             if (psw.ShowDialog() == true)
             {
                 (DataContext as SanknizkiViewModel).AddPersons(psw.vm.PersonList.Where(pp => pp.IsSelected).Select(pp => pp.Id));
-               
+                Helper.SetPersonShortIndexes(PersonsListView);
             }
         }
 

@@ -91,11 +91,16 @@ namespace Provodnik
                         pd.IsPsih = pd.IsPsihZabral = false;
 
                         foreach (var pdo in (from pdo in db.PersonDocs
-                                             where pdo.PersonId == pd.Id && pdo.DocTypeId == 5
+                                             where pdo.PersonId == pd.Id && pdo.DocTypeId == DocConsts.Психосвидетельствование
                                              select pdo))
                             pdo.FileName = null;
+
+                        db.SaveChanges();
+
+                        var pvm = new PersonViewModel(pd.Id,false);
+                        pvm.FillMessagesAndAlls(pd);
+                        db.SaveChanges();
                     }
-                    db.SaveChanges();
                 }
             }
 
@@ -107,7 +112,7 @@ namespace Provodnik
                 foreach (var p in news)
                 {
                     foreach (var pdo in (from pdo in db.PersonDocs
-                                         where pdo.PersonId == p.Id && pdo.DocTypeId == 5
+                                         where pdo.PersonId == p.Id && pdo.DocTypeId == DocConsts.Психосвидетельствование
                                          select pdo))
                         pdo.FileName = null;
                     db.SaveChanges();
@@ -122,9 +127,12 @@ namespace Provodnik
                     pe.PsihDat = dat;
                     pe.IsPsih = p.IsPsih;
                     pe.IsPsihZabral = p.IsPsihZabral;
+                    db.SaveChanges();
 
+                    var pvm = new PersonViewModel(pe.Id, false);
+                    pvm.FillMessagesAndAlls(pe);
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
             IsChanged = false;
         }
@@ -199,6 +207,7 @@ namespace Provodnik
                     var p = PersonsListView.SelectedItem as PersonShortViewModel;
                     (DataContext as PsihOsvidsViewModel).Persons.Remove(p);
                     (DataContext as PsihOsvidsViewModel).IsChanged = true;
+                    Helper.SetPersonShortIndexes(PersonsListView);
                 }
         }
 
@@ -214,7 +223,7 @@ namespace Provodnik
             if (psw.ShowDialog() == true)
             {
                 (DataContext as PsihOsvidsViewModel).AddPersons(psw.vm.PersonList.Where(pp => pp.IsSelected).Select(pp => pp.Id));
-               
+                Helper.SetPersonShortIndexes(PersonsListView);
             }
         }
 

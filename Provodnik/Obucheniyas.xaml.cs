@@ -71,11 +71,6 @@ namespace Provodnik
             DataContext = vm;            
         }
 
-
-       
-
-        
-
         void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var pvm = ((FrameworkElement)e.OriginalSource).DataContext as UchebGruppaViewModel;
@@ -115,8 +110,12 @@ namespace Provodnik
                             p.UchebCentr = null;
                             p.UchebStartDat = null;
                             p.UchebEndDat = null;
+                            db.SaveChanges();
+
+                            var pvm = new PersonViewModel(p.Id, false);
+                            pvm.FillMessagesAndAlls(p);
+                            db.SaveChanges();
                         }
-                        db.SaveChanges();
                         vm.List.Remove(ug);
                     }
                 }

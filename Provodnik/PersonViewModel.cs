@@ -28,7 +28,7 @@ namespace Provodnik
         }
         Repository repository=new Repository();
 
-        public PersonViewModel(int? personId)
+        public PersonViewModel(int? personId,bool loadBitmaps=true)
         {
             Validator = GetValidator();
 
@@ -58,7 +58,7 @@ namespace Provodnik
                 var progressShare = 80.0 / qq.Count;
                 foreach (var d in qq)
                 {
-                    if (d.FileName != null)
+                    if (loadBitmaps && d.FileName != null)
                         LoadFile(d);
                     this.Documents.Add(d);
                     // progressChanged(progressShare);
@@ -101,6 +101,103 @@ namespace Provodnik
             //UchebGruppa UchebEndDat UchebStartDat UchebCentr
             IsLoading = false;
         }
+
+        public bool GetAllPasport()
+        {
+            var allPasports= new string[]{ Fio,Phone,UchZavedenie,UchForma,Grazdanstvo//,Otryad
+                ,UchebCentr,(ExamenDat.HasValue) ? ExamenDat.ToString(): UchebEndDat.ToString()//TODO
+                ,RodPhone,RodFio
+                ,BirthDat.ToString(),MestoRozd,PaspNomer,PaspSeriya,PaspAdres,Snils };
+            return !allPasports.Any(pp => string.IsNullOrWhiteSpace(pp));
+        }
+
+        public List<string> GetModelErrors()
+        {
+            List<string> errors = new List<string>();
+            if (!Validator.IsValid)
+            {
+                foreach (var ve in Validator.ValidationMessages) errors.Add(ve.Message);
+            }          
+
+            return errors;
+        }
+
+        public class DocExist
+        {
+            public DocExist(int docTypeId, bool docExist)
+            {
+                DocTypeId = docTypeId;
+                Exist = docExist;
+            }
+
+            public int DocTypeId { get; set; }
+            public bool Exist { get; set; }
+        }
+
+        public List<string> GetScanErrors(bool checkOnlyFilename)
+        {
+            List<string> errors = new List<string>();
+            //var ddd = Documents.Select(pp => new DocExist( pp.DocTypeId, pp.Bitmap.Source != null )).ToList();
+            foreach (var d in Documents)
+            {
+                bool emptyScan;
+                if (checkOnlyFilename)
+                    emptyScan = d.FileName == null;
+                else
+                {
+                    ImageSource source = null;
+                    Application.Current.Dispatcher.Invoke((Action)(() =>
+                    {
+                        source = d.Bitmap.Source;
+                    }));
+                    emptyScan = source == null;
+                }
+
+                if (emptyScan)
+                {
+                    bool voenPripisEmpty = false;
+                    if (d.DocTypeId == DocConsts.ВоенныйБилет)
+                    {
+                        Application.Current.Dispatcher.Invoke((Action)(() =>
+                        {
+                            var emptyPripisnoe = (from pdd in Documents
+                                                  where (pdd.DocTypeId == DocConsts.Приписное1 || pdd.DocTypeId == DocConsts.Приписное2)
+                                                  && (checkOnlyFilename && pdd.FileName == null || !checkOnlyFilename && pdd.Bitmap.Source == null)
+                                                  select pdd);
+                            if (emptyPripisnoe.Any())
+                                voenPripisEmpty = true;
+                        }));
+                    }
+                    else
+                    if (d.DocTypeId == DocConsts.Приписное1 || d.DocTypeId == DocConsts.Приписное2)
+                    {
+                        Application.Current.Dispatcher.Invoke((Action)(() =>
+                        {
+                            var emptyVoennik = (from pdd in Documents
+                                                where pdd.DocTypeId == DocConsts.ВоенныйБилет
+                                                && (checkOnlyFilename && pdd.FileName == null || !checkOnlyFilename && pdd.Bitmap.Source == null)
+                                                select pdd);
+                            if (emptyVoennik.Any())
+                                voenPripisEmpty = true;
+                        }));
+                    }
+                    else errors.Add($"Не прикреплен скан документа: {d.Description}");
+                    if (voenPripisEmpty) errors.Add($"Не прикреплен скан документа: Приписное или военнный билет");
+                }
+            }
+            return errors;
+        }
+
+        public void FillMessagesAndAlls(Person p)
+        {
+            var scanErrors = GetScanErrors(true);
+            var allErrors = GetModelErrors(); allErrors.AddRange(scanErrors);
+
+            Messages=p.Messages = string.Join(Environment.NewLine, allErrors);
+            AllPasport = p.AllPasport = GetAllPasport();
+            AllScans = p.AllScans = !scanErrors.Any();
+        }
+
         bool IsLoading = true;
         private UchebGruppaViewModel _SelectedUchebGruppa;
         public UchebGruppaViewModel SelectedUchebGruppa
@@ -978,6 +1075,7 @@ if (_SelectedUchebGruppa != value)
         }   
 
         private string _Zametki;
+
         public string Zametki
         {
             get => _Zametki;

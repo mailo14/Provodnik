@@ -147,8 +147,13 @@ namespace Provodnik
                             p.UchebCentr = null;
                             p.UchebStartDat = null;
                             p.UchebEndDat = null;
-                        }
                         db.SaveChanges();
+
+                            var pvm = new PersonViewModel(p.Id, false);
+                            pvm.FillMessagesAndAlls(p);
+                            db.SaveChanges();
+
+                        }
                     }
                 }
             }
@@ -162,8 +167,12 @@ namespace Provodnik
                     pe.UchebCentr = UchebCentr;
                     pe.UchebStartDat = UchebStartDat;
                     pe.UchebEndDat = UchebEndDat;
+                    db.SaveChanges();
+
+                    var pvm = new PersonViewModel(pe.Id, false);
+                    pvm.FillMessagesAndAlls(pe);
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
             IsChanged = false;
         }
@@ -239,6 +248,7 @@ namespace Provodnik
                     var p = PersonsListView.SelectedItem as PersonShortViewModel;
                     (DataContext as ObuchenieViewModel).Persons.Remove(p);
                     (DataContext as ObuchenieViewModel).IsChanged = true;
+                    Helper.SetPersonShortIndexes(PersonsListView);
                 }
         }
 
@@ -255,7 +265,8 @@ namespace Provodnik
             if (psw.ShowDialog() == true)
             {
                 (DataContext as ObuchenieViewModel).AddPersons(psw.vm.PersonList.Where(pp => pp.IsSelected).Select(pp => pp.Id));
-               
+
+                Helper.SetPersonShortIndexes(PersonsListView);
             }
         }
 

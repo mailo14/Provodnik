@@ -88,8 +88,12 @@ namespace Provodnik
                     {
                         pd.PraktikaDat = null;
                         pd.IsPraktika = false;
+                        db.SaveChanges();
+
+                        var pvm = new PersonViewModel(pd.Id, false);
+                        pvm.FillMessagesAndAlls(pd);
+                        db.SaveChanges();
                     }
-                    db.SaveChanges();
                 }
             }
 
@@ -100,8 +104,12 @@ namespace Provodnik
                     var pe = db.Persons.First(pp => pp.Id == p.Id);
                     pe.PraktikaDat = dat;
                     pe.IsPraktika = p.IsPraktika;
+                    db.SaveChanges();
+
+                    var pvm = new PersonViewModel(pe.Id, false);
+                    pvm.FillMessagesAndAlls(pe);
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
             IsChanged = false;
         }
@@ -175,6 +183,7 @@ namespace Provodnik
                     var p = PersonsListView.SelectedItem as PersonShortViewModel;
                     (DataContext as PraktikasViewModel).Persons.Remove(p);
                     (DataContext as PraktikasViewModel).IsChanged = true;
+                    Helper.SetPersonShortIndexes(PersonsListView);
                 }
         }
 
@@ -191,7 +200,7 @@ pswVm.PersonSearch = null;//run find, should be last           pswVm.FindCommand
             if (psw.ShowDialog() == true)
             {
                 (DataContext as PraktikasViewModel).AddPersons(psw.vm.PersonList.Where(pp => pp.IsSelected).Select(pp => pp.Id));
-               
+                Helper.SetPersonShortIndexes(PersonsListView);
             }
         }
 

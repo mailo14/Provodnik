@@ -52,53 +52,9 @@ namespace Provodnik
                 return stream.ToArray();
             }
         }
-         List<string> GetErrors(PersonViewModel vm){
-            List<string> errors = new List<string>();
-            if (!vm.Validator.IsValid)
-            {
-                foreach (var ve in vm.Validator.ValidationMessages) errors.Add(ve.Message);
-            }
-            errors.AddRange(GetScanErrors(vm));
+         
 
-            return errors;
-        }
-
-        List<string> GetScanErrors(PersonViewModel vm) {
-            
-            List<string> errors = new List<string>();
-
-            foreach (var d in vm.Documents)
-            {
-
-                ImageSource source = null;
-                Application.Current.Dispatcher.Invoke((Action)(() => {
-                    source = d.Bitmap.Source;
-                }));
-                if (source == null)
-                { bool voenPripisEmpty = false;
-                    if (d.DocTypeId == 14)
-                    {
-                Application.Current.Dispatcher.Invoke((Action)(() => {
-                        var emptyPripisnoe = (from pdd in vm.Documents where (pdd.DocTypeId == 12 || pdd.DocTypeId == 13) && pdd.Bitmap.Source == null select pdd);
-                        if (emptyPripisnoe.Any())
-                            voenPripisEmpty = true;
-                }));
-                    }
-                    else
-                    if (d.DocTypeId == 12 || d.DocTypeId == 13)
-                    {
-                Application.Current.Dispatcher.Invoke((Action)(() => {
-                        var emptyVoennik = (from pdd in vm.Documents where pdd.DocTypeId == 14 && pdd.Bitmap.Source == null select pdd);
-                        if (emptyVoennik.Any())
-                            voenPripisEmpty = true;
-                }));
-                    }
-                    else errors.Add($"Не прикреплен скан документа: {d.Description}");
-                    if (voenPripisEmpty) errors.Add($"Не прикреплен скан документа: Приписное или военнный билет");
-                }
-            }
-            return errors;
-        }
+        
 
         public PersonViewModel vm;
         bool IsChanged = true;//TODO
@@ -111,8 +67,8 @@ namespace Provodnik
         private bool Save()
         {
                         vm = this.DataContext as PersonViewModel;
-                        List<string> errors = GetErrors(vm);
-            var enterErrors = errors.Where(pp => !pp.StartsWith("Не прикреплен скан документа") && !pp.EndsWith(" не заполнено"));
+            List<string> errors = vm.GetModelErrors();
+            var enterErrors = errors.Where(pp => /*!pp.StartsWith("Не прикреплен скан документа") && */ !pp.EndsWith(" не заполнено"));
             if (enterErrors.Any() && MessageBox.Show(string.Join(Environment.NewLine,enterErrors)+ Environment.NewLine+"Чтобы поправить, нажмите Отмена", "", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                 return false;
 
@@ -126,7 +82,6 @@ namespace Provodnik
 
 
                         //MessageBox.Show(string.Join(Environment.NewLine, errors));
-                        vm.Messages = string.Join(Environment.NewLine, errors);
                         
 
                         var db = new ProvodnikContext();
@@ -151,12 +106,6 @@ namespace Provodnik
                             db.SaveChanges();
                         }
 
-                        var allPasports = new string[]{ p.Fio,p.Phone,p.UchZavedenie,p.UchForma,p.Grazdanstvo//,p.Otryad
-                ,p.UchebCentr,(p.ExamenDat.HasValue) ? p.ExamenDat.ToString(): p.UchebEndDat.ToString()//TODO
-                ,p.RodPhone,p.RodFio
-                ,p.BirthDat.ToString(),p.MestoRozd,p.PaspNomer,p.PaspSeriya,p.PaspAdres,p.Snils };
-                        p.AllPasport = !allPasports.Any(pp => string.IsNullOrWhiteSpace(pp));
-                        db.SaveChanges();
 
                         //progressChanged(29, "Загрузка сканов");
                         var share = 70.0 / vm.Documents.Count;
@@ -189,7 +138,8 @@ namespace Provodnik
 
                                         client.Upload(ToByteArray(source as BitmapSource), remotePath, FtpExists.Overwrite, true);//, FtpVerify.Retry);
                                         pd.FileName = remotePath;
-                                    }
+                                    d.FileName= remotePath; //for GetScanErrors(true)
+                                }
                                 }
                                 else pd.FileName = null;
                                 db.SaveChanges();
@@ -199,7 +149,7 @@ namespace Provodnik
                             //progressChanged(share);
                         }
 
-                        p.AllScans = !GetScanErrors(vm).Any();
+                    vm.FillMessagesAndAlls(p);
                         db.SaveChanges();
                     }//));
             }
@@ -328,9 +278,12 @@ namespace Provodnik
         {
             
             var vm = this.DataContext as PersonViewModel;
-            List<string> errors = GetErrors(vm);
-            if (errors.Any())
-            MessageBox.Show(string.Join(Environment.NewLine, errors));
+            
+            var scanErrors = vm.GetScanErrors(false);
+            var allErrors = vm.GetModelErrors(); allErrors.AddRange(scanErrors);
+
+            if (allErrors.Any())
+            MessageBox.Show(string.Join(Environment.NewLine, allErrors));
             else MessageBox.Show("Все данные введены!");
         }
 

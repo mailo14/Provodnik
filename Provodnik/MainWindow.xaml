@@ -26,7 +26,7 @@
                 </MenuItem.Header>
             </MenuItem>
             <MenuItem Header="О программе" Click="MenuItem_Click" />
-            <MenuItem Header="Test" Click="TestMenuItem_Click" Visibility="Collapsed" />
+            <MenuItem Header="Test" Click="TestMenuItem_Click" Visibility="Visible" />
         </Menu>
         <Frame Name="MainFrame" Margin="3" Grid.Row="1" NavigationUIVisibility="Hidden"/>
 
