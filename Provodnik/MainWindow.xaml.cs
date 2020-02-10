@@ -509,5 +509,10 @@ namespace Provodnik
             new Obucheniyas().ShowDialog();
             (MainFrame.Content as PersonsViewPage).vm.FindCommand.Execute(null);
         }
+
+        private void InstrMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+                System.Diagnostics.Process.Start("Инструкция Проводник.docx");
+        }
     }
 }

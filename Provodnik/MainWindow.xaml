@@ -25,8 +25,12 @@
                     </TextBlock>
                 </MenuItem.Header>
             </MenuItem>
-            <MenuItem Header="О программе" Click="MenuItem_Click" />
-            <MenuItem Header="Test" Click="TestMenuItem_Click" Visibility="Visible" />
+            <MenuItem Header="О программе">
+                <MenuItem Header="Инструкция" Click="InstrMenuItem_Click"/>
+                <MenuItem Header="О АСУ Проводник" Click="MenuItem_Click"/>
+
+            </MenuItem>
+            <MenuItem Header="Test" Click="TestMenuItem_Click" Visibility="Collapsed" />
         </Menu>
         <Frame Name="MainFrame" Margin="3" Grid.Row="1" NavigationUIVisibility="Hidden"/>
 

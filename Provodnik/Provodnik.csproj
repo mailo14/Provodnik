@@ -30,8 +30,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://u0920601.plsk.regruhosting.ru/ProvodnikUpdate/</UpdateUrl>
     <ProductName>АСУ Проводник</ProductName>
-    <MinimumRequiredVersion>1.0.0.15</MinimumRequiredVersion>
-    <ApplicationRevision>16</ApplicationRevision>
+    <MinimumRequiredVersion>1.0.0.16</MinimumRequiredVersion>
+    <ApplicationRevision>17</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -397,6 +397,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Provodnik_TemporaryKey.pfx" />
+    <Content Include="Инструкция Проводник.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="pic\loading.gif" />
     <Content Include="_шаблоны\ВСОП_3.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

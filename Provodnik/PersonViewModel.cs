@@ -759,6 +759,7 @@ if (_SelectedUchebGruppa != value)
         }
 
         private DateTime? _VremRegDat;
+        [DisplayName(DisplayName = "Дата временной регистрации")]
         public DateTime? VremRegDat
         {
             get => _VremRegDat;
