@@ -11,7 +11,7 @@
     xmlns:Templates="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
         
         mc:Ignorable="d"
-        Title="Группы на мед.комиссию" Width="800" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="426.314">
+        Title="Группы на мед.комиссию" Width="1524" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="520">
     <Window.Resources>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment"
@@ -67,8 +67,12 @@
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Button Name="ExcelButton" Content="Экспорт в Excel" Grid.Row="3" HorizontalAlignment="Left" Click="ExcelButton_Click"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Left">
+                 <Button Name="ExcelButton" Content="Экспорт в Excel" Click="ExcelButton_Click"/>
+                 <Button Name="NapravleniyaButton" Content="Сформировать направления" Click="NapravleniyaButton_Click"/>
 
+            </StackPanel>
+           
             <Button Content="Добавить из списка" Click="AddFromListButton_Click"/>
             <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
                 <Button Content="Отмена" Click="CancelButton_Click" />
@@ -84,6 +88,7 @@
                     <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDat, StringFormat=\{0:dd.MM.yyyy\}}" CellStyle="{StaticResource CenteredCell}"/>
                     <DataGridTextColumn Header="Место рождения" Binding="{Binding MestoRozd}"/>
                     <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}" CellStyle="{StaticResource CenteredCell}"/>
 
                     <DataGridTemplateColumn Header="Санкнижка получена" SortMemberPath="IsSanKnizka">
                         <DataGridTemplateColumn.CellTemplate>

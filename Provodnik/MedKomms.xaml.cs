@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -160,13 +161,13 @@ namespace Provodnik
             //GroupCalendar.SelectedDate = DateTime.Today;
             var vm = new MedKommsViewModel();
             DataContext = vm;
-            vm.SelectedDate= DateTime.Today;
+            vm.SelectedDate = DateTime.Today;
         }
 
 
-       
 
-        
+
+
 
         void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -176,7 +177,7 @@ namespace Provodnik
                 var pw = new PersonView();
                 var db = new ProvodnikContext();
 
-                var pvm =new PersonViewModel(pe.Id);
+                var pvm = new PersonViewModel(pe.Id);
                 pw.DataContext = pvm;
                 if (pw.ShowDialog() == true)
                 {
@@ -199,7 +200,7 @@ namespace Provodnik
             if (e.Key == Key.Delete)
                 if (PersonsListView.SelectedItem != null &&
                 MessageBox.Show("Удалить?", "Подтверждение удаления", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
-                {                    
+                {
                     var p = PersonsListView.SelectedItem as PersonShortViewModel;
                     (DataContext as MedKommsViewModel).Persons.Remove(p);
                     (DataContext as MedKommsViewModel).IsChanged = true;
@@ -208,13 +209,13 @@ namespace Provodnik
         }
 
         private void AddFromListButton_Click(object sender, RoutedEventArgs e)
-        {            
+        {
             var psw = new PersonsView(1);
-            var pswVm=psw.DataContext as PersonsViewModel; pswVm.ReadyOnly = null;
+            var pswVm = psw.DataContext as PersonsViewModel; pswVm.ReadyOnly = null;
             pswVm.SanknizkaExist = true;
             pswVm.MedKommExist = false;
             pswVm.ExceptVibil = true;
- pswVm.PersonSearch = null; //run find, should be last            pswVm.FindCommand.Execute(null);//psw.FindButton_Click(null, null);    
+            pswVm.PersonSearch = null; //run find, should be last            pswVm.FindCommand.Execute(null);//psw.FindButton_Click(null, null);    
 
 
             if (psw.ShowDialog() == true)
@@ -234,7 +235,7 @@ namespace Provodnik
             (DataContext as MedKommsViewModel).ReloadPersons();
         }
 
-        
+
 
         private void GroupCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -255,7 +256,7 @@ namespace Provodnik
                 switch (MessageBox.Show("Сохранить изменения?", "", MessageBoxButton.YesNoCancel))
                 {
                     case MessageBoxResult.Yes: vm.Save(); break;
-                    case MessageBoxResult.Cancel: e.Cancel=true; break;
+                    case MessageBoxResult.Cancel: e.Cancel = true; break;
                 }
         }
         private async void ExcelButton_Click(object sender, RoutedEventArgs e)
@@ -271,6 +272,20 @@ namespace Provodnik
                 //runs after sorting is done
                 Helper.SetPersonShortIndexes(PersonsListView);
             }, null);
+        }
+
+        private void NapravleniyaButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = (DataContext as MedKommsViewModel);
+            var noBirths = vm.Persons.Where(pp => !pp.BirthDat.HasValue).Select(pp => pp.Fio).ToList();
+            if (noBirths.Any() &&
+                MessageBox.Show("У следующих бойцов не заполнена дата рождения:"
+                + Environment.NewLine + string.Join(", ", noBirths)
+                + Environment.NewLine + "Продолжить?", "", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                return;
+
+            new Reporter().NapravleniyaMed(vm.Persons.ToList());
+            
         }
     }
 }

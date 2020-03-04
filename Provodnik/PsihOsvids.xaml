@@ -82,6 +82,7 @@
                     <DataGridTextColumn Header="№" Binding="{Binding Index}" CellStyle="{StaticResource CenteredCell}"/>
                     <DataGridTextColumn Header="ФИО" Binding="{Binding Fio}" Width="*"/>
                     <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}" CellStyle="{StaticResource CenteredCell}"/>
 
                     <DataGridTemplateColumn Header="Прошел" SortMemberPath="IsPsih" >
                         <DataGridTemplateColumn.CellTemplate>

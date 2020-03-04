@@ -120,6 +120,7 @@
                     <DataGridTextColumn Header="ФИО" Binding="{Binding Fio}" Width="*"/>
                     <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDat, StringFormat=\{0:dd.MM.yyyy\}}" CellStyle="{StaticResource CenteredCell}"/>
                     <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}" CellStyle="{StaticResource CenteredCell}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid HorizontalAlignment="Right" Margin="3" VerticalAlignment="Top" Grid.Row="1">

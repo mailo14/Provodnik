@@ -146,6 +146,7 @@
                         <DataGridTextColumn Header="ФИО" Binding="{Binding Fio}" Width="*"/>
                         <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDat, StringFormat=\{0:dd.MM.yyyy\}}" CellStyle="{StaticResource CenteredCell}"/>
                         <DataGridTextColumn Header="Телефон" Binding="{Binding Path=Phone}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}" CellStyle="{StaticResource CenteredCell}"/>
                         <!--GridViewColumn Header="Действителен до" DisplayMemberBinding="{Binding Path=ModelNumber}"></GridViewColumn-->
 
                         <DataGridTemplateColumn Header="Старший" SortMemberPath="IsMain">

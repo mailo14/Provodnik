@@ -320,7 +320,7 @@ if (_SelectedUchebGruppa != value)
             //builder.RuleFor(vm => vm.UchFac).MyNotEmpty()
             //    .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie) && uchZavedenie!= "не учится");
             builder.RuleFor(vm => vm.UchGod).MyNotEmpty()
-                .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie) && uchZavedenie!= "не учится").Between("1950","2050");
+                .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie) && uchZavedenie!= RepoConsts.NoUchZavedenie).Between("1950","2050");
 
             builder.RuleFor(vm => vm.RodFio).MyNotEmpty();
             builder.RuleFor(vm => vm.RodPhone).MyNotEmpty()
@@ -564,7 +564,7 @@ if (_SelectedUchebGruppa != value)
                     if (UchFormas.Count == 1) UchForma = UchFormas[0];
                     //UchFacs.Clear(); foreach (var u in repository.GetUchFacs(UchZavedenie)) UchFacs.Add(u);
 
-                    if (!string.IsNullOrWhiteSpace(UchZavedenie) && UchZavedenie != "не учится")
+                    if (!string.IsNullOrWhiteSpace(UchZavedenie) && UchZavedenie != RepoConsts.NoUchZavedenie)
                     {
                         if (!Documents.Where(pp => pp.DocTypeId == 15).Any())
                             foreach (var d in new ProvodnikContext().DocTypes.Where(pp => pp.Id == 15))

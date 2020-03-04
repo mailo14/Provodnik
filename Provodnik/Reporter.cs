@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -109,6 +110,65 @@ namespace Provodnik
                         excel.setAllBorders(excel.get_Range("A1", "AL" + ri));
                         excel.myExcel.Visible = true;
                         //  excel.Finish();
+                    })
+
+
+                    );
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
+        public async void NapravleniyaMed(List<PersonShortViewModel> persons)
+        {
+            try
+            {
+                // await new ProgressRunner().RunAsync(doAction);      
+                await new ProgressRunner().RunAsync(
+                    new Action<ProgressHandler>((progressChanged) =>
+                    {
+
+                        progressChanged(1, "Формирование направлений");
+
+                        var path = (string.Format("{0}\\_шаблоны\\" + "Направление мед.dotx", AppDomain.CurrentDomain.BaseDirectory));
+                        Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false };
+                        Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Add(path/*, ReadOnly: false, Visible: true*/);
+                        aDoc.Activate();
+
+                        object missing = Missing.Value;
+                        object what = Microsoft.Office.Interop.Word.WdGoToItem.wdGoToLine;
+                        object which = Microsoft.Office.Interop.Word.WdGoToDirection.wdGoToLast;
+
+
+                        Microsoft.Office.Interop.Word.Range baseRange = aDoc.Content;
+                        baseRange.Cut();
+
+                        Microsoft.Office.Interop.Word.Range range = null;
+
+                        progressChanged(5);
+                        var share = 95.0 / persons.Count;
+                        foreach (var p in persons)
+                        {
+                            if (range != null)//!firstRow
+                            {
+                                range = aDoc.GoTo(ref what, ref which, ref missing, ref missing);
+                                range.InsertBreak(Microsoft.Office.Interop.Word.WdBreakType.wdPageBreak);
+                            }
+
+                            range = aDoc.GoTo(ref what, ref which, ref missing, ref missing);
+
+                            range.Paste();
+
+                            range.Find.ClearFormatting();
+                            range.Find.Execute(FindText: "{fio}", ReplaceWith: p.Fio, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+                            if (p.BirthDat.HasValue)
+                                range.Find.Execute(FindText: "{birthDat}", ReplaceWith: p.BirthDat.Value.ToString("dd.MM.yyyy"), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+
+                            progressChanged(share);
+                        }
+                        // string otchetDir = @"C:\_provodnikFTP";
+                        //  aDoc.SaveAs(FileName: otchetDir + @"\Согласие на обработку персональных данных.DOCX");
+                        wordApp.Visible = true;
+
                     })
 
 

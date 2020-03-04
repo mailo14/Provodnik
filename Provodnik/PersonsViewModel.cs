@@ -57,6 +57,7 @@ namespace Provodnik
         public ObservableCollection<string> Otryadi { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Grazdanstva { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Obucheniyas { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> MedKommDats { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> UchZavedeniya { get; set; } = new ObservableCollection<string>();
 
         string _UchZavedenie;
@@ -113,6 +114,16 @@ namespace Provodnik
                 OnPropertyChanged();
             }
         }
+        private string _MedKommDat;
+        public string MedKommDat
+        {
+            get => _MedKommDat;
+            set
+            {
+                _MedKommDat = value;
+                OnPropertyChanged();
+            }
+        }
 
         private DateTime? _BirthFrom;
         public DateTime? BirthFrom
@@ -143,6 +154,8 @@ namespace Provodnik
             UchZavedeniya.Clear(); foreach (var pp in repository.GetUchZavedeniya()) UchZavedeniya.Add(pp);
 
             Obucheniyas.Clear(); foreach (var pp in repository.GetObucheniyas()) Obucheniyas.Add(pp);
+
+            MedKommDats.Clear(); foreach (var pp in repository.GetMedKommDats()) MedKommDats.Add(pp);
 
         }
 
@@ -221,7 +234,7 @@ new ScanCheck{DisplayName="Миграционная карта и временн
                       ReadyOnly = null;
                       foreach (var ec in ExtendedChecks) ec.IsChecked = null;
                       BirthFrom = BirthTo = null;
-                      Otryad = UchZavedenie = Grazdanstvo = Obuchenie= null;
+                      Otryad = UchZavedenie = Grazdanstvo = Obuchenie= MedKommDat= null;
                       IsNovichok = null;
                       Gorod = null; VihodDat = null;
 
@@ -379,7 +392,7 @@ private RelayCommand _FindCommand;
                 query = query.Where(pp => pp.Grazdanstvo == Grazdanstvo);
             if (!string.IsNullOrWhiteSpace(Obuchenie))
             {
-                if (Obuchenie == "(нет)")
+                if (Obuchenie == RepoConsts.NoObuchenie)
                 {
                     query = query.Where(pp => pp.UchebGruppa == null);
                 }
@@ -388,6 +401,18 @@ private RelayCommand _FindCommand;
                     var yearStart = DateTime.Today;
                     yearStart = yearStart.AddDays(-yearStart.Day + 1).AddMonths(-yearStart.Month + 1);
                     query = query.Where(pp => pp.UchebGruppa == Obuchenie && pp.UchebStartDat > yearStart);
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(MedKommDat))
+            {
+                if (MedKommDat == RepoConsts.NoMedKommDat)
+                {
+                    query = query.Where(pp => pp.MedKommDat == null);
+                }
+                else
+                {
+                    var medKommDat = DateTime.Parse(MedKommDat);
+                    query = query.Where(pp => pp.MedKommDat == medKommDat);
                 }
             }
             if (BirthFrom.HasValue)

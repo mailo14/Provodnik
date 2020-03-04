@@ -362,7 +362,7 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Прописка по паспорту"/>
-                        <TextBox Text="{Binding PaspAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}"/>
+                        <TextBox Text="{Binding PaspAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}" AcceptsReturn="True"/>
                     </Grid>
 
                     <Grid Margin="3,3,3,0" Grid.Row="12" VerticalAlignment="Top">

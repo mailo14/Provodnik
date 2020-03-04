@@ -225,9 +225,9 @@ namespace Provodnik
 
         public void Soglasie()
         {
-            var path = (string.Format("{0}\\_шаблоны\\" + "Согласие на обработку персональных данных.DOCX", AppDomain.CurrentDomain.BaseDirectory));
+            var path = (string.Format("{0}\\_шаблоны\\" + "Согласие на обработку персональных данных.dotx", AppDomain.CurrentDomain.BaseDirectory));
             Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = true };
-            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Open(path, ReadOnly: false, Visible: true);
+            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Add(path);//, ReadOnly: false, Visible: true);
             aDoc.Activate();
 
            // var vm = DataContext as SendGroupViewModel;
@@ -246,8 +246,8 @@ namespace Provodnik
             range.Find.Execute(FindText: "{addres}", ReplaceWith: p.PaspAdres, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
             range.Find.Execute(FindText: "{till}", ReplaceWith: DateTime.Today.AddYears(1).ToString("dd.MM.yyyy"), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
 
-            string otchetDir = @"C:\_provodnikFTP";
-            aDoc.SaveAs(FileName: otchetDir + @"\Согласие на обработку персональных данных.DOCX");
+            //string otchetDir = @"C:\_provodnikFTP";
+            //aDoc.SaveAs(FileName: otchetDir + @"\Согласие на обработку персональных данных.DOCX");
 
         }
         private void Button_Click_2(object sender, RoutedEventArgs e)

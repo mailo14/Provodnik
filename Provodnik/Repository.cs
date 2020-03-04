@@ -31,14 +31,14 @@ public    class Repository
         public List<string> GetUchZavedeniya()
         {
             var items = new ProvodnikContext().Persons.Select(pp => pp.UchZavedenie).Distinct().OrderBy(pp => pp).ToList();
-            items.Remove("не учится");
-            items.Insert(0, "не учится");
+            items.Remove(RepoConsts.NoUchZavedenie);
+            items.Insert(0, RepoConsts.NoUchZavedenie);
             return items;// new List<string> { "не учится", "СГУПС" };
         }
 
         public List<string> GetUchFormas(string uchZavedenie)
         {
-            if (uchZavedenie == "не учится") return new List<string> { "не учится" };
+            if (uchZavedenie == RepoConsts.NoUchZavedenie) return new List<string> { RepoConsts.NoUchZavedenie };
             return new List<string> { "ОЧНАЯ", "ЗАОЧНАЯ", "АКАДЕМ", "ОЧНО-ЗАОЧНАЯ" };
         }
 
@@ -53,6 +53,19 @@ public    class Repository
             //return new List<string> { "СГУПС" };
         }
 
+        public List<string> GetMedKommDats()
+        {
+            var yearStart = DateTime.Today;
+            yearStart = yearStart.AddDays(-yearStart.Day + 1).AddMonths(-yearStart.Month + 1);
+            
+            var qq = (from pp in new ProvodnikContext().Persons
+                      where pp.MedKommDat >=yearStart select pp.MedKommDat.Value)
+                      .Distinct().OrderByDescending(pp=>pp).ToList().Select(pp=>pp.ToString("dd.MM.yyyy")).ToList();
+            qq.Insert(0, RepoConsts.NoMedKommDat);
+
+            return qq;
+        }
+
         public List<string> GetObucheniyas()
         {
             var yearStart = DateTime.Today;
@@ -62,14 +75,14 @@ public    class Repository
                       p.UchebGruppa != null
                       orderby p.UchebGruppa descending
                       select p.UchebGruppa).Distinct().ToList();
-            qq.Insert(0, "(нет)");
+            qq.Insert(0, RepoConsts.NoObuchenie);
 
             return qq;
         }
 
         public List<string> GetUchFacs(string uchZavedenie)
         {
-            if (uchZavedenie == "не учится") return new List<string> { };
+            if (uchZavedenie == RepoConsts.NoUchZavedenie) return new List<string> { };
             return new List<string> { "УПП", "др"};
         }
 
@@ -89,7 +102,7 @@ public    class Repository
             {
                 return (from p in db.Persons
                          join pd in db.PersonDocs on p.Id equals pd.PersonId                         
-                         where pd.PrinesetK <= DateTime.Today
+                         where pd.PrinesetK < DateTime.Today
                          select 1                         ).Count();
             }
         }
@@ -107,7 +120,8 @@ public    class Repository
             }
         }
 
-    } public class AlarmViewModel
+    }
+    public class AlarmViewModel
         {
             public AlarmViewModel(int id, string fio, string phone, DateTime? birthDat, string description, DateTime? prinesetK)
             {
@@ -126,4 +140,11 @@ public    class Repository
            public DateTime? BirthDat { get; set; }
            public DateTime? PrinesetK { get; set; }
         }
-}
+
+    public class RepoConsts
+    {
+        public const string NoMedKommDat = "(не вышел)";
+        public const string NoObuchenie = "(нет)";
+        public const string NoUchZavedenie = "не учится";
+    }
+    }

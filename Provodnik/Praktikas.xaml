@@ -11,7 +11,7 @@
     xmlns:Templates="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
         
         mc:Ignorable="d"
-        Title="Группы на прохождение практики" Width="800" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="426.314">
+        Title="Группы на прохождение практики" Width="1024" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="520">
     <Window.Resources>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment"
@@ -82,6 +82,7 @@
                     <DataGridTextColumn Header="№" Binding="{Binding Index}" CellStyle="{StaticResource CenteredCell}"/>
                     <DataGridTextColumn Header="ФИО" Binding="{Binding Fio}" Width="*"/>
                     <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}" CellStyle="{StaticResource CenteredCell}"/>
 
                     <DataGridTemplateColumn Header="Санкнижка" SortMemberPath="IsSanKnizka">
                         <DataGridTemplateColumn.CellTemplate>

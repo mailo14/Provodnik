@@ -101,6 +101,8 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="Отряд" Grid.Column="0"/>
@@ -118,6 +120,10 @@
                 <TextBlock Text="Группа обучения" Grid.Column="7"/>
                 <ComboBox Text="{Binding Obuchenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" MinWidth="50" Style="{DynamicResource ComboBox}"
                       ItemsSource="{Binding Obucheniyas}"  IsReadOnly="False"/>
+                
+                <TextBlock Text="Дата медкомиссии" Grid.Column="9"/>
+                <ComboBox Text="{Binding MedKommDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="10" MinWidth="50" Style="{DynamicResource ComboBox}"
+                      ItemsSource="{Binding MedKommDats}"  IsReadOnly="False"/>
             </Grid>
 
             <Expander Grid.Row="3" IsExpanded="False" Header="Расширенный фильтр">
