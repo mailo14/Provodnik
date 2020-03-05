@@ -106,7 +106,7 @@ namespace Provodnik
             using (var db = new ProvodnikContext())
             {
                 var news = (from pd in db.Persons
-                            where pd.PsihDat != dat && currents.Contains(pd.Id)
+                            where pd.MedKommDat != dat && currents.Contains(pd.Id)
                             select pd).ToList();
                 foreach (var p in news)
                 {
