@@ -30,8 +30,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://u0920601.plsk.regruhosting.ru/ProvodnikUpdate/</UpdateUrl>
     <ProductName>АСУ Проводник</ProductName>
-    <MinimumRequiredVersion>1.0.0.17</MinimumRequiredVersion>
-    <ApplicationRevision>18</ApplicationRevision>
+    <MinimumRequiredVersion>1.0.0.18</MinimumRequiredVersion>
+    <ApplicationRevision>19</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -181,6 +181,7 @@
     </Compile>
     <Compile Include="RelayCommand.cs" />
     <Compile Include="Reporter.cs" />
+    <Compile Include="SampleViewData\SamplePersonViewModel.cs" />
     <Compile Include="ScanView.xaml.cs">
       <DependentUpon>ScanView.xaml</DependentUpon>
     </Compile>
