@@ -33,6 +33,18 @@ namespace Provodnik
           //  this.DataContext = new PersonViewModel(null);// new ProvodnikContext().Persons.FirstOrDefault()==null?(int?)null:1);
 
             PolComboBox.ItemsSource = new List<string> { "мужской", "женский" };
+
+            Loaded += PersonView_Loaded;
+        }
+
+        private void PersonView_Loaded(object sender, RoutedEventArgs e)
+        {            
+            var s = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
+            if (Height > s.Height || Width > s.Width) 
+            {
+                SizeToContent = SizeToContent.Manual;
+                WindowState = WindowState.Maximized;
+            }
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -130,13 +142,13 @@ namespace Provodnik
                                 }));
                                 if (source != null)
                                 {
-                                    using (var client = new FluentFTP.FtpClient(App.CurrentConfig.FtpAdress, new System.Net.NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw)))
+                                    using (var client = new FluentFTP.FtpClient())
                                 {
-                                    client.RetryAttempts = 3;
+                                    App.ConfigureFtpClient(client);
                                     client.Connect();
                                         var remotePath = $@"ProvodnikDocs/{p.Id.ToString()}/{DateTime.Now.Ticks}.jpg";// "/1_Иванов";
 
-                                        client.Upload(ToByteArray(source as BitmapSource), remotePath, FtpExists.Overwrite, true);//, FtpVerify.Retry);
+                                        client.Upload(ToByteArray(source as BitmapSource), remotePath, FtpRemoteExists.Overwrite, true);//, FtpVerify.Retry);
                                         pd.FileName = remotePath;
                                     d.FileName= remotePath; //for GetScanErrors(true)
                                 }

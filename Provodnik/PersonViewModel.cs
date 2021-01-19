@@ -233,24 +233,32 @@ if (_SelectedUchebGruppa != value)
             d.Bitmap.Source = new BitmapImage(new Uri("pack://application:,,,/pic/loading.gif"));
 
             byte[] bytes = null;
-            await System.Threading.Tasks.Task.Run(
-                () =>
-                {
-                    using (var client = new FluentFTP.FtpClient(App.CurrentConfig.FtpAdress, new System.Net.NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw)))
-                    {
-                        client.RetryAttempts = 5;
-                        client.Connect();
-                        client.Download(out bytes, d.FileName);
-                        //Thread.Sleep(2000);
-                    }
-                });
-            //d.Bitmap.Source = ToBitmapSource(bytes);
-            using (var stream = new System.IO.MemoryStream(bytes))
+            try
             {
-                var bmf = BitmapFrame.Create(stream,
-                                                 BitmapCreateOptions.None,
-                                                 BitmapCacheOption.OnLoad);
-                d.Bitmap.Source = bmf;
+                await System.Threading.Tasks.Task.Run(
+                    () =>
+                    {
+                        using (var client = new FluentFTP.FtpClient())
+                        {
+                            App.ConfigureFtpClient(client);
+                            client.Connect();
+                            client.Download(out bytes, d.FileName);
+                            //Thread.Sleep(2000);
+                        }
+                    });
+
+                //d.Bitmap.Source = ToBitmapSource(bytes);
+                using (var stream = new System.IO.MemoryStream(bytes))
+                {
+                    var bmf = BitmapFrame.Create(stream,
+                                                     BitmapCreateOptions.None,
+                                                     BitmapCacheOption.OnLoad);
+                    d.Bitmap.Source = bmf;
+                }
+            }
+            catch (Exception oex)
+            {
+                MessageBox.Show(oex.Message + " " + d.Description + " " + d.FileName);
             }
         }
 

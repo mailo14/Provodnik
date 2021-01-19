@@ -387,9 +387,9 @@ int            ri = 1;
                         foreach (var d in g)
                         {
                             var fileName = $@"{path}\{fioInic}\{fioInic}_{d.Description}.jpg";
-                            using (var client = new FluentFTP.FtpClient(App.CurrentConfig.FtpAdress, new System.Net.NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw)))
+                            using (var client = new FluentFTP.FtpClient())
                             {
-                                client.RetryAttempts = 3;
+                                App.ConfigureFtpClient(client);
                                 client.Connect();
                                 client.DownloadFile(fileName, d.FileName, FtpLocalExists.Overwrite);//, true, FtpVerify.Retry);
                             }

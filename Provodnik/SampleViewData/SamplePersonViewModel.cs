@@ -16,7 +16,11 @@ namespace Provodnik.SampleViewData
         {
             Fio = "Иванов Иван Иванович";
             Phone = "9231234567";
-            //PaspAdres="город"+Environment.NewLine+ "город" + Environment.NewLine+"город" + Environment.NewLine;
+            PaspVidan= @"обл Новосибирская 
+гор.Новосибирск
+район Советский
+ул.Экваторная
+дом 3, кв. 25";//город"+Environment.NewLine+ "город" + Environment.NewLine+"город" + Environment.NewLine + "город";
             Documents = new ObservableCollection<PersonDocViewModel>()
             { 
                 new PersonDocViewModel() {
@@ -24,7 +28,11 @@ namespace Provodnik.SampleViewData
                     //Bitmap = new System.Windows.Controls.Image() { Source = new BitmapImage(new Uri("pack://application:,,,/pic/loading.gif")) },
                     PrinesetK = new DateTime(2019, 05, 23) }
             ,    new PersonDocViewModel(){
-                    Description ="Прописка",
+                    Description ="Справка-подтверждение  МООО  «РСО»",
+                    //Bitmap =new System.Windows.Controls.Image(){Source= new BitmapImage(new Uri("pack://application:,,,/pic/loading.gif")) },
+                    }
+            ,    new PersonDocViewModel(){
+                    Description ="Согласие на обработку персональных данных",
                     //Bitmap =new System.Windows.Controls.Image(){Source= new BitmapImage(new Uri("pack://application:,,,/pic/loading.gif")) },
                     }
             };

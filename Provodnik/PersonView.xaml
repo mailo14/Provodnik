@@ -9,10 +9,10 @@
              xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
         xmlns:local="clr-namespace:Provodnik"
         mc:Ignorable="d"
-        Title="Карточка бойца"  SizeToContent="WidthAndHeight"  Closing="Window_Closing" WindowStartupLocation="CenterScreen"
+        Title="Карточка бойца"  SizeToContent="Width"  Closing="Window_Closing" WindowStartupLocation="CenterScreen"
      
         xmlns:sample="clr-namespace:Provodnik.SampleViewData"
-    d:DataContext="{d:DesignInstance sample:SamplePersonViewModel, IsDesignTimeCreatable=True}" Width="1005"
+    d:DataContext="{d:DesignInstance sample:SamplePersonViewModel, IsDesignTimeCreatable=True}" Width="1238.5" Height="965" 
         >
     <!--:DataContext="{d:DesignData Source=SampleViewData/PersonViewSample.xaml}"-->
     <Window.Resources>
@@ -58,367 +58,18 @@
             <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
         </Style>
     </Window.Resources>
-    <Grid VerticalAlignment="Top">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" VerticalAlignment="Top" Grid.Row="4">
-            <CheckBox Content="Наличие льготы" IsChecked="{Binding HasLgota, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4"/>
-        </Grid>
-        <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" VerticalAlignment="Top" Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="0"/>
-                <ColumnDefinition Width="0"/>
-                <ColumnDefinition Width="0"/>
-                <ColumnDefinition Width="0"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="7*"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="ФИО"/>
-            <TextBlock Text="Отряд" Grid.Column="11"/>
-            <TextBlock Text="Гражданство" Grid.Column="8"/>
-            <TextBox Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="250" Style="{DynamicResource TextBox}"/>
-            <ComboBox Name="GrazdanstvoComboBox" Text="{Binding Grazdanstvo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" MinWidth="50"
-                      ItemsSource="{Binding Grazdanstva}"/>
-            <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="12" MinWidth="80" Style="{DynamicResource ComboBox}"
-                       IsEditable="True" ItemsSource="{Binding Otryadi}" IsReadOnly="False"/>
-            <TextBlock Text="Пол" Grid.Column="6"/>
-            <ComboBox Name="PolComboBox" Text="{Binding Pol, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="50"/>
-        </Grid>
-        <Grid HorizontalAlignment="Stretch"  Margin="3,3,3,0" VerticalAlignment="Top" Grid.Row="1" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Номер телефона"/>
-            <TextBlock Text="+7" Grid.Column="1"/>
-            <TextBlock Text="Логин vk" Grid.Column="3"/>
-            <TextBlock Text="https://vk.com/" Grid.Column="4"/>
-
-            <TextBox Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" MinWidth="70" Style="{DynamicResource TextBox}"/>
-            <TextBox Text="{Binding Vk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="100" Style="{DynamicResource TextBox}"/>
-            <Button Content="перейти" Grid.Column="6" VerticalAlignment="Center" Click="Button_Click_3" Height="22" Padding="5,0"/>
-        </Grid>
-        <Grid HorizontalAlignment="Stretch"  Margin="3,3,3,0" VerticalAlignment="Top" Grid.Row="2" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <CheckBox Content="Новичок" IsChecked="{Binding IsNovichok, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0"/>
-
-            <TextBlock Text="Номер договора" Grid.Column="1"/>
-            <TextBlock Text="Дата договора" Grid.Column="3"/>
-            <TextBox Text="{Binding Dogovor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" MinWidth="70" Style="{DynamicResource TextBox}"/>
-            <DatePicker SelectedDate="{Binding DogovorDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" Style="{DynamicResource DatePicker}"/>
-
-        </Grid>
-        <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="3" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="24*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Учебное заведение"/>
-            <TextBlock Text="Форма обучения" Grid.Column="2"/>
-            <TextBlock Text="Год окончания обучения" Grid.Column="6"/>
-            <TextBox Text="{Binding UchGod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="40" Style="{DynamicResource TextBox}"/>
-            <ComboBox Name="UchFormaComboBox" Text="{Binding UchForma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="80" Style="{DynamicResource ComboBox}"
-                          ItemsSource="{Binding UchFormas}"/>
-            <ComboBox Name="UchZavedenieComboBox" Text="{Binding UchZavedenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="70" Style="{DynamicResource ComboBox}"
-                          ItemsSource="{Binding UchZavedeniya}" IsReadOnly="False"/>
-        </Grid>
-        <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="5" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="ФИО родителя"/>
-            <TextBlock Text="Контактный телефон родителей" Grid.Column="2"/>
-            <TextBlock Text="+7" Grid.Column="3"/>
-            <TextBox Text="{Binding RodPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RenderTransformOrigin="-1.701,3.479" Grid.Column="4" MinWidth="70" Style="{DynamicResource TextBox}"/>
-            <TextBox Text="{Binding RodFio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="200" Style="{DynamicResource TextBox}"/>
+    <DockPanel>
+        <Grid DockPanel.Dock="Bottom">
+            <StackPanel Grid.Row="23" Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Right">
+                <Button Content="Проверить" Click="CheckErrorsButton_Click" />
+                <Button Content="Отмена" Click="CancelButton_Click" />
+                <Button Content="Сохранить" Click="Button_Click"/>
+            </StackPanel>
+            <Button Content="Согласие на обработку данных" Grid.Row="23" Click="Button_Click_2"/>
         </Grid>
 
 
-        <Grid Margin="3,3,3,0" Grid.Row="6" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="319*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Размер формы"/>
-            <TextBox Text="{Binding RazmerFormi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="50" Style="{DynamicResource TextBox}"/>
-            <CheckBox Content="Наличие формы" IsChecked="{Binding HasForma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"/>
-        </Grid>
-        <Grid  Margin="3,3,3,0" Grid.Row="20" VerticalAlignment="Top" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="111*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Желаемый город работы" Grid.Column="2"/>
-            <DatePicker SelectedDate="{Binding VihodDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
-            <ComboBox Name="GorodComboBox" Text="{Binding Gorod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="100" Style="{DynamicResource ComboBox}"
-                       ItemsSource="{Binding Cities}"/>
-            <TextBlock Text="Предварительная дата выхода"/>
-        </Grid>
-
-        <Grid Margin="3,3,3,0" Grid.Row="21" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="411*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Заметки"/>
-            <TextBox Text="{Binding Zametki, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="100" Style="{DynamicResource TextBox}" TextWrapping="Wrap"/>
-        </Grid>
-        <Expander Header="Медицинские справки" Margin="3,3,3,0" Grid.Row="16" VerticalAlignment="Top" IsExpanded="True" >
-            <Grid Background="#FFE5E5E5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <CheckBox Content="Пройдена" IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" Margin="10,8,0,8"/>
-                <CheckBox Content="Пройдено" IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3"  Margin="10,8,0,8"/>
-                <CheckBox Content="Забрал справку" IsChecked="{Binding IsPsihZabral, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"  Margin="10,8,0,8"/>
-                <TextBlock Text="Психосвидетельствование" Margin="10,7,0,7"/>
-                <DatePicker SelectedDate="{Binding PsihDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                <TextBlock Text="дата" Grid.Column="1" Margin="10,7,3,7"/>
-                <CheckBox Content="Получена" IsChecked="{Binding IsSanKnizka, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="10,8,0,8"/>
-                <TextBlock Text="Санкнижка" Grid.Row="1" Margin="10,7,0,7"/>
-                <DatePicker SelectedDate="{Binding SanKnizkaDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                <TextBlock Text="дата" Grid.Row="1" Grid.Column="1" Margin="10,7,3,7"/>
-                <TextBlock Text="Медкомиссия" Grid.Row="2" Margin="10,7,0,7"/>
-                <DatePicker SelectedDate="{Binding MedKommDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                <TextBlock Text="дата" Grid.Row="2" Grid.Column="1" Margin="10,7,3,7"/>
-            </Grid>
-        </Expander>
-        <Expander Header="Обучение" Margin="3,3,3,0" Grid.Row="18"  VerticalAlignment="Top" IsExpanded="True" >
-            <Grid Background="#FFE5E5E5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="246*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid Margin="3" VerticalAlignment="Top" Grid.ColumnSpan="2" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="72*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="Учебный центр" />
-                    <ComboBox Name="UchebCentrComboBox" Text="{Binding UchebCentr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Grid.Column="1" Style="{DynamicResource ComboBox}" MinWidth="70"
-                               ItemsSource="{Binding UchebCentri}" IsReadOnly="False"/>
-                    <TextBlock Text="дата" Grid.Column="2" HorizontalAlignment="Right"/>
-                </Grid>
-                <DatePicker SelectedDate="{Binding UchebStartDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                <Grid Margin="3" VerticalAlignment="Top" Grid.Column="3" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="срок окончания" Grid.Column="0"/>
-                    <DatePicker SelectedDate="{Binding UchebEndDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
-                    <TextBlock Text="Группа" Grid.Column="2"/>
-                    <ComboBox Grid.Column="3" Style="{DynamicResource ComboBox}" MinWidth="35"
-                              ItemsSource="{Binding UchebGruppas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                              SelectedItem="{Binding SelectedUchebGruppa}"
-                              DisplayMemberPath="UchebGruppa" IsReadOnly="False" IsEditable="True"/>
-                    <TextBlock Text="x" Grid.Column="4" Margin="0,0,0,3" Foreground="Red" Padding="0,3,3,3" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
-                </Grid>
-                <TextBlock Text="Практика" Grid.Row="1"/>
-                <TextBlock Text="дата пробной поездки" Grid.Row="1" Grid.Column="1" Margin="10,3,3,3" HorizontalAlignment="Right"/>
-                <DatePicker SelectedDate="{Binding PraktikaDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                <CheckBox Content="Пройдена" IsChecked="{Binding IsPraktika, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="3"/>
-
-                <TextBlock Text="Экзамен " Grid.Row="2"/>
-                <TextBlock Text="дата" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="10,3,3,3"/>
-                <DatePicker SelectedDate="{Binding ExamenDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                <CheckBox Content="Пройден" IsChecked="{Binding IsExamen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="3"/>
-            </Grid>
-
-        </Expander>
-        <Expander Header="Паспортные данные, ИНН, СНИЛС" Margin="3,3,3,0" Grid.Row="7" VerticalAlignment="Top" IsExpanded="True">
-            <Grid Background="#FFE5E5E5">
-                <StackPanel Orientation="Vertical">
-                    <Grid Margin="3" Grid.Row="7" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="393*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Дата рождения"/>
-                        <TextBlock Text="Место рождения" Grid.Column="2"/>
-                        <DatePicker SelectedDate="{Binding BirthDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
-                        <TextBox Text="{Binding MestoRozd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{DynamicResource TextBox}"/>
-                    </Grid>
-                    <Grid Margin="3,3,3,0" Grid.Row="8" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="394*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Серия паспорта"/>
-                        <TextBox Text="{Binding PaspSeriya, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}" MinWidth="40"/>
-                        <TextBlock Text="Номер паспорта " Grid.Column="2"/>
-                        <TextBox Text="{Binding PaspNomer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{DynamicResource TextBox}" MinWidth="57"/>
-                    </Grid>
-                    <Grid Margin="3,3,3,0" Grid.Row="9" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="21*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Кем выдан"/>
-                        <TextBox Text="{Binding PaspVidan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}"/>
-                    </Grid>
-                    <Grid Margin="3,3,3,0" Grid.Row="10" VerticalAlignment="Top" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="361*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Когда выдан"/>
-                        <DatePicker SelectedDate="{Binding VidanDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RenderTransformOrigin="0.39,0.667" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
-                    </Grid>
-                    <Grid Margin="3,3,3,0" Grid.Row="11" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Прописка по паспорту"/>
-                        <TextBox Text="{Binding PaspAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}" AcceptsReturn="True"/>
-                    </Grid>
-
-                    <Grid Margin="3,3,3,0" Grid.Row="12" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Адрес фактического места жительства"/>
-                        <TextBox Text="{Binding FactAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}"/>
-                    </Grid>
-
-                    <Grid Margin="3,3,3,0" Grid.Row="13" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Срок действия временной регистрации или миграционной карты"/>
-                        <DatePicker SelectedDate="{Binding VremRegDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
-                    </Grid>
-                    <Grid Margin="3,3,3,0" Grid.Row="14" VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="411*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="ИНН" Grid.Column="2"/>
-                        <TextBlock Text="Номер ПФ (СНИЛС)"/>
-                        <TextBox Text="{Binding Snils, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="100" Style="{DynamicResource TextBox}"/>
-                        <TextBox Text="{Binding Inn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="100" Style="{DynamicResource TextBox}"/>
-                    </Grid>
-                </StackPanel>
-            </Grid>
-        </Expander>
-        <Grid Margin="3,3,3,0" Grid.Row="22" VerticalAlignment="Top" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <CheckBox Content="Выбыл" IsChecked="{Binding IsVibil, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="Причина" Grid.Column="1"/>
-            <ComboBox Name="VibilPrichinaComboBox" Text="{Binding VibilPrichina, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" MinWidth="150" Style="{DynamicResource ComboBox}"
-                       ItemsSource="{Binding VibilPrichini}" IsEditable="True" IsReadOnly="False"/>
-        </Grid>
-        <Expander  IsExpanded="True" Grid.Column="1" Grid.RowSpan="23" Margin="3,3,3,3">
+        <Expander Name="DocsExpander" DockPanel.Dock="Right" IsExpanded="True" Grid.Column="1" Grid.RowSpan="23" Margin="3,3,3,3">
             <Expander.Header>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Сканированные документы" Style="{x:Null}" VerticalAlignment="Center" />
@@ -426,7 +77,7 @@
                 </StackPanel>
             </Expander.Header>
             <Grid Background="#FFE5E5E5" >
-                <ListView Name="lstw" Margin="3,3,3,0" SelectionMode="Single" ItemsSource="{Binding Documents}" Height="787" MinHeight="150">
+                <ListView Name="lstw" Margin="3,3,3,0" SelectionMode="Single" ItemsSource="{Binding Documents}" MinHeight="150">
                     <ListView.View>
                         <GridView>
                             <GridView.Columns>
@@ -443,8 +94,15 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Вид документа" DisplayMemberBinding="{Binding Path=Description}"></GridViewColumn>
-                                <!--GridViewColumn Header="Действителен до" DisplayMemberBinding="{Binding Path=ModelNumber}"></GridViewColumn-->
+                                <GridViewColumn Header="Вид документа" Width="auto">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap" MaxWidth="180"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <!--GridViewColumn Header="Вид документа" DisplayMemberBinding="{Binding Path=Description}"></>
+                                <GridViewColumn Header="Действителен до" DisplayMemberBinding="{Binding Path=ModelNumber}"></GridViewColumn-->
 
                                 <GridViewColumn Header="Предоставит к" Width="auto" >
                                     <GridViewColumn.CellTemplate>
@@ -465,13 +123,368 @@
 
             </Grid>
         </Expander>
-        <StackPanel Grid.Row="23" Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Right">
-            <Button Content="Проверить" Click="CheckErrorsButton_Click" />
-            <Button Content="Отмена" Click="CancelButton_Click" />
-            <Button Content="Сохранить" Click="Button_Click"/>
-        </StackPanel>
-        <Button Content="Согласие на обработку данных" Grid.Row="23" Click="Button_Click_2"/>
+        <ScrollViewer Name="DataScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid Name="DataGrid" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" VerticalAlignment="Top" Grid.Row="4">
+                    <CheckBox Content="Наличие льготы" IsChecked="{Binding HasLgota, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4"/>
+                </Grid>
+                <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" VerticalAlignment="Top" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="0"/>
+                        <ColumnDefinition Width="0"/>
+                        <ColumnDefinition Width="0"/>
+                        <ColumnDefinition Width="0"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="ФИО"/>
+                    <TextBlock Text="Отряд" Grid.Column="11"/>
+                    <TextBlock Text="Гражданство" Grid.Column="8"/>
+                    <TextBox Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="250" Style="{DynamicResource TextBox}"/>
+                    <ComboBox Name="GrazdanstvoComboBox" Text="{Binding Grazdanstvo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" MinWidth="50"
+                      ItemsSource="{Binding Grazdanstva}"/>
+                    <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="12" MinWidth="80" Style="{DynamicResource ComboBox}"
+                       IsEditable="True" ItemsSource="{Binding Otryadi}" IsReadOnly="False"/>
+                    <TextBlock Text="Пол" Grid.Column="6"/>
+                    <ComboBox Name="PolComboBox" Text="{Binding Pol, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="50"/>
+                </Grid>
+                <Grid HorizontalAlignment="Stretch"  Margin="3,3,3,0" VerticalAlignment="Top" Grid.Row="1" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Номер телефона"/>
+                    <TextBlock Text="+7" Grid.Column="1"/>
+                    <TextBlock Text="Логин vk" Grid.Column="3"/>
+                    <TextBlock Text="https://vk.com/" Grid.Column="4"/>
 
-    </Grid>
+                    <TextBox Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" MinWidth="70" Style="{DynamicResource TextBox}"/>
+                    <TextBox Text="{Binding Vk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="100" Style="{DynamicResource TextBox}"/>
+                    <Button Content="перейти" Grid.Column="6" VerticalAlignment="Center" Click="Button_Click_3" Height="22" Padding="5,0"/>
+                </Grid>
+                <Grid HorizontalAlignment="Stretch"  Margin="3,3,3,0" VerticalAlignment="Top" Grid.Row="2" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Content="Новичок" IsChecked="{Binding IsNovichok, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0"/>
 
+                    <TextBlock Text="Номер договора" Grid.Column="1"/>
+                    <TextBlock Text="Дата договора" Grid.Column="3"/>
+                    <TextBox Text="{Binding Dogovor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" MinWidth="70" Style="{DynamicResource TextBox}"/>
+                    <DatePicker SelectedDate="{Binding DogovorDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" Style="{DynamicResource DatePicker}"/>
+
+                </Grid>
+                <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="3" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="24*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Учебное заведение"/>
+                    <TextBlock Text="Форма обучения" Grid.Column="2"/>
+                    <TextBlock Text="Год окончания обучения" Grid.Column="6"/>
+                    <TextBox Text="{Binding UchGod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="40" Style="{DynamicResource TextBox}"/>
+                    <ComboBox Name="UchFormaComboBox" Text="{Binding UchForma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="80" Style="{DynamicResource ComboBox}"
+                          ItemsSource="{Binding UchFormas}"/>
+                    <ComboBox Name="UchZavedenieComboBox" Text="{Binding UchZavedenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="70" Style="{DynamicResource ComboBox}"
+                          ItemsSource="{Binding UchZavedeniya}" IsReadOnly="False"/>
+                </Grid>
+                <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="5" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="ФИО родителя"/>
+                    <TextBlock Text="Контактный телефон родителей" Grid.Column="2"/>
+                    <TextBlock Text="+7" Grid.Column="3"/>
+                    <TextBox Text="{Binding RodPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RenderTransformOrigin="-1.701,3.479" Grid.Column="4" MinWidth="70" Style="{DynamicResource TextBox}"/>
+                    <TextBox Text="{Binding RodFio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="200" Style="{DynamicResource TextBox}"/>
+                </Grid>
+
+
+                <Grid Margin="3,3,3,0" Grid.Row="6" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="319*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Размер формы"/>
+                    <TextBox Text="{Binding RazmerFormi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="50" Style="{DynamicResource TextBox}"/>
+                    <CheckBox Content="Наличие формы" IsChecked="{Binding HasForma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2"/>
+                </Grid>
+                <Grid  Margin="3,3,3,0" Grid.Row="20" VerticalAlignment="Top" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="111*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Желаемый город работы" Grid.Column="2"/>
+                    <DatePicker SelectedDate="{Binding VihodDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
+                    <ComboBox Name="GorodComboBox" Text="{Binding Gorod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="100" Style="{DynamicResource ComboBox}"
+                       ItemsSource="{Binding Cities}"/>
+                    <TextBlock Text="Предварительная дата выхода"/>
+                </Grid>
+
+                <Grid Margin="3,3,3,0" Grid.Row="21" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="411*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Заметки"/>
+                    <TextBox Text="{Binding Zametki, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="100" Style="{DynamicResource TextBox}" TextWrapping="Wrap"/>
+                </Grid>
+                <Expander Header="Медицинские справки" Margin="3,3,3,0" Grid.Row="16" VerticalAlignment="Top" IsExpanded="True" >
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Content="Пройдена" IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" Margin="10,8,0,8"/>
+                        <CheckBox Content="Пройдено" IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3"  Margin="10,8,0,8"/>
+                        <CheckBox Content="Забрал справку" IsChecked="{Binding IsPsihZabral, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"  Margin="10,8,0,8"/>
+                        <TextBlock Text="Психосвидетельствование" Margin="10,7,0,7"/>
+                        <DatePicker SelectedDate="{Binding PsihDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+                        <TextBlock Text="дата" Grid.Column="1" Margin="10,7,3,7"/>
+                        <CheckBox Content="Получена" IsChecked="{Binding IsSanKnizka, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="10,8,0,8"/>
+                        <TextBlock Text="Санкнижка" Grid.Row="1" Margin="10,7,0,7"/>
+                        <DatePicker SelectedDate="{Binding SanKnizkaDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+                        <TextBlock Text="дата" Grid.Row="1" Grid.Column="1" Margin="10,7,3,7"/>
+                        <TextBlock Text="Медкомиссия" Grid.Row="2" Margin="10,7,0,7"/>
+                        <DatePicker SelectedDate="{Binding MedKommDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+                        <TextBlock Text="дата" Grid.Row="2" Grid.Column="1" Margin="10,7,3,7"/>
+                    </Grid>
+                </Expander>
+                <Expander Header="Обучение" Margin="3,3,3,0" Grid.Row="18"  VerticalAlignment="Top" IsExpanded="True" >
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="246*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid Margin="3" VerticalAlignment="Top" Grid.ColumnSpan="2" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="72*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Учебный центр" />
+                            <ComboBox Name="UchebCentrComboBox" Text="{Binding UchebCentr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Grid.Column="1" Style="{DynamicResource ComboBox}" MinWidth="70"
+                               ItemsSource="{Binding UchebCentri}" IsReadOnly="False"/>
+                            <TextBlock Text="дата" Grid.Column="2" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <DatePicker SelectedDate="{Binding UchebStartDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+                        <Grid Margin="3" VerticalAlignment="Top" Grid.Column="3" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="срок окончания" Grid.Column="0"/>
+                            <DatePicker SelectedDate="{Binding UchebEndDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
+                            <TextBlock Text="Группа" Grid.Column="2"/>
+                            <ComboBox Grid.Column="3" Style="{DynamicResource ComboBox}" MinWidth="35"
+                              ItemsSource="{Binding UchebGruppas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              SelectedItem="{Binding SelectedUchebGruppa}"
+                              DisplayMemberPath="UchebGruppa" IsReadOnly="False" IsEditable="True"/>
+                            <TextBlock Text="x" Grid.Column="4" Margin="0,0,0,3" Foreground="Red" Padding="0,3,3,3" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+                        </Grid>
+                        <TextBlock Text="Практика" Grid.Row="1"/>
+                        <TextBlock Text="дата пробной поездки" Grid.Row="1" Grid.Column="1" Margin="10,3,3,3" HorizontalAlignment="Right"/>
+                        <DatePicker SelectedDate="{Binding PraktikaDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+                        <CheckBox Content="Пройдена" IsChecked="{Binding IsPraktika, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="3"/>
+
+                        <TextBlock Text="Экзамен " Grid.Row="2"/>
+                        <TextBlock Text="дата" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="10,3,3,3"/>
+                        <DatePicker SelectedDate="{Binding ExamenDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+                        <CheckBox Content="Пройден" IsChecked="{Binding IsExamen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="3"/>
+                    </Grid>
+
+                </Expander>
+                <Expander Header="Паспортные данные, ИНН, СНИЛС" Margin="3,3,3,0" Grid.Row="7" VerticalAlignment="Top" IsExpanded="True">
+                    <Grid Background="#FFE5E5E5">
+                        <StackPanel Orientation="Vertical">
+                            <Grid Margin="3" Grid.Row="7" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="393*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Дата рождения"/>
+                                <TextBlock Text="Место рождения" Grid.Column="2"/>
+                                <DatePicker SelectedDate="{Binding BirthDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
+                                <TextBox Text="{Binding MestoRozd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{DynamicResource TextBox}"/>
+                            </Grid>
+                            <Grid Margin="3,3,3,0" Grid.Row="8" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="394*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Серия паспорта"/>
+                                <TextBox Text="{Binding PaspSeriya, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}" MinWidth="40"/>
+                                <TextBlock Text="Номер паспорта " Grid.Column="2"/>
+                                <TextBox Text="{Binding PaspNomer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{DynamicResource TextBox}" MinWidth="57"/>
+                            </Grid>
+                            <Grid Margin="3,3,3,0" Grid.Row="9" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="21*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Кем выдан"/>
+                                <TextBox Text="{Binding PaspVidan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}"/>
+                            </Grid>
+                            <Grid Margin="3,3,3,0" Grid.Row="10" VerticalAlignment="Top" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="361*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Когда выдан"/>
+                                <DatePicker SelectedDate="{Binding VidanDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RenderTransformOrigin="0.39,0.667" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
+                            </Grid>
+                            <Grid Margin="3,3,3,0" Grid.Row="11" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Прописка по паспорту"/>
+                                <TextBox Text="{Binding PaspAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}" AcceptsReturn="True"/>
+                            </Grid>
+
+                            <Grid Margin="3,3,3,0" Grid.Row="12" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Адрес фактического места жительства"/>
+                                <TextBox Text="{Binding FactAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}"/>
+                            </Grid>
+
+                            <Grid Margin="3,3,3,0" Grid.Row="13" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Срок действия временной регистрации или миграционной карты"/>
+                                <DatePicker SelectedDate="{Binding VremRegDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
+                            </Grid>
+                            <Grid Margin="3,3,3,0" Grid.Row="14" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="411*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="ИНН" Grid.Column="2"/>
+                                <TextBlock Text="Номер ПФ (СНИЛС)"/>
+                                <TextBox Text="{Binding Snils, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="100" Style="{DynamicResource TextBox}"/>
+                                <TextBox Text="{Binding Inn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="100" Style="{DynamicResource TextBox}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </Expander>
+                <Grid Margin="3,3,3,0" Grid.Row="22" VerticalAlignment="Top" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox Content="Выбыл" IsChecked="{Binding IsVibil, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Причина" Grid.Column="1"/>
+                    <ComboBox Name="VibilPrichinaComboBox" Text="{Binding VibilPrichina, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" MinWidth="150" Style="{DynamicResource ComboBox}"
+                       ItemsSource="{Binding VibilPrichini}" IsEditable="True" IsReadOnly="False"/>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </DockPanel>
 </Window>

@@ -36,32 +36,6 @@ namespace Provodnik
             public static bool isWarnedThatReadOnly = false;
             public LoginView()
         {
-            /*using (var client = new FluentFTP.FtpClient(App.CurrentConfig.FtpAdress, new System.Net.NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw)))
-            {
-                client.Connect();
-                var db2 = new ProvodnikContext();
-
-                foreach (var pe in db2.Persons.Where(pp=>pp.IsMedKomm).ToList())
-                {
-                    var pdd = (from pd in db2.PersonDocs where pd.PersonId == pe.Id select pd).ToList();
-                    if (pdd.FirstOrDefault(pp => pp.DocTypeId == 6) != null) continue;
-                    var remotePath = $@"ProvodnikDocs/{pe.Id.ToString()}";
-                    foreach (var item in client.GetListing(remotePath, FluentFTP.FtpListOption.AllFiles))
-                    {
-                        if (pdd.FirstOrDefault(pp=>@"/"+pp.FileName==item.FullName)==null)
-                            System.Diagnostics.Debug.WriteLine(pe.Fio +"\t"+ item.FullName);
-                    }
-                }
-            }
-            return;*/
-
-
-            /* var ppp = (from p in new List<KeyValuePair<string, string>> {
-                 new KeyValuePair<string, string>("1", "2") ,new KeyValuePair<string, string>("1", "2")}
-                        select new { p.Key,p.Value}).Distinct().ToList();
-            */
-
-            //var db2 = new ProvodnikContext();
 
             Application.Current.DispatcherUnhandledException += (s, ex) =>
             {

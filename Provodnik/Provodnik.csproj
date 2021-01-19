@@ -30,8 +30,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://u0920601.plsk.regruhosting.ru/ProvodnikUpdate/</UpdateUrl>
     <ProductName>АСУ Проводник</ProductName>
-    <MinimumRequiredVersion>1.0.0.18</MinimumRequiredVersion>
-    <ApplicationRevision>19</ApplicationRevision>
+    <MinimumRequiredVersion>1.0.0.22</MinimumRequiredVersion>
+    <ApplicationRevision>22</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -58,10 +58,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>C7B48A00B6953DEA550651C0F6EDFB78BB90F557</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>5915B24F428BAE87C71E8958F8E126E40F4673B9</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Provodnik_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Provodnik_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -79,8 +79,8 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="FluentFTP, Version=28.0.5.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
-      <HintPath>packages\FluentFTP.28.0.5\lib\net45\FluentFTP.dll</HintPath>
+    <Reference Include="FluentFTP, Version=33.0.3.0, Culture=neutral, PublicKeyToken=f4af092b1d8df44f, processorArchitecture=MSIL">
+      <HintPath>packages\FluentFTP.33.0.3\lib\net45\FluentFTP.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -397,6 +397,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Provodnik_1_TemporaryKey.pfx" />
     <None Include="Provodnik_TemporaryKey.pfx" />
     <Content Include="Инструкция Проводник.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
