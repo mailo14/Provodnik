@@ -44,6 +44,7 @@ namespace Provodnik
                         }
                         progressChanged(5);
                         var share = 95.0 / rr.Count;
+                        var errors = new List<string>();
                         foreach (var r in rr)//vm.Persons)
                         {
                             ri++;
@@ -103,13 +104,19 @@ namespace Provodnik
                             c++; excel.cell[ri, c].value2 = r.IsVibil ? "да" : "нет";
                             c++; excel.cell[ri, c].value2 = r.VibilPrichina;
                             c++; excel.cell[ri, c].value2 = r.AllScans ? "да" : "нет";
-                            c++; excel.cell[ri, c].value2 = r.Messages.Replace(Environment.NewLine, "; ");
+
+                            if (r.Messages == null) errors.Add(r.Fio);
+                            c++; excel.cell[ri, c].value2 = r.Messages?.Replace(Environment.NewLine, "; ");
+
                             c++; excel.cell[ri, c].value2 = r.Zametki;
                             progressChanged(share);
                         }
                         excel.setAllBorders(excel.get_Range("A1", "AL" + ri));
                         excel.myExcel.Visible = true;
                         //  excel.Finish();
+                        if (errors.Any())
+                            throw new Exception("Выявлены ошибки примечаний для:" + Environment.NewLine +string.Join(Environment.NewLine+"  ", errors)
+                                +Environment.NewLine+Environment.NewLine + "Возможно был сбой при сохранении карточки. Проверьте карточку и сохраните");
                     })
 
 
