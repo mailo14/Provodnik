@@ -183,5 +183,51 @@ namespace Provodnik
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
+
+        public async void Badges(List<PersonShortViewModel> persons)
+        {
+            try
+            {
+                // await new ProgressRunner().RunAsync(doAction);      
+                await new ProgressRunner().RunAsync(
+                    new Action<ProgressHandler>((progressChanged) =>
+                    {
+
+                        progressChanged(1, "Формирование документа");
+
+                        var path = (string.Format("{0}\\_шаблоны\\" + "Бейджи.dotx", AppDomain.CurrentDomain.BaseDirectory));
+                        Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false};
+                        Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Add(path/*, ReadOnly: false, Visible: true*/);
+                        aDoc.Activate();
+
+                        object missing = Missing.Value;
+
+                        var table = aDoc.Tables[1];
+                        int iRow=2;
+
+                        progressChanged(5);
+                        var share = 95.0 / persons.Count;
+                        //for (int i=0;i<persons.Count-1;i++) table.Rows.Add(table.Rows[i+2]); //table.Rows.Add(ref missing);
+                        foreach (var p in persons)
+                        {
+                            if (iRow > 2) table.Rows.Add(ref missing);             
+                            table.Cell(iRow, 1).Range.Text = (iRow-1).ToString() + '.';
+                            table.Cell(iRow, 2).Range.Text = p.BadgeRus;
+                            table.Cell(iRow, 3).Range.Text = p.BadgeEng;
+
+                            iRow++;
+                            progressChanged(share);
+                        }
+                        // string otchetDir = @"C:\_provodnikFTP";
+                        //  aDoc.SaveAs(FileName: otchetDir + @"\Согласие на обработку персональных данных.DOCX");
+                        wordApp.Visible = true;
+
+                    })
+
+
+                    );
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
     }
 }

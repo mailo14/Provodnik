@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Provodnik
 {
-  public  class SendGroupPersonViewModel : System.ComponentModel.INotifyPropertyChanged//: PersonDoc
+  public  class MedKomZayavkaPersonViewModel : System.ComponentModel.INotifyPropertyChanged//: PersonDoc
     {
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
@@ -18,7 +18,6 @@ namespace Provodnik
         public int? Id { get; set; }
         public int PersonId { get; set; }
         public string Fio { get; set; }
-        public string UchForma { get; set; }
         public string Phone { get; set; }
         public string Messages { get; set; }
 
@@ -32,23 +31,7 @@ namespace Provodnik
                 OnPropertyChanged();
             }
         }
-
-        bool _IsMain;
-        public bool IsMain
-        {
-            get => _IsMain;
-            set
-            {//TODO event
-                if (value && SendGroupViewModel!=null)
-                {
-                    var p = SendGroupViewModel.Persons.FirstOrDefault(pp => pp.IsMain);
-                    if (p != null) p.IsMain = false;
-                }
-                _IsMain = value;
-                OnPropertyChanged();
-            }
-        }
         //public List<string> Errors { get; set; }
-        public SendGroupViewModel SendGroupViewModel { get; set; }//TODO event
+        public MedKomZayavkaViewModel MedKomZayavkaViewModel { get; set; }//TODO event
     }
 }

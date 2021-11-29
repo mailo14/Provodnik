@@ -18,6 +18,12 @@ namespace Provodnik
         public static string FormatSnils(string snils)
         {
             if (string.IsNullOrWhiteSpace(snils)) return null;
+
+            snils = snils.Trim();
+
+            if (snils.Length != 11)
+                return snils;
+
             return snils.Insert(9," ").Insert(6,"-").Insert(3,"-");
         }
 

@@ -148,9 +148,12 @@
                             <local:PersonDocument Name="Паспорт"  />
                             <local:PersonDocument Name="Прописка"  />
                         </ListView.Items-->
-        
-        <Button Name="ExcelButton" Content="Экспорт в Excel" Grid.Row="3" HorizontalAlignment="Left" Click="ExcelButton_Click"/>
-
+        <StackPanel  Grid.Row="3" HorizontalAlignment="Left" Orientation="Horizontal">
+            <Button Name="ExcelButton" Content="Экспорт в Excel" Click="ExcelButton_Click"/>
+            <Button Name="BadgesButton" Content="Бейджи" Click="BadgesButton_Click"/>
+            <Button  Content="Справки РСО" Click="SpravkiPSOButton_Click"/>
+            <Button  Content="Воронка" Click="VoronkaButton_Click"/>
+        </StackPanel>
         <Button Name="AddToGroupButton" Content="Добавить выбранных в группу" Grid.Row="3" HorizontalAlignment="Right" Click="AddToGroupButton_Click"/>
 
     </Grid>

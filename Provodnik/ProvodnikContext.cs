@@ -29,6 +29,8 @@ namespace Provodnik
         public virtual DbSet<SendGroup> SendGroups { get; set; }
         public virtual DbSet<SendGroupPerson> SendGroupPersons { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<MedKomZayavka> MedKomZayavki { get; set; }
+        public virtual DbSet<MedKomZayavkaPerson> MedKomZayavkaPersons { get; set; }
     }
 
     [Table("Person")]
@@ -38,12 +40,15 @@ namespace Provodnik
         //[Index]
         //[MaxLength(100)]
         public string Fio { get; set; }
+        public string BadgeRus { get; set; }
+        public string BadgeEng { get; set; }
         public string Pol { get; set; }
         public string Grazdanstvo { get; set; }
         public string Phone { get; set; }
         public string Vk { get; set; }
         //[Index]
         public string Otryad { get; set; }
+        public string Sezon { get; set; }
         //[Index]
         public bool IsNovichok { get; set; }
         public string Dogovor { get; set; }
@@ -76,6 +81,21 @@ namespace Provodnik
         public bool IsSanKnizka { get; set; }
         public DateTime? MedKommDat { get; set; }
         public bool IsMedKomm { get; set; }
+        public DateTime? NaprMedZakazanoDat { get; set; }
+        public bool IsNaprMedZakazano { get; set; }
+        public DateTime? NaprMedPoluchenoDat { get; set; }
+        public bool IsNaprMedPolucheno { get; set; }
+        public bool IsNaprMedPoluchenoNePoln { get; set; }
+        public bool IsNaprMedPoluchenoSOshibkoi { get; set; }
+        public DateTime? NaprMedVidanoDat { get; set; }
+        public bool IsNaprMedVidano { get; set; }
+        public DateTime? VaccineOneDat { get; set; }
+        public bool IsVaccineOne { get; set; }
+        public DateTime? VaccineOneOnlyDat { get; set; }
+        public bool IsVaccineOneOnly { get; set; }
+        public DateTime? VaccineTwoDat { get; set; }
+        public bool IsVaccineTwo { get; set; }
+        public DateTime? RevacDat { get; set; }
         //[Index]
         public string UchebCentr { get; set; }
         //[Index]
@@ -86,6 +106,12 @@ namespace Provodnik
         public bool IsPraktika { get; set; }
         public DateTime? ExamenDat { get; set; }
         public bool IsExamen { get; set; }
+        public bool IsExamenFailed { get; set; }
+
+        public DateTime? SertificatDat { get; set; }
+        public bool IsSertificatError { get; set; }
+        public string SertificatError { get; set; }
+
         public string Srez { get; set; }
         public DateTime? VihodDat { get; set; }
         public string Gorod { get; set; }
@@ -129,8 +155,11 @@ namespace Provodnik
     public class SendGroup
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         public string City { get; set; }
+        public string PeresadSt { get; set; }
         public string Depo { get; set; }
+        public string DepoRod { get; set; }
         public string RegOtdelenie { get; set; }
         public string Poezd { get; set; }
         public string Vagon { get; set; }
@@ -152,6 +181,22 @@ namespace Provodnik
         public bool IsMain { get; set; }
     }
 
+    [Table("MedKomZayavka")]
+    public class MedKomZayavka
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime? Dat { get; set; }
+    }
+
+    [Table("MedKomZayavkaPerson")]
+    public class MedKomZayavkaPerson
+    {
+        public int Id { get; set; }
+        public int MedKomZayavkaId { get; set; }
+        public int PersonId { get; set; }
+    }
+
     [Table("User")]
     public class User
     {
@@ -168,12 +213,12 @@ namespace Provodnik
             context.DocTypes.AddRange(new List<DocType>
             {
                 new DocType { Id = 1, OrderId = 1, Description = "Паспорт",IsObyazat=true },
-                new DocType { Id = 2, OrderId = 1, Description = "Прописка",IsObyazat=true },
+                new DocType { Id = 2, OrderId = 1, Description = "Прописка",IsObyazat=false },
                 new DocType { Id = 3, OrderId = 1, Description = "СНИЛС",IsObyazat=true },
                 new DocType { Id = 4, OrderId = 1, Description = "ИНН",IsObyazat=true },
                 new DocType { Id = 5, OrderId = 1, Description = "Психиатрическое освидетельствование",IsObyazat=true },
                 new DocType { Id = 6, OrderId = 1, Description = "Заключение ВЭК",IsObyazat=true },
-                //new DocType { Id = 7, OrderId = 1, Description = "Заключение ВЭК 2",IsObyazat=true },
+                new DocType { Id = 7, OrderId = 1, Description = "Заключение ВЭК 2",IsObyazat=true },
                 //new DocType { Id = 8, OrderId = 1, Description = "Заключение ВЭК 3",IsObyazat=true },
                 new DocType { Id = 9, OrderId = 1, Description = "Согласие на обработку персональных данных",IsObyazat=true },
                 new DocType { Id = 10, OrderId = 1, Description = "Свидетельство о присвоении профессии",IsObyazat=true },
@@ -188,6 +233,7 @@ namespace Provodnik
             new DocType { Id = 18, OrderId = 1, Description = "Миграционная карта 2", IsObyazat = false },
             new DocType { Id = 19, OrderId = 1, Description = "Временная регистрация 1", IsObyazat = false },
             new DocType { Id = 20, OrderId = 1, Description = "Временная регистрация 2", IsObyazat = false },
+            new DocType { Id = 21, OrderId = 1, Description = "Свидетельство о вакцинации", IsObyazat = true },
 
 }
        );
@@ -202,6 +248,7 @@ namespace Provodnik
         public const int ИНН = 4;
         public const int Психосвидетельствование = 5;
         public const int ЗаключениеВЭК = 6;
+        public const int ЗаключениеВЭК2 = 7;
         public const int СогласиеПерс = 9;
         public const int СвидетельствоПрофессии = 10;
         public const int РеквизитыКарты = 11;
@@ -214,5 +261,6 @@ namespace Provodnik
         public const int Миграционная2 = 18;
         public const int ВремРегистрация1 = 19;
         public const int ВремРегистрация2 = 20;
+        public const int СвидетельствоВакцинации = 21;
     }
 }

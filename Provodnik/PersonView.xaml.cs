@@ -320,5 +320,36 @@ namespace Provodnik
             var vm = this.DataContext as PersonViewModel;
             vm.SelectedUchebGruppa = null;
         }
+
+        private void GrazdanstvoComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+        }
+
+        private void BadgeRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshBadges();
+        }
+
+        private void RefreshBadges(bool showMessageIfError=true) { 
+            var vm = this.DataContext as PersonViewModel;
+            var helper = new StringHelper();
+            try
+            {
+                var fio = helper.ParseFio(vm.Fio);
+                vm.BadgeRus = fio[0].ToUpper() + " " + fio[1];
+                vm.BadgeEng=               helper.Translit(vm.BadgeRus);
+            }
+            catch (Exception ex){
+               if (showMessageIfError)                     MessageBox.Show("Ошибка "+ ex.Message);
+            }
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var vm = this.DataContext as PersonViewModel;
+            if (string.IsNullOrEmpty(vm.BadgeRus))
+                RefreshBadges(false);
+        }
     }
 }

@@ -27,9 +27,13 @@ namespace Provodnik
         public int Id { get; set; }
         public string Phone { get; set; }
         public string Fio { get; set; }
+        public string BadgeRus { get; set; }
+        public string BadgeEng { get; set; }
         public DateTime? BirthDat { get; set; }
         public string MestoRozd { get; set; }
         public string UchZavedenie { get; set; }
+        public string Snils { get; set; }
+        public string Inn { get; set; }
 
         public bool IsPsih { get; set; }
         public bool IsPsihZabral { get; set; }

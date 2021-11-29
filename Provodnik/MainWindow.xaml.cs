@@ -138,6 +138,21 @@ namespace Provodnik
                 cfg.CreateMap<SendGroup, SendGroupViewModel>();//.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id.Value));
                 cfg.CreateMap<SendGroupViewModel, SendGroup>().ForMember(dest => dest.Id, act => act.Ignore());//.ReverseMap();
 
+
+
+                cfg.CreateMap<Person, MedKomZayavkaPersonViewModel>()
+                .ForMember(dest => dest.Id, act => act.Ignore())
+                .ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.Id));//.ReverseMap();
+
+                cfg.CreateMap<MedKomZayavkaPerson, MedKomZayavkaPersonViewModel>();
+
+                cfg.CreateMap<PersonShortViewModel, MedKomZayavkaPersonViewModel>()
+                .ForMember(dest => dest.Id, act => act.Ignore())
+                .ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.Id));//.ReverseMap();
+                cfg.CreateMap<MedKomZayavka, MedKomZayavkaViewModel>();//.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id.Value));
+                cfg.CreateMap<MedKomZayavkaViewModel, MedKomZayavka>().ForMember(dest => dest.Id, act => act.Ignore());//.ReverseMap();
+
+
                 cfg.CreateMap<UchebGruppaViewModel, ObuchenieViewModel>().ReverseMap();
 
             });
@@ -149,6 +164,9 @@ namespace Provodnik
 
         public MainWindow()
         {
+           // Patch_ExecOnceThanDelete();
+
+
             p = this;
             /*Task.Run(() =>
             {
@@ -170,6 +188,20 @@ namespace Provodnik
             MainFrame.Navigate(psw);
 
             CheckAlarms();
+        }
+
+        private void Patch_ExecOnceThanDelete()
+        {
+            using (var db = new ProvodnikContext())
+            {
+                foreach (var p in db.Persons)
+                {
+                    //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.СвидетельствоВакцинации });
+                    db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ЗаключениеВЭК2 });
+
+                }
+                db.SaveChanges();
+            }
         }
 
         public static byte[] ToByteArray(BitmapSource bitmapSource)
@@ -353,6 +385,11 @@ namespace Provodnik
         private void InstrMenuItem_Click(object sender, RoutedEventArgs e)
         {
                 System.Diagnostics.Process.Start("Инструкция Проводник.docx");
+        }
+
+        private void MedKomZayavkiMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            new MedKomZayavkiView().ShowDialog();
         }
     }
 }

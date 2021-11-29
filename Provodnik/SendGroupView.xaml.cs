@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -27,7 +29,21 @@ namespace Provodnik
         public SendGroupView()
         {
             InitializeComponent();
-         //   this.DataContext = new PersonViewModel(new ProvodnikContext().Persons.FirstOrDefault()==null?(int?)null:1);//SendGroupViewModel
+            //   this.DataContext = new PersonViewModel(new ProvodnikContext().Persons.FirstOrDefault()==null?(int?)null:1);//SendGroupViewModel
+            Loaded += SendGroupView_Loaded;
+        }
+
+        private void SendGroupView_Loaded(object sender, RoutedEventArgs e)
+        {
+            //(DepoComboBox as TextBoxBase).TextChanged += SendGroupView_TextChanged;
+            CityComboBox.AddHandler(TextBoxBase.TextChangedEvent, new RoutedEventHandler(OnDepoComboBoxTextChanged));
+            DepoComboBox.AddHandler(TextBoxBase.TextChangedEvent, new RoutedEventHandler(OnDepoComboBoxTextChanged));
+        }
+
+        private void OnDepoComboBoxTextChanged(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as SendGroupViewModel;
+            vm.DepoRod = new Repository().GetF6Depo(vm.City, vm.Depo);
         }
 
         private void ComboBox_GotFocus(object sender, RoutedEventArgs e)
@@ -57,18 +73,23 @@ namespace Provodnik
                 excel.cell[ri, 2].value2 = r.Fio;
                 excel.cell[ri, 3].value2 = vm.Depo;
                 excel.cell[ri, 4].value2 = Helper.FormatPhone(r.Phone);
-                excel.cell[ri, 5].value2 = r.UchZavedenie;
-                excel.cell[ri, 6].value2 = r.UchForma;
-                excel.cell[ri, 7].value2 = r.Grazdanstvo;
-                excel.cell[ri, 8].value2 = r.Otryad;
-                excel.cell[ri, 9].value2 = r.UchebCentr;
-                excel.cell[ri, 10].value2 = (r.ExamenDat.HasValue)?r.ExamenDat.Value.Year.ToString() 
+
+                excel.cell[ri, 5].value2 = r.VaccineOneDat?.ToString("dd.MM.yyyy");
+                excel.cell[ri, 6].value2 = r.VaccineTwoDat?.ToString("dd.MM.yyyy");
+
+
+                excel.cell[ri, 7].value2 = r.UchZavedenie;
+                excel.cell[ri, 8].value2 = r.UchForma;
+                excel.cell[ri, 9].value2 = r.Grazdanstvo;
+                excel.cell[ri, 10].value2 = r.Otryad;
+                excel.cell[ri, 11].value2 = r.UchebCentr;
+                excel.cell[ri, 12].value2 = (r.ExamenDat.HasValue)?r.ExamenDat.Value.Year.ToString() 
                     : (r.UchebEndDat.HasValue?r.UchebEndDat.Value.Year.ToString():"");
-                excel.cell[ri, 11].value2 = Helper.FormatPhone(r.RodPhone);
-                excel.cell[ri, 12].value2 = r.RodFio;
+                excel.cell[ri, 13].value2 = Helper.FormatPhone(r.RodPhone);
+                excel.cell[ri, 14].value2 = r.RodFio;
               
             }
-            excel.setAllBorders(excel.get_Range("A2", "L" + ri)); 
+            excel.setAllBorders(excel.get_Range("A2", "N" + ri)); 
             excel.Finish();
         }
         public void VSOP2()//DateTime start, DateTime end, ProgressBar progress)
@@ -91,7 +112,7 @@ namespace Provodnik
                 ri++;
                 excel.cell[ri, 1].value2 = ri - 1;
                 excel.cell[ri, 2].value2 = vm.RegOtdelenie;
-                var fio = ParseFio(r.Fio);
+                var fio = new StringHelper().ParseFio(r.Fio);
                 excel.cell[ri, 3].value2 = fio[0];
                 excel.cell[ri, 4].value2 = fio[1];
                 excel.cell[ri, 5].value2 = fio[2];
@@ -104,43 +125,23 @@ namespace Provodnik
             excel.Finish();
         }
 
-        private string[] ParseFio(string _fio)
-        {
-            var fio = _fio.SplitString();
-            string f = "", i = "", o = "";
-            if (fio.Length >= 3)
-            {
-                o = fio[fio.Length - 1];
-                i = fio[fio.Length - 2];
-                f = "";
-                for (int fi = 0; fi <= fio.Length - 3; fi++)
-                    f += fio[fi];
-            }
-            else 
-            if (fio.Length == 2)
-            {
-                f=  fio[0];
-                i = fio[1];
-            }
-            if (fio.Length == 1)
-            {
-                f = fio[0];
-            }
-            return new string[] { f, i, o };
-        }
-
-        public  void VSOP3()//DateTime start, DateTime end, ProgressBar progress)
+        public  void VSOP3(bool otdelno=false)//DateTime start, DateTime end, ProgressBar progress)
         {
             var vm = DataContext as SendGroupViewModel;
 
             excelReport excel = new excelReport();
-            excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}__{2}_{3}.xlsx",
+          if (!otdelno)  excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}__{2}_{3}.xlsx",
                 vm.OtprDat.Value.ToString("dd.MM.yyyy"), 
                 "Новосибирск",
                 vm.City,
                 vm.Persons.Count),otchetDir: otchetDir);
+            else excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}__{2}_{3}.xlsx",
+                 vm.OtprDat.Value.ToString("dd.MM.yyyy"),
+                 "Новосибирск",
+                 vm.City,
+                 vm.Persons.Count), true);
 
-int            ri = 1;
+            int            ri = 1;
             var db = new ProvodnikContext();
             var ids= vm.Persons.Select(pp=>pp.PersonId).ToList();
             var rr = db.Persons.Where(pp => ids.Contains(pp.Id));
@@ -162,22 +163,22 @@ int            ri = 1;
             excel.cell[ri, 11].value2 = vm.Vstrechat?"да":"нет";
             excel.cell[ri, 12].value2 = vm.Vokzal;
 
-            ri = 3;
+            ri =1;
             foreach (var r in rr)//vm.Persons)
             {
                     ri++;               
-                excel.cell[ri, 3].value2 = r.Fio;         
+                excel.cell[ri, 13].value2 = r.Fio;         
             }
-            excel.setAllBorders(excel.get_Range("B2", "L" + ri));  
-            excel.Finish();
+            excel.setAllBorders(excel.get_Range("B2", "M" + ri));  
+            excel.Finish(!otdelno);
         }
         public  void F6()//DateTime start, DateTime end, ProgressBar progress)
         {
             var vm = DataContext as SendGroupViewModel;
 
             excelReport excel = new excelReport();
-            excel.Init((vm.City== "Москва")?"Ф6_Msk.xlsx":"Ф6_ost.xlsx", 
-                string.Format(@"Ф6_3_{0}_{1}__{2}_{3}.xls",                vm.OtprDat.Value.ToString("dd.MM.yyyy"),                 "Новосибирск",                vm.City,                vm.Persons.Count),
+            excel.Init(/*(vm.City== "Москва")?"Ф6_Msk.xlsx":*/"Ф6_ost.xlsx", 
+                string.Format(@"Ф6_3_{0}_{1}__{2}_{3}.xlsx",                vm.OtprDat.Value.ToString("dd.MM.yyyy"),                 "Новосибирск",                vm.City,                vm.Persons.Count),
                 otchetDir: otchetDir);
 
             int            ri =7;
@@ -185,6 +186,7 @@ int            ri = 1;
             var ids= vm.Persons.Select(pp=>pp.PersonId).ToList();
             var rr = db.Persons.Where(pp => ids.Contains(pp.Id));
 
+            excel.cell[4, 1].value2 = vm.DepoRod;// new Repository().GetF6Depo(vm.City, vm.Depo);
 
             if (vm.Persons.Count > 1)
             {
@@ -245,7 +247,47 @@ int            ri = 1;
 
 
         }
-            string otchetDir ;
+
+        public void ReestrPeredachi()
+        {
+            var vm = DataContext as SendGroupViewModel;
+
+            var db = new ProvodnikContext();
+            var ids = vm.Persons.Select(pp => pp.PersonId);
+            var pe = db.Persons.Where(pp => ids.Contains(pp.Id) && !pp.HasLgota).ToList();
+            if (pe.Count == 0) return;
+
+
+            var path = (string.Format("{0}\\_шаблоны\\" + "Реестр передачи.docx", AppDomain.CurrentDomain.BaseDirectory));
+            Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false };
+            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Open(path, ReadOnly: false, Visible: false);
+            aDoc.Activate();
+
+            object missing = Missing.Value;
+
+            Microsoft.Office.Interop.Word.Range range = aDoc.Content;
+            range.Find.ClearFormatting();
+            
+            range.Find.Execute(FindText: "{ВЧ}", ReplaceWith: vm.DepoRod, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll); 
+
+            var table = aDoc.Tables[1];
+            int iRow = 2;
+
+            foreach (var p in vm.Persons)
+            {
+                if (iRow > 2) table.Rows.Add(ref missing);
+                table.Cell(iRow, 1).Range.Text = (iRow - 1).ToString() + '.';
+                table.Cell(iRow, 2).Range.Text = p.Fio;
+                table.Cell(iRow, 3).Range.Text = p.UchForma;
+                table.Cell(iRow, 4).Range.Text = "ЕСТЬ";
+
+                iRow++;
+            }
+
+            aDoc.SaveAs(FileName: otchetDir + $@"\Реестр передачи {vm.City}.docx");
+            aDoc.Close();       }
+
+        string otchetDir ;
         private void AddFromListButton_Click(object sender, RoutedEventArgs e)
         {
             var vm= this.DataContext as SendGroupViewModel;
@@ -347,7 +389,7 @@ int            ri = 1;
             {
                 App.setCursor(true);
                 var vm = this.DataContext as SendGroupViewModel;
-                otchetDir = dialog.SelectedPath + @"\" + string.Format(@"ВСОП_1_{0}_{1}__{2}_{3}",
+                otchetDir = dialog.SelectedPath + @"\" + string.Format(@"Пакет_{0}_{1}__{2}_{3}",
                 vm.OtprDat.Value.ToString("dd.MM.yyyy"),
                 "Новосибирск",
                 vm.City,
@@ -356,9 +398,11 @@ int            ri = 1;
 
                 try
                 {
-                    VSOP1(); VSOP2(); VSOP3();
+                   VSOP1();// VSOP2();
+                    VSOP3();
                     F6();
                     PismoLgoti();/**/
+                    ReestrPeredachi();
 
                     string path = otchetDir + @"\Сканы";
                     if (!Directory.Exists(path))
@@ -379,7 +423,7 @@ int            ri = 1;
 
                     foreach (var g in qq)
                     {
-                        var fio = ParseFio(g.Key);
+                        var fio = new StringHelper().ParseFio(g.Key);
                         var fioInic = fio[0];
                         if (fio[1].Length > 0) fioInic += $" {fio[1][0]}.";
                         if (fio[2].Length > 0) fioInic += $" {fio[2][0]}.";
@@ -435,6 +479,11 @@ int            ri = 1;
                 //runs after sorting is done
                 Helper.SetPersonShortIndexes(PersonsListView);
             }, null);
+        }
+
+        private void PrintVSOP3Button_Click(object sender, RoutedEventArgs e)
+        {
+            VSOP3(true);
         }
     }
 }

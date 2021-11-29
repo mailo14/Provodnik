@@ -59,6 +59,7 @@ namespace Provodnik
         public ObservableCollection<string> Obucheniyas { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> MedKommDats { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> UchZavedeniya { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> Sezons { get; set; } = new ObservableCollection<string>();
 
         string _UchZavedenie;
         [DisplayName(DisplayName = "Учебное заведение")]
@@ -68,6 +69,18 @@ namespace Provodnik
             set
             {
                 _UchZavedenie = value;               
+                OnPropertyChanged();
+            }
+        }
+
+        string _Sezon;
+        //[DisplayName(DisplayName = "Учебное заведение")]
+        public string Sezon
+        {
+            get => _Sezon;
+            set
+            {
+                _Sezon = value;               
                 OnPropertyChanged();
             }
         }
@@ -153,6 +166,9 @@ namespace Provodnik
             Grazdanstva.Clear(); foreach (var pp in repository.GetGrazdanstva()) Grazdanstva.Add(pp);
             UchZavedeniya.Clear(); foreach (var pp in repository.GetUchZavedeniya()) UchZavedeniya.Add(pp);
 
+            Sezons.Clear(); foreach (var pp in repository.GetSezons()) Sezons.Add(pp);            Sezons.Insert(0, RepoConsts.NoSezons);
+                        Sezon = new Repository().GetCurSezon();
+
             Obucheniyas.Clear(); foreach (var pp in repository.GetObucheniyas()) Obucheniyas.Add(pp);
 
             MedKommDats.Clear(); foreach (var pp in repository.GetMedKommDats()) MedKommDats.Add(pp);
@@ -179,7 +195,6 @@ new ScanCheck{DisplayName="Справка-подтверждение МООО  
 new ScanCheck{DisplayName="Миграционная карта и временная регистрация",DocType=DocConsts.Миграционная1},
 
             };
-
         }
 
         private string _Gorod;
@@ -237,6 +252,7 @@ new ScanCheck{DisplayName="Миграционная карта и временн
                       Otryad = UchZavedenie = Grazdanstvo = Obuchenie= MedKommDat= null;
                       IsNovichok = null;
                       Gorod = null; VihodDat = null;
+                     Sezon= new Repository().GetCurSezon();
 
                       PersonSearch = null;//run find, should be last                      RefreshPersonList();
                   }));
@@ -278,6 +294,19 @@ private RelayCommand _FindCommand;
             }
             else
             {
+                if (IsNaprMedVidano != null)
+                    query = query.Where(pp => pp.IsNaprMedVidano == IsNaprMedVidano);
+                if (IsNaprMedPoluchenoSOshibkoi != null)
+                    query = query.Where(pp => pp.IsNaprMedPoluchenoSOshibkoi == IsNaprMedPoluchenoSOshibkoi); 
+                if (IsNaprMedPoluchenoNePoln != null)
+                    query = query.Where(pp => pp.IsNaprMedPoluchenoNePoln == IsNaprMedPoluchenoNePoln);
+                if (IsNaprMedPolucheno != null)
+                    query = query.Where(pp => pp.IsNaprMedPolucheno == IsNaprMedPolucheno);
+                if (IsNaprMedZakazano != null)
+                    query = query.Where(pp => pp.IsNaprMedZakazano == IsNaprMedZakazano);
+
+                if (Sezon!=null && Sezon!= RepoConsts.NoSezons)
+                    query = query.Where(pp => pp.Sezon ==  Sezon); 
                 if (ExceptVibil.HasValue)
                     query = query.Where(pp => pp.IsVibil == !ExceptVibil.Value);
                 if (PasportEntered.HasValue)
@@ -645,15 +674,70 @@ private RelayCommand _FindCommand;
             }
         }
 
-    /*    bool? _ActualOnly;
-        public bool? ActualOnly
+        private bool? _IsNaprMedZakazano;
+        public bool? IsNaprMedZakazano
         {
-            get => _ActualOnly;
+            get => _IsNaprMedZakazano;
             set
             {
-                _ActualOnly = value;
+                _IsNaprMedZakazano = value;
                 OnPropertyChanged();
             }
-        }*/
+        }
+        
+        private bool? _IsNaprMedPolucheno;
+        public bool? IsNaprMedPolucheno
+        {
+            get => _IsNaprMedPolucheno;
+            set
+            {
+                _IsNaprMedPolucheno = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool? _IsNaprMedPoluchenoNePoln;
+        public bool? IsNaprMedPoluchenoNePoln
+        {
+            get => _IsNaprMedPoluchenoNePoln;
+            set
+            {
+                _IsNaprMedPoluchenoNePoln = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool? _IsNaprMedPoluchenoSOshibkoi;
+        public bool? IsNaprMedPoluchenoSOshibkoi
+        {
+            get => _IsNaprMedPoluchenoSOshibkoi;
+            set
+            {
+                _IsNaprMedPoluchenoSOshibkoi = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool? _IsNaprMedVidano;
+        public bool? IsNaprMedVidano
+        {
+            get => _IsNaprMedVidano;
+            set
+            {
+                _IsNaprMedVidano = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /*    bool? _ActualOnly;
+            public bool? ActualOnly
+            {
+                get => _ActualOnly;
+                set
+                {
+                    _ActualOnly = value;
+                    OnPropertyChanged();
+                }
+            }*/
     }
 }

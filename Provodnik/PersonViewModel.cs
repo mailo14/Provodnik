@@ -26,9 +26,9 @@ namespace Provodnik
                 return decoder.Frames.First();
             }
         }
-        Repository repository=new Repository();
+        Repository repository = new Repository();
 
-        public PersonViewModel(int? personId,bool loadBitmaps=true)
+        public PersonViewModel(int? personId, bool loadBitmaps = true)
         {
             Validator = GetValidator();
 
@@ -40,6 +40,7 @@ namespace Provodnik
             Otryadi = db.Persons.Select(pp => pp.Otryad).Distinct().ToList();
             UchebCentri = repository.GetUchebCentri();
             Grazdanstva = repository.GetGrazdanstva();
+            Sezons = repository.GetSezons();
 
 
             Documents = new ObservableCollection<PersonDocViewModel>();
@@ -73,8 +74,10 @@ namespace Provodnik
                 if (UchebCentri.Count == 1)
                     UchebCentr = UchebCentri[0];
                 Grazdanstvo = Grazdanstva[0];
-                foreach (var d in db.DocTypes.Where(pp => pp.IsObyazat).ToList())
-                    Documents.Add(new PersonDocViewModel() { Description = d.Description, DocTypeId = d.Id, Bitmap = new System.Windows.Controls.Image() });
+                Sezon = Sezons[0];
+                ReCreateDocs();
+                //foreach (var d in db.DocTypes.Where(pp => pp.IsObyazat).ToList())
+                //    Documents.Add(new PersonDocViewModel() { Description = d.Description, DocTypeId = d.Id, Bitmap = new System.Windows.Controls.Image() });
                 //  progressChanged(50);
             }
             //  LoadPersonViewModelAsync(personId);
@@ -104,7 +107,7 @@ namespace Provodnik
 
         public bool GetAllPasport()
         {
-            var allPasports= new string[]{ Fio,Phone,UchZavedenie,UchForma,Grazdanstvo//,Otryad
+            var allPasports = new string[]{ Fio,Phone,UchZavedenie,UchForma,Grazdanstvo//,Otryad
                 ,UchebCentr,(ExamenDat.HasValue) ? ExamenDat.ToString(): UchebEndDat.ToString()//TODO
                 ,RodPhone,RodFio
                 ,BirthDat.ToString(),MestoRozd,PaspNomer,PaspSeriya,PaspAdres,Snils };
@@ -117,7 +120,7 @@ namespace Provodnik
             if (!Validator.IsValid)
             {
                 foreach (var ve in Validator.ValidationMessages) errors.Add(ve.Message);
-            }          
+            }
 
             return errors;
         }
@@ -193,7 +196,7 @@ namespace Provodnik
             var scanErrors = GetScanErrors(true);
             var allErrors = GetModelErrors(); allErrors.AddRange(scanErrors);
 
-            Messages=p.Messages = string.Join(Environment.NewLine, allErrors);
+            Messages = p.Messages = string.Join(Environment.NewLine, allErrors);
             AllPasport = p.AllPasport = GetAllPasport();
             AllScans = p.AllScans = !scanErrors.Any();
         }
@@ -206,24 +209,24 @@ namespace Provodnik
             set
             {
                 if (value != null && value.UchebCentr == null) value = null;
-if (_SelectedUchebGruppa != value)
+                if (_SelectedUchebGruppa != value)
                 {
                     _SelectedUchebGruppa = value;
-                        IsLoading = true;
-                        if (value != null)
-                        {
-                            UchebGruppa = value.UchebGruppa;
-                            UchebCentr = value.UchebCentr;
-                            UchebStartDat = value.UchebStartDat;
-                            UchebEndDat = value.UchebEndDat;
-                        }
-                        else
-                        {
-                            UchebGruppa = null;
-                            // UchebGruppa = UchebCentr = null;
-                            // UchebStartDat = UchebEndDat = null;
-                        }
-                        IsLoading = false;
+                    IsLoading = true;
+                    if (value != null)
+                    {
+                        UchebGruppa = value.UchebGruppa;
+                        UchebCentr = value.UchebCentr;
+                        UchebStartDat = value.UchebStartDat;
+                        //UchebEndDat = value.UchebEndDat;
+                    }
+                    else
+                    {
+                        UchebGruppa = null;
+                        // UchebGruppa = UchebCentr = null;
+                        // UchebStartDat = UchebEndDat = null;
+                    }
+                    IsLoading = false;
                     OnPropertyChanged();
                 }
             }
@@ -264,40 +267,47 @@ if (_SelectedUchebGruppa != value)
 
         public async void Load(int? personId)
         {
-            List<PersonDocViewModel> qq=null;
-  await new ProgressRunner().RunAsync(
-                          new Action<ProgressHandler>((progressChanged) =>
-                          {
+            List<PersonDocViewModel> qq = null;
+            await new ProgressRunner().RunAsync(
+                                    new Action<ProgressHandler>((progressChanged) =>
+                                    {
 
-                              var db = new ProvodnikContext();
-                              var pp = (from pd in db.PersonDocs
-                                        join dt in db.DocTypes on pd.DocTypeId equals dt.Id select new { pd,dt}).ToList();
+                                        var db = new ProvodnikContext();
+                                        var pp = (from pd in db.PersonDocs
+                                                  join dt in db.DocTypes on pd.DocTypeId equals dt.Id
+                                                  select new { pd, dt }).ToList();
                               //return;
                               qq = (from pd in db.PersonDocs
-                                        join dt in db.DocTypes on pd.DocTypeId equals dt.Id
-                                        where pd.PersonId ==personId.Value
-                                        select new PersonDocViewModel() { Id = pd.Id, DocTypeId = pd.DocTypeId, Description = dt.Description, FileName = pd.FileName, PrinesetK = pd.PrinesetK
-                                       // , Bitmap = new System.Windows.Controls.Image()
-                                        }).ToList();
+                                              join dt in db.DocTypes on pd.DocTypeId equals dt.Id
+                                              where pd.PersonId == personId.Value
+                                              select new PersonDocViewModel()
+                                              {
+                                                  Id = pd.Id,
+                                                  DocTypeId = pd.DocTypeId,
+                                                  Description = dt.Description,
+                                                  FileName = pd.FileName,
+                                                  PrinesetK = pd.PrinesetK
+                                        // , Bitmap = new System.Windows.Controls.Image()
+                                    }).ToList();
 
-                          }));
+                                    }));
             Fio = string.Join(" ", qq.Select(pp => pp.Description));
         }
-     /*   public  void LoadPersonViewModel(ProgressHandler progressChanged)//int? _personId)
-        {
-                          var personId = 1 as int?;//
-           // _personId;
-                          
-                    
-        }
-
-    public async void LoadPersonViewModelAsync(int? _personId)
-    {
-        await new ProgressRunner().RunAsync(LoadPersonViewModel);
-        }*/
+        /*   public  void LoadPersonViewModel(ProgressHandler progressChanged)//int? _personId)
+           {
+                             var personId = 1 as int?;//
+              // _personId;
 
 
-                  public void ReCreateDocs()
+           }
+
+       public async void LoadPersonViewModelAsync(int? _personId)
+       {
+           await new ProgressRunner().RunAsync(LoadPersonViewModel);
+           }*/
+
+
+        public void ReCreateDocs()
         {
             Documents.Clear();
 
@@ -315,6 +325,7 @@ if (_SelectedUchebGruppa != value)
             var builder = new ValidationBuilder<PersonViewModel>();
 
             builder.RuleFor(vm => vm.Fio).MyNotEmpty();
+            builder.RuleFor(vm => vm.BadgeRus).MyNotEmpty(); builder.RuleFor(vm => vm.BadgeEng).MyNotEmpty();
             builder.RuleFor(vm => vm.Pol).MyNotEmpty();
             builder.RuleFor(vm => vm.Grazdanstvo).MyNotEmpty();
             builder.RuleFor(vm => vm.Phone).MyNotEmpty()
@@ -324,11 +335,11 @@ if (_SelectedUchebGruppa != value)
             builder.RuleFor(vm => vm.DogovorDat).MyNotEmptyDat();
             builder.RuleFor(vm => vm.UchZavedenie).MyNotEmpty();
             builder.RuleFor(vm => vm.UchForma).MyNotEmpty();
-               // .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie));
+            // .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie));
             //builder.RuleFor(vm => vm.UchFac).MyNotEmpty()
             //    .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie) && uchZavedenie!= "не учится");
             builder.RuleFor(vm => vm.UchGod).MyNotEmpty()
-                .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie) && uchZavedenie!= RepoConsts.NoUchZavedenie).Between("1950","2050");
+                .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie) && uchZavedenie != RepoConsts.NoUchZavedenie).Between("1950", "2050");
 
             builder.RuleFor(vm => vm.RodFio).MyNotEmpty();
             builder.RuleFor(vm => vm.RodPhone).MyNotEmpty()
@@ -336,20 +347,22 @@ if (_SelectedUchebGruppa != value)
             builder.RuleFor(vm => vm.RazmerFormi).MyNotEmpty()
                 .When(vm => vm.HasForma, hasForma => !hasForma);
 
-            builder.RuleFor(vm => vm.BirthDat).MyNotEmptyDat(); 
-            builder.RuleFor(vm => vm.MestoRozd).MyNotEmpty(); 
+            builder.RuleFor(vm => vm.BirthDat).MyNotEmptyDat();
+            //System.Linq.Expressions.Expression<Func<PersonsViewModel, bool>> NotKazahPpedicate =  vm => vm.Grazdanstvo != "КЗ";
+            builder.RuleFor(vm => vm.MestoRozd).MyNotEmpty().When(vm => vm.Grazdanstvo != "КЗ");
 
-            builder.RuleFor(vm => vm.PaspSeriya).MyNotEmpty()
-                .Matches(@"^\d{4}$").WithMessage("{PropertyName} должна содержать 4 цифры");
-            builder.RuleFor(vm => vm.PaspNomer).MyNotEmpty()
-                 .Matches(@"^\d{6}$").WithMessage("{PropertyName} должен содержать 6 цифр");
-            builder.RuleFor(vm => vm.PaspVidan).MyNotEmpty();
+            builder.RuleFor(vm => vm.PaspSeriya).MyNotEmpty().When(vm => vm.Grazdanstvo != "КЗ")
+                .Matches(@"^\d{4}$").WithMessage("{PropertyName} должна содержать 4 цифры").When(vm => vm.Grazdanstvo != "КЗ");
+            builder.RuleFor(vm => vm.PaspNomer).MyNotEmpty();
+            builder.RuleFor(vm => vm.PaspNomer).Matches(@"^\d{6}$").WithMessage("{PropertyName} должен содержать 6 цифр").When(vm => vm.Grazdanstvo != "КЗ");
+            builder.RuleFor(vm => vm.PaspNomer).Matches(@"^\d{8}$").WithMessage("{PropertyName} должен содержать 8 цифр").When(vm => vm.Grazdanstvo == "КЗ");
+            builder.RuleFor(vm => vm.PaspVidan).MyNotEmpty().When(vm => vm.Grazdanstvo != "КЗ");
             builder.RuleFor(vm => vm.VidanDat).MyNotEmptyDat();
-            builder.RuleFor(vm => vm.PaspAdres).MyNotEmpty();
+            builder.RuleFor(vm => vm.PaspAdres).MyNotEmpty().When(vm => vm.Grazdanstvo != "КЗ");
             builder.RuleFor(vm => vm.FactAdres).MyNotEmpty();
 
             builder.RuleFor(vm => vm.VremRegDat).MyNotEmptyDat()
-                .When(vm => vm.Grazdanstvo, grazdanstvo => grazdanstvo== "КЗ");
+                .When(vm => vm.Grazdanstvo, grazdanstvo => grazdanstvo == "КЗ");
 
             builder.RuleFor(vm => vm.Snils).MyNotEmpty()
                 .Matches(@"^\d{11}$").WithMessage("{PropertyName} должен содержать 11 цифр");
@@ -358,11 +371,11 @@ if (_SelectedUchebGruppa != value)
             builder.RuleFor(vm => vm.UchebCentr).MyNotEmpty();
             builder.RuleFor(vm => vm.UchebEndDat).MyNotEmptyDat();
             //builder.RuleFor(vm => vm.UchebGruppa).MyNotEmpty();
-           // builder.RuleFor(vm => vm.Gorod).MyNotEmpty();
+            // builder.RuleFor(vm => vm.Gorod).MyNotEmpty();
 
             builder.RuleFor(vm => vm.VibilPrichina).MyNotEmpty()
                 .When(vm => vm.IsVibil, isVibil => isVibil);
-    ;//TODO .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie)).Between("1950", "2050");
+            ;//TODO .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie)).Between("1950", "2050");
 
 
 
@@ -371,11 +384,13 @@ if (_SelectedUchebGruppa != value)
         }
 
 
+
         public List<string> Cities { get; set; }
         public List<string> VibilPrichini { get; set; }
         public List<string> Otryadi { get; set; }
         public List<string> UchebCentri { get; set; }
         public List<string> Grazdanstva { get; set; }
+        public List<string> Sezons { get; set; }
 
 
         private static bool IsValidEmail(string email)
@@ -385,7 +400,7 @@ if (_SelectedUchebGruppa != value)
 
             return System.Text.RegularExpressions.Regex.IsMatch(email, @"^\w+@\w+.\w+$");
         }
-        public class PersonDocViewModel: System.ComponentModel.INotifyPropertyChanged//: PersonDoc
+        public class PersonDocViewModel : System.ComponentModel.INotifyPropertyChanged//: PersonDoc
         {
             public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
             public void OnPropertyChanged([CallerMemberName]string prop = "")
@@ -399,7 +414,7 @@ if (_SelectedUchebGruppa != value)
             public string FileName { get; set; }
 
             public DateTime? _PrinesetK;
-            public DateTime? PrinesetK 
+            public DateTime? PrinesetK
             {
                 get => _PrinesetK;
                 set
@@ -410,7 +425,7 @@ if (_SelectedUchebGruppa != value)
             }
 
             public System.Windows.Controls.Image _Bitmap;
-            public System.Windows.Controls.Image Bitmap 
+            public System.Windows.Controls.Image Bitmap
             {
                 get => _Bitmap;
                 set
@@ -444,22 +459,22 @@ if (_SelectedUchebGruppa != value)
             set
             {
                 _Pol = value;
-                if (Pol== "мужской")
+                if (Pol == "мужской")
                 {
                     if (!Documents.Where(pp => pp.DocTypeId >= 12 && pp.DocTypeId <= 14).Any())
                         foreach (var d in new ProvodnikContext().DocTypes.Where(pp => pp.Id >= 12 && pp.Id <= 14))
-                          Documents.Add(new PersonDocViewModel() { Description = d.Description, DocTypeId = d.Id, Bitmap = new Image() });
+                            Documents.Add(new PersonDocViewModel() { Description = d.Description, DocTypeId = d.Id, Bitmap = new Image() });
                 }
                 else
                     if (Pol == "женский")
                 {
                     foreach (var d in Documents.Where(pp => pp.DocTypeId >= 12 && pp.DocTypeId <= 14).ToList())
-                         Documents.Remove(d);
+                        Documents.Remove(d);
                 }
                 OnPropertyChanged();//TODO all nameof(Pol));
             }
         }
-        
+
         private string _Fio;
         [DisplayName(DisplayName = "ФИО")]
         public string Fio
@@ -471,7 +486,31 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
+        private string _BadgeRus;
+        [DisplayName(DisplayName = "Бейдж на русском")]
+        public string BadgeRus
+        {
+            get => _BadgeRus;
+            set
+            {
+                _BadgeRus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _BadgeEng;
+        [DisplayName(DisplayName = "Бейдж на английском")]
+        public string BadgeEng
+        {
+            get => _BadgeEng;
+            set
+            {
+                _BadgeEng = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _Vk;
         [DisplayName(DisplayName = "Ссылка на ВК")]
         public string Vk
@@ -483,7 +522,19 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
+        private string _Sezon;
+        [DisplayName(DisplayName = "Сезон")]
+        public string Sezon
+        {
+            get => _Sezon;
+            set
+            {
+                _Sezon = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _Grazdanstvo;
         [DisplayName(DisplayName = "Гражданство")]
         public string Grazdanstvo
@@ -493,23 +544,36 @@ if (_SelectedUchebGruppa != value)
             {
                 _Grazdanstvo = value;
 
-                    var docIds=new int[]{17,18,19,20};
+                var docIds = new int[] { 17, 18, 19, 20 };
                 if (Grazdanstvo == "КЗ")
                 {
-                    if (!Documents.Where(pp => docIds.Contains(pp.DocTypeId )).Any())
-                        foreach (var d in new ProvodnikContext().DocTypes.Where(pp => docIds.Contains(pp.Id )))
-                        Documents.Add(new PersonDocViewModel() { Description = d.Description, DocTypeId = d.Id, Bitmap = new System.Windows.Controls.Image() });
+                    if (!Documents.Where(pp => docIds.Contains(pp.DocTypeId)).Any())
+                        foreach (var d in new ProvodnikContext().DocTypes.Where(pp => docIds.Contains(pp.Id)))
+                            Documents.Add(new PersonDocViewModel() { Description = d.Description, DocTypeId = d.Id, Bitmap = new System.Windows.Controls.Image() });
+
+                    Documents.Remove(Documents.FirstOrDefault(x => x.DocTypeId == DocConsts.Прописка));
                 }
                 else
                 {
                     foreach (var d in Documents.Where(pp => docIds.Contains(pp.DocTypeId)).ToList())
                         Documents.Remove(d);
+
+                    if (!Documents.Any(x => x.DocTypeId == DocConsts.Прописка))
+                    {
+                        var propiskaDoc = new ProvodnikContext().DocTypes.First(x => x.Id == DocConsts.Прописка);
+                        Documents.Add(new PersonDocViewModel() { Description = propiskaDoc.Description, DocTypeId = propiskaDoc.Id, Bitmap = new System.Windows.Controls.Image() });
+                    }
                 }
+
+                Validator.Revalidate();
                 //TODO миграция Казахи
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsRussia));
             }
         }
-        
+
+        public bool IsRussia => Grazdanstvo != "КЗ";
+
         private string _Otryad;
         [DisplayName(DisplayName = "Отряд")]
         public string Otryad
@@ -521,7 +585,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private bool _IsNovichok;
         public bool IsNovichok
         {
@@ -532,7 +596,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private string _Dogovor;
         [DisplayName(DisplayName = "Номер договора")]
         public string Dogovor
@@ -544,7 +608,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private DateTime? _DogovorDat;
         [DisplayName(DisplayName = "Дата договора")]
         public DateTime? DogovorDat
@@ -556,7 +620,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private string _UchZavedenie;
 
         [DisplayName(DisplayName = "Учебное заведение")]
@@ -566,7 +630,7 @@ if (_SelectedUchebGruppa != value)
             set
             {
                 _UchZavedenie = value;
-               //if (UchFormas != null)
+                //if (UchFormas != null)
                 {
                     UchFormas.Clear(); foreach (var u in repository.GetUchFormas(UchZavedenie)) UchFormas.Add(u);
                     if (UchFormas.Count == 1) UchForma = UchFormas[0];
@@ -587,7 +651,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private string _UchForma;
         [DisplayName(DisplayName = "Форма обучения")]
         public string UchForma
@@ -599,7 +663,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         /*private string _UchFac;
         [DisplayName(DisplayName = "Факультет")]
         public string UchFac
@@ -611,7 +675,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }*/
-        
+
         private string _UchGod;
         [DisplayName(DisplayName = "Год окончания обучения")]
         public string UchGod
@@ -623,7 +687,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private bool _HasLgota;
         [DisplayName(DisplayName = "Есть льгота")]
         public bool HasLgota
@@ -635,7 +699,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private string _RodFio;
         [DisplayName(DisplayName = "ФИО родителя")]
         public string RodFio
@@ -647,7 +711,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private string _RodPhone;
         [DisplayName(DisplayName = "Контактный телефон родителей")]
         public string RodPhone
@@ -659,7 +723,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private bool _HasForma;
         public bool HasForma
         {
@@ -670,7 +734,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private string _RazmerFormi;
         [DisplayName(DisplayName = "Размер формы")]
         public string RazmerFormi
@@ -706,7 +770,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private string _PaspSeriya;
         [DisplayName(DisplayName = "Серия паспорта")]
         public string PaspSeriya
@@ -718,7 +782,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private string _PaspNomer;
         [DisplayName(DisplayName = "Номер паспорта")]
         public string PaspNomer
@@ -730,7 +794,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private string _PaspVidan;
         [DisplayName(DisplayName = "Кем выдан")]
         public string PaspVidan
@@ -789,7 +853,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private string _Snils;
         [DisplayName(DisplayName = "Номер ПФ (снилс)")]
         public string Snils
@@ -801,7 +865,7 @@ if (_SelectedUchebGruppa != value)
                 OnPropertyChanged();
             }
         }
-        
+
         private string _Inn;
         [DisplayName(DisplayName = "ИНН")]
         public string Inn
@@ -869,6 +933,96 @@ if (_SelectedUchebGruppa != value)
             }
         }
 
+
+        private DateTime? _NaprMedZakazanoDat;
+        public DateTime? NaprMedZakazanoDat
+        {
+            get => _NaprMedZakazanoDat;
+            set
+            {
+                _NaprMedZakazanoDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsNaprMedZakazano;
+        public bool IsNaprMedZakazano
+        {
+            get => _IsNaprMedZakazano;
+            set
+            {
+                _IsNaprMedZakazano = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        private DateTime? _NaprMedPoluchenoDat;
+        public DateTime? NaprMedPoluchenoDat
+        {
+            get => _NaprMedPoluchenoDat;
+            set
+            {
+                _NaprMedPoluchenoDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsNaprMedPolucheno;
+        public bool IsNaprMedPolucheno
+        {
+            get => _IsNaprMedPolucheno;
+            set
+            {
+                _IsNaprMedPolucheno = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsNaprMedPoluchenoNePoln;
+        public bool IsNaprMedPoluchenoNePoln
+        {
+            get => _IsNaprMedPoluchenoNePoln;
+            set
+            {
+                _IsNaprMedPoluchenoNePoln = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsNaprMedPoluchenoSOshibkoi;
+        public bool IsNaprMedPoluchenoSOshibkoi
+        {
+            get => _IsNaprMedPoluchenoSOshibkoi;
+            set
+            {
+                _IsNaprMedPoluchenoSOshibkoi = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime? _NaprMedVidanoDat;
+        public DateTime? NaprMedVidanoDat
+        {
+            get => _NaprMedVidanoDat;
+            set
+            {
+                _NaprMedVidanoDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsNaprMedVidano;
+        public bool IsNaprMedVidano
+        {
+            get => _IsNaprMedVidano;
+            set
+            {
+                _IsNaprMedVidano = value;
+                OnPropertyChanged();
+            }
+        }
+
         private DateTime? _MedKommDat;
         public DateTime? MedKommDat
         {
@@ -891,6 +1045,83 @@ if (_SelectedUchebGruppa != value)
             }
         }
 
+        private DateTime? _VaccineOneDat;
+        public DateTime? VaccineOneDat
+        {
+            get => _VaccineOneDat;
+            set
+            {
+                _VaccineOneDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsVaccineOne;
+        public bool IsVaccineOne
+        {
+            get => _IsVaccineOne;
+            set
+            {
+                _IsVaccineOne = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime? _VaccineOneOnlyDat;
+        public DateTime? VaccineOneOnlyDat
+        {
+            get => _VaccineOneOnlyDat;
+            set
+            {
+                _VaccineOneOnlyDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsVaccineOneOnly;
+        public bool IsVaccineOneOnly
+        {
+            get => _IsVaccineOneOnly;
+            set
+            {
+                _IsVaccineOneOnly = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime? _VaccineTwoDat;
+        public DateTime? VaccineTwoDat
+        {
+            get => _VaccineTwoDat;
+            set
+            {
+                _VaccineTwoDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsVaccineTwo;
+        public bool IsVaccineTwo
+        {
+            get => _IsVaccineTwo;
+            set
+            {
+                _IsVaccineTwo = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime? _RevacDat;
+        public DateTime? RevacDat
+        {
+            get => _RevacDat;
+            set
+            {
+                _RevacDat = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _UchebCentr;
         [DisplayName(DisplayName = "Учебный центр")]
         public string UchebCentr
@@ -899,7 +1130,7 @@ if (_SelectedUchebGruppa != value)
             set
             {
                 _UchebCentr = value;
-                if (!IsLoading) { IsLoading = true; SelectedUchebGruppa =null; IsLoading = false; }
+                if (!IsLoading) { IsLoading = true; SelectedUchebGruppa = null; IsLoading = false; }
                 OnPropertyChanged();
             }
         }
@@ -986,6 +1217,50 @@ if (_SelectedUchebGruppa != value)
             }
         }
 
+        private bool _IsExamenFailed;
+        public bool IsExamenFailed
+        {
+            get => _IsExamenFailed;
+            set
+            {
+                _IsExamenFailed = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime? _SertificatDat;
+        public DateTime? SertificatDat
+        {
+            get => _SertificatDat;
+            set
+            {
+                _SertificatDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsSertificatError;
+        public bool IsSertificatError
+        {
+            get => _IsSertificatError;
+            set
+            {
+                _IsSertificatError = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _SertificatError;
+        public string SertificatError
+        {
+            get => _SertificatError;
+            set
+            {
+                _SertificatError = value;
+                OnPropertyChanged();
+            }
+        }
+
 
 
 
@@ -1003,7 +1278,7 @@ if (_SelectedUchebGruppa != value)
             }
         }
 
-                private DateTime? _VihodDat;
+        private DateTime? _VihodDat;
         public DateTime? VihodDat
         {
             get => _VihodDat;
@@ -1069,8 +1344,8 @@ if (_SelectedUchebGruppa != value)
                 _AllScans = value;
                 OnPropertyChanged();
             }
-        }        
-       
+        }
+
 
         private string _Messages;
         public string Messages
@@ -1081,7 +1356,7 @@ if (_SelectedUchebGruppa != value)
                 _Messages = value;
                 OnPropertyChanged();
             }
-        }   
+        }
 
         private string _Zametki;
 
@@ -1093,9 +1368,9 @@ if (_SelectedUchebGruppa != value)
                 _Zametki = value;
                 OnPropertyChanged();
             }
-        }      
-       
-      //      LastUpdated
+        }
+
+        //      LastUpdated
 
         public List<string> UchZavedeniya { get; set; }
         public List<UchebGruppaViewModel> UchebGruppas { get; set; }

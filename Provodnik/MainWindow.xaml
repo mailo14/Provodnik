@@ -17,6 +17,7 @@
                 <MenuItem Header="Группы на практику" Click="PraktikasMenuItem_Click"/>
                 <MenuItem Header="Группы записи на экзамен" Click="ExamensMenuItem_Click"/>
             </MenuItem>
+            <MenuItem Header="Заявки на мед.ком." Click="MedKomZayavkiMenuItem_Click"/>
             <MenuItem Header="Группы для отправки" Click="SendGroupsMenuItem_Click"/>
             <MenuItem Name="AlarmsMenuItem" Click="AlarmsMenuItem_Click">
                 <MenuItem.Header>
@@ -28,7 +29,6 @@
             <MenuItem Header="О программе">
                 <MenuItem Header="Инструкция" Click="InstrMenuItem_Click"/>
                 <MenuItem Header="О АСУ Проводник" Click="MenuItem_Click"/>
-
             </MenuItem>
             <MenuItem Header="Test" Click="TestMenuItem_Click" Visibility="Collapsed" />
         </Menu>

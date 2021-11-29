@@ -6,6 +6,7 @@
              xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation"
              xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
              StartupUri="LoginView.xaml">
+    <!--    MainWindow         StartupUri="LoginView.xaml">-->
     <Application.Resources>
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="3"/>

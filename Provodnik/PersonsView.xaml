@@ -12,7 +12,7 @@
     
     x:Class="Provodnik.PersonsView"
         mc:Ignorable="d"
-        Title="Бойцы"  WindowStartupLocation="CenterScreen" WindowState="Maximized">
+        Title="Бойцы"  WindowStartupLocation="CenterScreen" WindowState="Maximized" Width="1004.8">
     <Window.Resources>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment"

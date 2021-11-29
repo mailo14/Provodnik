@@ -87,7 +87,7 @@ namespace Provodnik
             else return mySheet.get_Range(cell1, cell2);
         }
 
-        public void Finish()
+        public void Finish(bool close=true)
         {
             // path =  + @"\" + path;//string.Format(@"\{2} {1} {0} - Исполнители.xls", r.remType, r.poezd, r.endDate.Value.ToString("yyyy.MM.dd"));
             // Directory.SetCurrentDirectory();
@@ -117,7 +117,7 @@ namespace Provodnik
 
             myExcel.DisplayAlerts = true;
          // myExcel.Visible = true;
-            myBook.Close();//+убрать
+         if (close)   myBook.Close();//+убрать
             cell = null; mySheet = null; mySheets = null; myBooks = null; myBook = null; myExcel = null; myRange = null;
             GC.Collect();
         }

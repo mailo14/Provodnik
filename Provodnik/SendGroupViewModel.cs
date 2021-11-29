@@ -13,14 +13,15 @@ namespace Provodnik
 {
     public class SendGroupViewModel : ValidatableObject// : System.ComponentModel.INotifyPropertyChanged
     {
-       /* public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(prop));
-        }*/
-
+        /* public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+         public void OnPropertyChanged([CallerMemberName]string prop = "")
+         {
+             if (PropertyChanged != null)
+                 PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(prop));
+         }*/
+        private bool _isLoaded = false;
         Repository repository = new Repository();
+
         public SendGroupViewModel(int? sendGroupId=null)
         {
             Validator = GetValidator();
@@ -29,6 +30,7 @@ namespace Provodnik
 
                Cities = repository.GetCities();
             Marshruts = repository.GetMarshruts();
+            PeresadSts= repository.GetPeresadSts();
 
             Persons = new ObservableCollection<SendGroupPersonViewModel>();
 
@@ -58,6 +60,8 @@ namespace Provodnik
             RegOtdelenie = RegOtdeleniya[0];
 
             }
+
+            _isLoaded = true;
         }
         private IObjectValidator GetValidator()
         {
@@ -109,6 +113,7 @@ namespace Provodnik
 
         public List<string> RegOtdeleniya { get; set; }
         public List<string> Cities { get; set; }
+        public List<string> PeresadSts { get; set; }
         public ObservableCollection<string> Depos { get; set; } = new ObservableCollection<string>();
         public List<string> Marshruts { get; set; }
 
@@ -116,6 +121,18 @@ namespace Provodnik
         public ObservableCollection<SendGroupPersonViewModel> Persons { get; set; }
 
         public int? Id { get; set; }
+
+        private string _Name;
+        [DisplayName(DisplayName = "Название")]
+        public string Name
+        {
+            get => _Name;
+            set
+            {
+                _Name = value;
+                OnPropertyChanged();
+            }
+        }
 
         private string _RegOtdelenie;
         [DisplayName(DisplayName = "Рег. отделение")]
@@ -136,16 +153,33 @@ namespace Provodnik
             get => _City;
             set
             {
-                if (Depos != null)
+                if (_City != value)
                 {
-                    Depos.Clear(); foreach (var d in repository.GetDepos(value)) Depos.Add(d);
-                    if (_City != null) Depo = null;
-                    if (Depos.Count == 1)
-                        Depo = Depos[0];
-                    
+                    if (Depos != null)
+                    {
+                        Depos.Clear(); foreach (var d in repository.GetDepos(value)) Depos.Add(d);
+                        if (_City != null) Depo = null;
+                        if (Depos.Count == 1)
+                            Depo = Depos[0];
 
+
+                    }
+                    _City = value;
+
+                  //  ChangeDepoRod();
+                    OnPropertyChanged();
                 }
-                _City = value;
+            }
+        }
+
+        public string _PeresadSt;
+        [DisplayName(DisplayName = "Станция пересадки")]
+        public string PeresadSt
+        {
+            get => _PeresadSt;
+            set
+            {
+                _PeresadSt = value;
                 OnPropertyChanged();
             }
         }
@@ -157,7 +191,24 @@ namespace Provodnik
             get => _Depo;
             set
             {
-                _Depo = value;
+                if (_Depo != value)
+                {
+                    _Depo = value;
+
+                   // ChangeDepoRod();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string _DepoRod;
+        [DisplayName(DisplayName = "Депо приписки в родительном падеже")]
+        public string DepoRod
+        {
+            get => _DepoRod;
+            set
+            {
+                _DepoRod = value;
                 OnPropertyChanged();
             }
         }
@@ -257,7 +308,8 @@ namespace Provodnik
             }
         }
 
-        DateTime? _Uvolnenie;
+        DateTime? _Uvolnenie;        
+
         [DisplayName(DisplayName = "Предполагаемая дата увольнения")]
         public DateTime? Uvolnenie
         {

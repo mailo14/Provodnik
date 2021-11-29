@@ -1,4 +1,4 @@
-﻿<Window x:Class="Provodnik.SendGroupsView"
+﻿<Window x:Class="Provodnik.MedKomZayavkiView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,7 +9,7 @@
              xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
         xmlns:local="clr-namespace:Provodnik"
         mc:Ignorable="d"
-        Title="Группы для отправки" Height="462.43" Width="895.339" WindowStartupLocation="CenterScreen">
+        Title="Заявки на мед.комиссию" Height="340.298" Width="580.093" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment"
@@ -60,7 +60,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button Content="Новая группа для отправки" Click="Button_Click" Grid.Row="0"/>
+        <Button Content="Новая заявка" Click="Button_Click" Grid.Row="0"/>
         <ListView x:Name="GroupsListView" SelectionMode="Single" ItemsSource="{Binding Persons}" Margin="3"
                   MouseDoubleClick="ListView_MouseDoubleClick"  KeyUp="PersonsListView_KeyUp" Grid.Row="1">
             <ListView.View>
@@ -68,21 +68,8 @@
                     <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Name}"/>
                     <!--GridViewColumn Header="#" DisplayMemberBinding="{Binding Id}"/-->
                     <!--GridViewColumn Header="Дата создания" DisplayMemberBinding="{Binding Path=BirthDat,StringFormat=\{0:dd.MM.yyyy\}}"/-->
-                    <GridViewColumn Header="Дата отправления" DisplayMemberBinding="{Binding Path=OtprDat,StringFormat=\{0:dd.MM.yyyy\}}"/>
-                    <GridViewColumn Header="Город" DisplayMemberBinding="{Binding City}"/>
-                    <GridViewColumn Header="Депо приписки" DisplayMemberBinding="{Binding Depo}"/>
-                    <!--GridViewColumn Header="Количество бойцов" DisplayMemberBinding="{Binding Phone}"/-->
-                    <GridViewColumn Header="Предполагаемая дата увольнения" DisplayMemberBinding="{Binding Path=Uvolnenie,StringFormat=\{0:dd.MM.yyyy\}}"/>
-                    <!--GridViewColumn Header="Статус/статистика" DisplayMemberBinding="{Binding Phone}"/>
-                    <GridViewColumn Header="Действителен до" DisplayMemberBinding="{Binding Path=ModelNumber}"></GridViewColumn-->
-
-                    <!--GridViewColumn Header="Старший" Width="auto" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsMain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </-->
+                    <GridViewColumn Header="Планируемая дата трудоустройства" DisplayMemberBinding="{Binding Path=Dat,StringFormat=\{0:dd.MM.yyyy\}}"/>
+                   
                 </GridView>
             </ListView.View>
             <!--ListView.Items>

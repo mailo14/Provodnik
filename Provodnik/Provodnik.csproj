@@ -32,7 +32,7 @@
     <ProductName>АСУ Проводник</ProductName>
     <MinimumRequiredVersion>1.0.0.25</MinimumRequiredVersion>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>26</ApplicationRevision>
+    <ApplicationRevision>28</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -143,6 +143,34 @@
     <Compile Include="AlarmsView.xaml.cs">
       <DependentUpon>AlarmsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111280459299_init12.cs" />
+    <Compile Include="Migrations\202111280459299_init12.designer.cs">
+      <DependentUpon>202111280459299_init12.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111280632514_init13.cs" />
+    <Compile Include="Migrations\202111280632514_init13.designer.cs">
+      <DependentUpon>202111280632514_init13.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111281041223_init14.cs" />
+    <Compile Include="Migrations\202111281041223_init14.designer.cs">
+      <DependentUpon>202111281041223_init14.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111281600583_init15.cs" />
+    <Compile Include="Migrations\202111281600583_init15.designer.cs">
+      <DependentUpon>202111281600583_init15.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111281632562_init16.cs" />
+    <Compile Include="Migrations\202111281632562_init16.designer.cs">
+      <DependentUpon>202111281632562_init16.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111290514097_init17.cs" />
+    <Compile Include="Migrations\202111290514097_init17.designer.cs">
+      <DependentUpon>202111290514097_init17.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111290827130_init18.cs" />
+    <Compile Include="Migrations\202111290827130_init18.designer.cs">
+      <DependentUpon>202111290827130_init18.cs</DependentUpon>
+    </Compile>
     <Compile Include="Obuchenie.xaml.cs">
       <DependentUpon>Obuchenie.xaml</DependentUpon>
     </Compile>
@@ -189,6 +217,14 @@
     <Compile Include="SampleViewData\SamplePersonViewModel.cs" />
     <Compile Include="ScanView.xaml.cs">
       <DependentUpon>ScanView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MedKomZayavkiView.xaml.cs">
+      <DependentUpon>MedKomZayavkiView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MedKomZayavkaPersonViewModel.cs" />
+    <Compile Include="MedKomZayavkaViewModel.cs" />
+    <Compile Include="MedKomZayavkaView.xaml.cs">
+      <DependentUpon>MedKomZayavkaView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShortStringConverter.cs" />
     <Compile Include="DelimitedStringToMultilineConverter.cs" />
@@ -252,6 +288,7 @@
     </Compile>
     <Compile Include="ProvodnikContext.cs" />
     <Compile Include="SendGroupViewModel.cs" />
+    <Compile Include="Transliteration.cs" />
     <Page Include="AlarmsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -322,7 +359,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MedKomZayavkiView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="SendGroupsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MedKomZayavkaView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -393,6 +438,27 @@
     <EmbeddedResource Include="Migrations\202001241256212_init11.resx">
       <DependentUpon>202001241256212_init11.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111280459299_init12.resx">
+      <DependentUpon>202111280459299_init12.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111280632514_init13.resx">
+      <DependentUpon>202111280632514_init13.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111281041223_init14.resx">
+      <DependentUpon>202111281041223_init14.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111281600583_init15.resx">
+      <DependentUpon>202111281600583_init15.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111281632562_init16.resx">
+      <DependentUpon>202111281632562_init16.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111290514097_init17.resx">
+      <DependentUpon>202111290514097_init17.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111290827130_init18.resx">
+      <DependentUpon>202111290827130_init18.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -411,6 +477,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="_шаблоны\Согласие на обработку персональных данных.dotx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_шаблоны\Бейджи.dotx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_шаблоны\Направление мед.xltx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_шаблоны\Реестр передачи.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_шаблоны\Справки РСО.xltx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_шаблоны\Воронка.xltx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="pic\loading.gif" />
@@ -437,7 +518,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
