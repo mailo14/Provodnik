@@ -253,27 +253,19 @@
                     <DatePicker SelectedDate="{Binding DogovorDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" Style="{DynamicResource DatePicker}"/>
 
                 </Grid>
-                <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="4" VerticalAlignment="Top">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="24*"/>
-                    </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="4" VerticalAlignment="Top">                   
                     <TextBlock Text="Учебное заведение"/>
+                    <ComboBox Name="UchZavedenieComboBox" Text="{Binding UchZavedenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="70" Style="{DynamicResource ComboBox}"
+                          ItemsSource="{Binding UchZavedeniya}" IsReadOnly="False"/>               
+                    <TextBlock Text="Факультет"/>
+                    <ComboBox Name="UchFacComboBox" Text="{Binding UchFac, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="70" Style="{DynamicResource ComboBox}"
+                          ItemsSource="{Binding UchFacs}" IsReadOnly="False"/>
                     <TextBlock Text="Форма обучения" Grid.Column="2"/>
-                    <TextBlock Text="Год окончания обучения" Grid.Column="6"/>
-                    <TextBox Text="{Binding UchGod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="40" Style="{DynamicResource TextBox}"/>
                     <ComboBox Name="UchFormaComboBox" Text="{Binding UchForma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="80" Style="{DynamicResource ComboBox}"
                           ItemsSource="{Binding UchFormas}"/>
-                    <ComboBox Name="UchZavedenieComboBox" Text="{Binding UchZavedenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="70" Style="{DynamicResource ComboBox}"
-                          ItemsSource="{Binding UchZavedeniya}" IsReadOnly="False"/>
-                </Grid>
+                    <TextBlock Text="Год окончания обучения" Grid.Column="6"/>
+                    <TextBox Text="{Binding UchGod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="40" Style="{DynamicResource TextBox}"/>
+                </StackPanel>
                 <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="6" VerticalAlignment="Top">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
@@ -572,17 +564,15 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <CheckBox Content="Первый компонент вакцины" IsChecked="{Binding IsVaccineOne, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"  Margin="10,8,0,8"/>
-                        <CheckBox Content="Только один компонент вакцины" IsChecked="{Binding IsVaccineOneOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0" Margin="10,8,0,8"/>
-                        <CheckBox Content="Второй компонент вакцины" IsChecked="{Binding IsVaccineTwo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="0" Margin="10,8,0,8"/>
-                        <DatePicker SelectedDate="{Binding VaccineOneDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                        <TextBlock Text="дата" Grid.Column="1" Margin="10,7,3,7"/>
-                        <DatePicker SelectedDate="{Binding VaccineOneOnlyDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                        <TextBlock Text="дата" Grid.Row="1" Grid.Column="1" Margin="10,7,3,7"/>
-                        <DatePicker SelectedDate="{Binding VaccineTwoDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                        <TextBlock Text="дата" Grid.Row="2" Grid.Column="1" Margin="10,7,3,7"/>
-                        <DatePicker SelectedDate="{Binding RevacDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                        <TextBlock Text="Ревакцинация/переболел"  Grid.Row="3" Grid.Column="0" Margin="10,7,3,7"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Номер сертификата" Grid.Column="1" Margin="10,7,3,7"/>
+                            <TextBox Text="{Binding VaccineSert, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="100" Style="{DynamicResource TextBox}"/>
+                            <TextBlock Text="дата выдачи" Grid.Column="1" Margin="10,7,3,7"/>
+                            <DatePicker SelectedDate="{Binding VaccineSertDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+                            <TextBlock Text="действует до" Grid.Column="1" Margin="10,7,3,7"/>
+                            <DatePicker SelectedDate="{Binding VaccineSertDatTo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+                        </StackPanel>
+                        
                     </Grid>
                 </Expander>
             </Grid>

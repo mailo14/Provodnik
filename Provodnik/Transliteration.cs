@@ -8,7 +8,7 @@ namespace Provodnik
     {
         public  string[] ParseFio(string _fio)
         {
-            var fio = _fio.SplitString();
+            var fio = _fio.Split(new char[] { ' '});
             string f = "", i = "", o = "";
             if (fio.Length >= 3)
             {

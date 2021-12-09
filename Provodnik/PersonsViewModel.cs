@@ -5,9 +5,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Linq.Expressions;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using LinqKit;
 
 namespace Provodnik
 {
@@ -282,10 +285,30 @@ private RelayCommand _FindCommand;
             var query = db.Persons.AsQueryable();
             if (!string.IsNullOrWhiteSpace(PersonSearch))
             {
-                query = (from p in query//db.Persons
-                         where p.Fio.Contains(PersonSearch)
-                         orderby p.Fio.IndexOf(PersonSearch)
-                         select p);
+                var lines = PersonSearch.Trim().Split(new char[] { '+' }, StringSplitOptions.RemoveEmptyEntries);
+                if (lines.Length == 1) {
+                    var fio = lines[0];
+                    query = (from p in query//db.Persons
+                             where p.Fio.Contains(fio)
+                             orderby p.Fio.IndexOf(fio)
+                             select p);
+                }
+                else
+                {
+                    var predicate = PredicateBuilder.New<Person>(false);
+                    foreach (var line in lines )
+                    {
+                        var fio = new StringHelper().ParseFio(line);
+                        if (string.IsNullOrEmpty(fio[1]))
+                        {
+                            var f = fio[0] + " ";
+                            predicate = predicate.Or(p => p.Fio.StartsWith(f));
+                        }
+                        else predicate = predicate.Or(p => p.Fio.StartsWith(line));
+                    }
+
+                    query = query.Where(predicate);
+                }
                 /*foreach (var i in (from p in db.Persons
                                    where p.Fio.Contains(PersonSearch)
                                    orderby p.Fio.IndexOf(PersonSearch)

@@ -32,6 +32,7 @@ namespace Provodnik
         public DateTime? BirthDat { get; set; }
         public string MestoRozd { get; set; }
         public string UchZavedenie { get; set; }
+        public string UchFac { get; set; }
         public string Snils { get; set; }
         public string Inn { get; set; }
 

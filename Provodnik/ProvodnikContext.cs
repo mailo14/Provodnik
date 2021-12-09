@@ -89,13 +89,16 @@ namespace Provodnik
         public bool IsNaprMedPoluchenoSOshibkoi { get; set; }
         public DateTime? NaprMedVidanoDat { get; set; }
         public bool IsNaprMedVidano { get; set; }
-        public DateTime? VaccineOneDat { get; set; }
+        public string VaccineSert { get; set; }
+        public DateTime? VaccineSertDat { get; set; }
+        public DateTime? VaccineSertDatTo { get; set; }
+        /*public DateTime? VaccineOneDat { get; set; }
         public bool IsVaccineOne { get; set; }
         public DateTime? VaccineOneOnlyDat { get; set; }
         public bool IsVaccineOneOnly { get; set; }
         public DateTime? VaccineTwoDat { get; set; }
         public bool IsVaccineTwo { get; set; }
-        public DateTime? RevacDat { get; set; }
+        public DateTime? RevacDat { get; set; }*/
         //[Index]
         public string UchebCentr { get; set; }
         //[Index]

@@ -88,7 +88,7 @@
             <TextBlock Text="Фильтр по ФИО"/>
             <TextBox Text="{Binding PersonSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBox}" MinWidth="150" 
                        Grid.Column="1"
-                       IsReadOnly="False"/>
+                       IsReadOnly="False" ToolTip="например: &quot;Иванов&quot;, &quot;Иванов+Петров&quot;"/>
             <!--ComboBox SelectedItem="{Binding PersonSearchItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Text="{Binding PersonSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource ComboBox}" MinWidth="150" 
                        ItemsSource="{Binding PersonSearchList}" DisplayMemberPath="Name" Grid.Column="1"
                        IsReadOnly="False"/-->

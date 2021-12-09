@@ -51,7 +51,7 @@ namespace Provodnik
             client.Host = App.CurrentConfig.FtpAdress;
             client.Credentials = new System.Net.NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw);
 
-            client.ConnectTimeout = 30000; client.ReadTimeout = 30000; client.RetryAttempts = 1000;
+            client.ConnectTimeout = 30000; client.ReadTimeout = 30000; client.RetryAttempts = 2000;
         }
     }
 }

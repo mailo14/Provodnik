@@ -46,6 +46,7 @@ namespace Provodnik
             Documents = new ObservableCollection<PersonDocViewModel>();
 
             UchZavedeniya = repository.GetUchZavedeniya();
+            UchFacs = repository.GetUchFacs();
             UchFormas = new ObservableCollection<string>();/**/
                                                            //UchFacs = new ObservableCollection<string>();
                                                            //progressChanged(5);
@@ -652,6 +653,18 @@ namespace Provodnik
             }
         }
 
+        private string _UchFac;
+        [DisplayName(DisplayName = "Факультет")]
+        public string UchFac
+        {
+            get => _UchFac;
+            set
+            {
+                _UchFac = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _UchForma;
         [DisplayName(DisplayName = "Форма обучения")]
         public string UchForma
@@ -1045,83 +1058,6 @@ namespace Provodnik
             }
         }
 
-        private DateTime? _VaccineOneDat;
-        public DateTime? VaccineOneDat
-        {
-            get => _VaccineOneDat;
-            set
-            {
-                _VaccineOneDat = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _IsVaccineOne;
-        public bool IsVaccineOne
-        {
-            get => _IsVaccineOne;
-            set
-            {
-                _IsVaccineOne = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private DateTime? _VaccineOneOnlyDat;
-        public DateTime? VaccineOneOnlyDat
-        {
-            get => _VaccineOneOnlyDat;
-            set
-            {
-                _VaccineOneOnlyDat = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _IsVaccineOneOnly;
-        public bool IsVaccineOneOnly
-        {
-            get => _IsVaccineOneOnly;
-            set
-            {
-                _IsVaccineOneOnly = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private DateTime? _VaccineTwoDat;
-        public DateTime? VaccineTwoDat
-        {
-            get => _VaccineTwoDat;
-            set
-            {
-                _VaccineTwoDat = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _IsVaccineTwo;
-        public bool IsVaccineTwo
-        {
-            get => _IsVaccineTwo;
-            set
-            {
-                _IsVaccineTwo = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private DateTime? _RevacDat;
-        public DateTime? RevacDat
-        {
-            get => _RevacDat;
-            set
-            {
-                _RevacDat = value;
-                OnPropertyChanged();
-            }
-        }
-
         private string _UchebCentr;
         [DisplayName(DisplayName = "Учебный центр")]
         public string UchebCentr
@@ -1261,6 +1197,39 @@ namespace Provodnik
             }
         }
 
+        private string _VaccineSert;
+        public string VaccineSert
+        {
+            get => _VaccineSert;
+            set
+            {
+                _VaccineSert = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime? _VaccineSertDat;
+        public DateTime? VaccineSertDat
+        {
+            get => _VaccineSertDat;
+            set
+            {
+                _VaccineSertDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime? _VaccineSertDatTo;
+        public DateTime? VaccineSertDatTo
+        {
+            get => _VaccineSertDatTo;
+            set
+            {
+                _VaccineSertDatTo = value;
+                OnPropertyChanged();
+            }
+        }
+
 
 
 
@@ -1373,6 +1342,7 @@ namespace Provodnik
         //      LastUpdated
 
         public List<string> UchZavedeniya { get; set; }
+        public List<string> UchFacs { get; set; }
         public List<UchebGruppaViewModel> UchebGruppas { get; set; }
         public ObservableCollection<string> UchFormas { get; set; }
         //public ObservableCollection<string> UchFacs { get;  set; }

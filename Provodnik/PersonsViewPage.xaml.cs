@@ -136,13 +136,13 @@ namespace Provodnik
                 ri++;
                 excel.cell[ri, 1].value2 = ri - 1;
                 excel.cell[ri, 2].value2 = r.Fio;
-                excel.cell[ri, 3].value2 = "АО \"ФПК\"";
+                //excel.cell[ri, 3].value2 = "АО \"ФПК\"";
                 excel.cell[ri, 4].value2 = r.BirthDat?.ToString("dd.MM.yyyy");
                 excel.cell[ri, 5].value2 = r.UchZavedenie;
-                excel.cell[ri, 6].value2 = "";
+                excel.cell[ri, 6].value2 = r.UchFac;
                 excel.cell[ri, 7].value2 = r.Inn;
                 excel.cell[ri, 8].value2 = Helper.FormatSnils(r.Snils);
-                excel.cell[ri, 9].value2 = "01.04.2021 - 31.12.2021 г.";
+                //excel.cell[ri, 9].value2 = "01.04.2021 - 31.12.2021 г.";
             }
             excel.setAllBorders(excel.get_Range("A1", "I" + ri));
             excel.myExcel.Visible = true;
@@ -156,7 +156,9 @@ namespace Provodnik
             int ri = 1;
             var db = new ProvodnikContext();
 
-            var qq = from p in db.Persons
+            var ids = vm.PersonList.Select(pp => pp.Id).ToList();
+            var qq = from p in  db.Persons
+                     where ids.Contains(p.Id)
                      select new
                      {
                          p.UchebGruppa,

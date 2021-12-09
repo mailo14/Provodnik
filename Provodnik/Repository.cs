@@ -53,6 +53,12 @@ public    class Repository
             return items;// new List<string> { "не учится", "СГУПС" };
         }
 
+        public List<string> GetUchFacs()
+        {
+            var items = new ProvodnikContext().Persons.Select(pp => pp.UchFac).Distinct().OrderBy(pp => pp).ToList();
+            return items;
+        }
+
         public List<string> GetUchFormas(string uchZavedenie)
         {
             if (uchZavedenie == RepoConsts.NoUchZavedenie) return new List<string> { RepoConsts.NoUchZavedenie };

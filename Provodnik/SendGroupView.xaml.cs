@@ -74,8 +74,8 @@ namespace Provodnik
                 excel.cell[ri, 3].value2 = vm.Depo;
                 excel.cell[ri, 4].value2 = Helper.FormatPhone(r.Phone);
 
-                excel.cell[ri, 5].value2 = r.VaccineOneDat?.ToString("dd.MM.yyyy");
-                excel.cell[ri, 6].value2 = r.VaccineTwoDat?.ToString("dd.MM.yyyy");
+                excel.cell[ri, 5].value2 = r.VaccineSert;
+                excel.cell[ri, 6].value2 = r.VaccineSertDat?.ToString("dd.MM.yyyy");
 
 
                 excel.cell[ri, 7].value2 = r.UchZavedenie;
@@ -435,7 +435,9 @@ namespace Provodnik
                             {
                                 App.ConfigureFtpClient(client);
                                 client.Connect();
-                                client.DownloadFile(fileName, d.FileName, FtpLocalExists.Overwrite);//, true, FtpVerify.Retry);
+                                var result = client.DownloadFile(fileName, d.FileName, FtpLocalExists.Overwrite,FtpVerify.Retry);//, true, FtpVerify.Retry);
+                                if (result != FtpStatus.Success)
+                                    throw new Exception("Не удалось загрузить файл "+ System.IO.Path.GetFileName(fileName));
                             }
                         }
                     }
