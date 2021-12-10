@@ -114,67 +114,74 @@ namespace Provodnik
 
         public void Save()
         {
-            if (UchebGruppa == null || UchebCentr == null || UchebStartDat == null || UchebEndDat == null)
+            try
             {
-                MessageBox.Show("Данные группы не заполнены!");
-                return;
-            }
-            if (Persons.Count == 0)
-            {
-                MessageBox.Show("Добавьте хотя бы одного участника!");
-                return;
-            }
-
-
-            if (BaseUchebGruppa != null)
-            {
-                var currents = Persons.Select(pp => pp.Id).ToList();
-                using (var db = new ProvodnikContext())
+                if (UchebGruppa == null || UchebCentr == null || UchebStartDat == null || UchebEndDat == null)
                 {
-                    var toDelete = (from p in db.Persons
-                                    where p.UchebGruppa == BaseUchebGruppa.UchebGruppa && p.UchebCentr == BaseUchebGruppa.UchebCentr
-                                    && p.UchebStartDat == BaseUchebGruppa.UchebStartDat
-                                    && p.UchebEndDat == BaseUchebGruppa.UchebEndDat
-                                    && !currents.Contains(p.Id)
-                                    select p).ToList();
-                    if (toDelete.Any())
+                    MessageBox.Show("Данные группы не заполнены!");
+                    return;
+                }
+                if (Persons.Count == 0)
+                {
+                    MessageBox.Show("Добавьте хотя бы одного участника!");
+                    return;
+                }
+
+
+                if (BaseUchebGruppa != null)
+                {
+                    var currents = Persons.Select(pp => pp.Id).ToList();
+                    using (var db = new ProvodnikContext())
                     {
-                        MessageBox.Show("Данные о обучении будут очищены у удаленных: "
-                            + Environment.NewLine + string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
-                        foreach (var p in toDelete)
+                        var toDelete = (from p in db.Persons
+                                        where p.UchebGruppa == BaseUchebGruppa.UchebGruppa && p.UchebCentr == BaseUchebGruppa.UchebCentr
+                                        && p.UchebStartDat == BaseUchebGruppa.UchebStartDat
+                                        && p.UchebEndDat == BaseUchebGruppa.UchebEndDat
+                                        && !currents.Contains(p.Id)
+                                        select p).ToList();
+                        if (toDelete.Any())
                         {
-                            p.UchebGruppa = null;
-                            p.UchebCentr = null;
-                            p.UchebStartDat = null;
-                            p.UchebEndDat = null;
-                        db.SaveChanges();
+                            MessageBox.Show("Данные о обучении будут очищены у удаленных: "
+                                + Environment.NewLine + string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
+                            foreach (var p in toDelete)
+                            {
+                                p.UchebGruppa = null;
+                                p.UchebCentr = null;
+                                p.UchebStartDat = null;
+                                p.UchebEndDat = null;
+                                db.SaveChanges();
 
-                            var pvm = new PersonViewModel(p.Id, false);
-                            pvm.FillMessagesAndAlls(p);
-                            db.SaveChanges();
+                                var pvm = new PersonViewModel(p.Id, false);
+                                pvm.FillMessagesAndAlls(p);
+                                db.SaveChanges();
 
+                            }
                         }
                     }
                 }
-            }
 
-            using (var db = new ProvodnikContext())
-            {
-                foreach (var p in Persons)
+                using (var db = new ProvodnikContext())
                 {
-                    var pe = db.Persons.First(pp => pp.Id == p.Id);
-                    pe.UchebGruppa = UchebGruppa;
-                    pe.UchebCentr = UchebCentr;
-                    pe.UchebStartDat = UchebStartDat;
-                    pe.UchebEndDat = UchebEndDat;
-                    db.SaveChanges();
+                    foreach (var p in Persons)
+                    {
+                        var pe = db.Persons.First(pp => pp.Id == p.Id);
+                        pe.UchebGruppa = UchebGruppa;
+                        pe.UchebCentr = UchebCentr;
+                        pe.UchebStartDat = UchebStartDat;
+                        pe.UchebEndDat = UchebEndDat;
+                        db.SaveChanges();
 
-                    var pvm = new PersonViewModel(pe.Id, false);
-                    pvm.FillMessagesAndAlls(pe);
-                    db.SaveChanges();
+                        var pvm = new PersonViewModel(pe.Id, false);
+                        pvm.FillMessagesAndAlls(pe);
+                        db.SaveChanges();
+                    }
                 }
+                IsChanged = false;
             }
-            IsChanged = false;
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при сохранении" + Environment.NewLine + ex.Message);
+            }
         }
 
         public void AddPersons(IEnumerable<int> ids)

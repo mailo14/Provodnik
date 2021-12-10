@@ -318,43 +318,50 @@ namespace Provodnik
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var vm= this.DataContext as SendGroupViewModel;
-            if (!vm.Validator.IsValid)
-                MessageBox.Show(string.Join(Environment.NewLine, vm.Validator.ValidationMessages));
-
-            var db = new ProvodnikContext();
-
-            SendGroup p;
-            if (vm.Id.HasValue)
+            try
             {
-                p = db.SendGroups.Single(pp => pp.Id == vm.Id.Value);
+                var vm = this.DataContext as SendGroupViewModel;
+                if (!vm.Validator.IsValid)
+                    MessageBox.Show(string.Join(Environment.NewLine, vm.Validator.ValidationMessages));
 
-                MainWindow.Mapper.Value.Map(vm, p);
-                var currents = vm.Persons.Select(pp => pp.PersonId).ToList();
-                var toDelete = (from pd in db.SendGroupPersons
-                                where pd.SendGroupId== p.Id && !currents.Contains(pd.PersonId)
-                                select pd);
-                db.SendGroupPersons.RemoveRange(toDelete);
-                db.SaveChanges();
-            }
-            else
-            { p = new SendGroup();
-                MainWindow.Mapper.Value.Map(vm, p);
-                db.SendGroups.Add( p);
-                db.SaveChanges();
-            }
+                var db = new ProvodnikContext();
 
-            foreach (var d in vm.Persons)
-            {
-                SendGroupPerson pd;
-                if (d.Id==null)
-                {                    
-                    db.SendGroupPersons.Add(pd = new SendGroupPerson() {IsMain=d.IsMain,SendGroupId=p.Id,PersonId=d.PersonId});
+                SendGroup p;
+                if (vm.Id.HasValue)
+                {
+                    p = db.SendGroups.Single(pp => pp.Id == vm.Id.Value);
+
+                    MainWindow.Mapper.Value.Map(vm, p);
+                    var currents = vm.Persons.Select(pp => pp.PersonId).ToList();
+                    var toDelete = (from pd in db.SendGroupPersons
+                                    where pd.SendGroupId == p.Id && !currents.Contains(pd.PersonId)
+                                    select pd);
+                    db.SendGroupPersons.RemoveRange(toDelete);
                     db.SaveChanges();
                 }
-            }
-            DialogResult = true;
+                else
+                {
+                    p = new SendGroup();
+                    MainWindow.Mapper.Value.Map(vm, p);
+                    db.SendGroups.Add(p);
+                    db.SaveChanges();
+                }
 
+                foreach (var d in vm.Persons)
+                {
+                    SendGroupPerson pd;
+                    if (d.Id == null)
+                    {
+                        db.SendGroupPersons.Add(pd = new SendGroupPerson() { IsMain = d.IsMain, SendGroupId = p.Id, PersonId = d.PersonId });
+                        db.SaveChanges();
+                    }
+                }
+                DialogResult = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка при сохранении" + Environment.NewLine + ex.Message);
+            }
         }
 
 

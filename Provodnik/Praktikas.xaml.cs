@@ -72,46 +72,53 @@ namespace Provodnik
 
         public void Save()
         {
-            var dat = SelectedDate.Value;
-
-            var currents = Persons.Select(pp => pp.Id).ToList();
-            using (var db = new ProvodnikContext())
+            try
             {
-                var toDelete = (from pd in db.Persons
-                                where pd.PraktikaDat == dat && !currents.Contains(pd.Id)
-                                select pd).ToList();
-                if (toDelete.Any())
+                var dat = SelectedDate.Value;
+
+                var currents = Persons.Select(pp => pp.Id).ToList();
+                using (var db = new ProvodnikContext())
                 {
-                    MessageBox.Show("Данные о практике будут очищены у удаленных: "
-                        + Environment.NewLine + string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
-                    foreach (var pd in toDelete)
+                    var toDelete = (from pd in db.Persons
+                                    where pd.PraktikaDat == dat && !currents.Contains(pd.Id)
+                                    select pd).ToList();
+                    if (toDelete.Any())
                     {
-                        pd.PraktikaDat = null;
-                        pd.IsPraktika = false;
+                        MessageBox.Show("Данные о практике будут очищены у удаленных: "
+                            + Environment.NewLine + string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
+                        foreach (var pd in toDelete)
+                        {
+                            pd.PraktikaDat = null;
+                            pd.IsPraktika = false;
+                            db.SaveChanges();
+
+                            var pvm = new PersonViewModel(pd.Id, false);
+                            pvm.FillMessagesAndAlls(pd);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+
+                using (var db = new ProvodnikContext())
+                {
+                    foreach (var p in Persons)
+                    {
+                        var pe = db.Persons.First(pp => pp.Id == p.Id);
+                        pe.PraktikaDat = dat;
+                        pe.IsPraktika = p.IsPraktika;
                         db.SaveChanges();
 
-                        var pvm = new PersonViewModel(pd.Id, false);
-                        pvm.FillMessagesAndAlls(pd);
+                        var pvm = new PersonViewModel(pe.Id, false);
+                        pvm.FillMessagesAndAlls(pe);
                         db.SaveChanges();
                     }
                 }
+                IsChanged = false;
             }
-
-            using (var db = new ProvodnikContext())
+            catch (Exception ex)
             {
-                foreach (var p in Persons)
-                {
-                    var pe = db.Persons.First(pp => pp.Id == p.Id);
-                    pe.PraktikaDat = dat;
-                    pe.IsPraktika = p.IsPraktika;
-                    db.SaveChanges();
-
-                    var pvm = new PersonViewModel(pe.Id, false);
-                    pvm.FillMessagesAndAlls(pe);
-                    db.SaveChanges();
-                }
+                MessageBox.Show("Ошибка при сохранении" + Environment.NewLine + ex.Message);
             }
-            IsChanged = false;
         }
 
         public void AddPersons(IEnumerable<int> ids)

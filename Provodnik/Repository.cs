@@ -127,7 +127,7 @@ public    class Repository
         public List<string> GetMarshruts()
         {
             var r = new ProvodnikContext().SendGroups.Select(pp => pp.Marshrut)
-                .Union(new string[] { "Новосибирск – Москва", "Новосибирск – Санкт-Петербург", "Новосибирск – Адлер", "Новосибирск – Новороссийск" })
+                .Union(new string[] { "Новосибирск – Москва – Новосибирск", "Новосибирск – Санкт-Петербург – Новосибирск", "Новосибирск – Адлер – Новосибирск", "Новосибирск – Новороссийск – Новосибирск" })
                 .Distinct().OrderBy(pp => pp).ToList();
             return r;
         }

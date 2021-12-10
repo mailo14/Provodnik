@@ -73,66 +73,73 @@ namespace Provodnik
 
         public void Save()
         {
-            var dat = SelectedDate.Value;
-
-            var currents = Persons.Select(pp => pp.Id).ToList();
-            using (var db = new ProvodnikContext())
+            try
             {
-                var toDelete = (from pd in db.Persons
-                                where pd.MedKommDat == dat && !currents.Contains(pd.Id)
-                                select pd).ToList();
-                if (toDelete.Any())
-                {
-                    MessageBox.Show("Данные о мед.комиссии будут очищены у удаленных: "
-                        + Environment.NewLine + string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
-                    foreach (var pd in toDelete)
-                    {
-                        pd.MedKommDat = null;
-                        pd.IsMedKomm = false;
+                var dat = SelectedDate.Value;
 
+                var currents = Persons.Select(pp => pp.Id).ToList();
+                using (var db = new ProvodnikContext())
+                {
+                    var toDelete = (from pd in db.Persons
+                                    where pd.MedKommDat == dat && !currents.Contains(pd.Id)
+                                    select pd).ToList();
+                    if (toDelete.Any())
+                    {
+                        MessageBox.Show("Данные о мед.комиссии будут очищены у удаленных: "
+                            + Environment.NewLine + string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
+                        foreach (var pd in toDelete)
+                        {
+                            pd.MedKommDat = null;
+                            pd.IsMedKomm = false;
+
+                            foreach (var pdo in (from pdo in db.PersonDocs
+                                                 where pdo.PersonId == pd.Id && pdo.DocTypeId == DocConsts.ЗаключениеВЭК//>= 6 && pdo.DocTypeId <= 8
+                                                 select pdo))
+                                pdo.FileName = null;
+                            db.SaveChanges();
+
+                            var pvm = new PersonViewModel(pd.Id, false);
+                            pvm.FillMessagesAndAlls(pd);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+
+                using (var db = new ProvodnikContext())
+                {
+                    var news = (from pd in db.Persons
+                                where pd.MedKommDat != dat && currents.Contains(pd.Id)
+                                select pd).ToList();
+                    foreach (var p in news)
+                    {
                         foreach (var pdo in (from pdo in db.PersonDocs
-                                             where pdo.PersonId == pd.Id && pdo.DocTypeId == DocConsts.ЗаключениеВЭК//>= 6 && pdo.DocTypeId <= 8
+                                             where pdo.PersonId == p.Id && pdo.DocTypeId == DocConsts.ЗаключениеВЭК//>= 6 && pdo.DocTypeId <= 8
                                              select pdo))
                             pdo.FileName = null;
                         db.SaveChanges();
+                    }
+                }
 
-                        var pvm = new PersonViewModel(pd.Id, false);
-                        pvm.FillMessagesAndAlls(pd);
+                using (var db = new ProvodnikContext())
+                {
+                    foreach (var p in Persons)
+                    {
+                        var pe = db.Persons.First(pp => pp.Id == p.Id);
+                        pe.MedKommDat = dat;
+                        pe.IsMedKomm = p.IsMedKomm;
+                        db.SaveChanges();
+
+                        var pvm = new PersonViewModel(pe.Id, false);
+                        pvm.FillMessagesAndAlls(pe);
                         db.SaveChanges();
                     }
                 }
+                IsChanged = false;
             }
-
-            using (var db = new ProvodnikContext())
+            catch (Exception ex)
             {
-                var news = (from pd in db.Persons
-                            where pd.MedKommDat != dat && currents.Contains(pd.Id)
-                            select pd).ToList();
-                foreach (var p in news)
-                {
-                    foreach (var pdo in (from pdo in db.PersonDocs
-                                         where pdo.PersonId == p.Id && pdo.DocTypeId == DocConsts.ЗаключениеВЭК//>= 6 && pdo.DocTypeId <= 8
-                                         select pdo))
-                        pdo.FileName = null;
-                    db.SaveChanges();
-                }
+                MessageBox.Show("Ошибка при сохранении" + Environment.NewLine + ex.Message);
             }
-
-            using (var db = new ProvodnikContext())
-            {
-                foreach (var p in Persons)
-                {
-                    var pe = db.Persons.First(pp => pp.Id == p.Id);
-                    pe.MedKommDat = dat;
-                    pe.IsMedKomm = p.IsMedKomm;
-                    db.SaveChanges();
-
-                    var pvm = new PersonViewModel(pe.Id, false);
-                    pvm.FillMessagesAndAlls(pe);
-                    db.SaveChanges();
-                }
-            }
-            IsChanged = false;
         }
 
         public void AddPersons(IEnumerable<int> ids)
