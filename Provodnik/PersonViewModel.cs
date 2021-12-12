@@ -189,7 +189,16 @@ namespace Provodnik
                     if (voenPripisEmpty) errors.Add($"Не прикреплен скан документа: Приписное или военнный билет");
                 }
             }
+
+            var size = Documents.Select(pp => pp.Size).Sum(pp=>pp??0);
+            if (size>10*1024*1024) errors.Add($"Размер сканов больше 10Мб: {(size/1024/ 1024).ToString("F3")}");
+
             return errors;
+        }
+
+        public void RefreshScansSize()
+        {
+            OnPropertyChanged(nameof(ScansSize));
         }
 
         public void FillMessagesAndAlls(Person p)
@@ -258,6 +267,7 @@ namespace Provodnik
                                                      BitmapCreateOptions.None,
                                                      BitmapCacheOption.OnLoad);
                     d.Bitmap.Source = bmf;
+                    d.Size = bytes.Length; RefreshScansSize();
                 }
             }
             catch (Exception oex)
@@ -436,6 +446,30 @@ namespace Provodnik
                 }
             }
             public int DocTypeId { get; set; }
+
+            public double? _Size;
+            public double? Size
+            {
+                get => _Size;
+                set
+                {
+                    _Size = value;
+                    OnPropertyChanged();
+
+                    OnPropertyChanged(nameof(SizeProp));
+                }
+            }
+
+            public string SizeProp
+            {
+                get
+                {
+                    if (Size.HasValue)
+                        return (Size.Value / 1024 / 1024).ToString("F3") + " Мб";
+
+                    return "";
+                }
+            }
         }
 
         public ObservableCollection<PersonDocViewModel> Documents { get; set; }
@@ -1096,6 +1130,17 @@ namespace Provodnik
             }
         }
 
+        private bool _IsUchebFinish;
+        public bool IsUchebFinish
+        {
+            get => _IsUchebFinish;
+            set
+            {
+                _IsUchebFinish = value;
+                OnPropertyChanged();
+            }
+        }
+
         private DateTime? _UchebEndDat;
         [DisplayName(DisplayName = "Дата окончания обучения")]
         public DateTime? UchebEndDat
@@ -1336,6 +1381,14 @@ namespace Provodnik
             {
                 _Zametki = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public string ScansSize
+        {
+            get
+            {
+                return (Documents.Select(pp => pp.Size).Sum(pp => pp ?? 0)/ 1024 / 1024).ToString("F3");
             }
         }
 

@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -189,13 +190,17 @@ namespace Provodnik
 
         private void ClearScan_Button_Click(object sender, RoutedEventArgs e)
         {
+            vm = this.DataContext as PersonViewModel;
             var dc = (sender as Button).DataContext as PersonViewModel.PersonDocViewModel;
             dc.Bitmap.Source = null;
             dc.FileName= null;
+
+            dc.Size = null; vm.RefreshScansSize();
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            vm = this.DataContext as PersonViewModel;
             
             OpenFileDialog openFileDialog = new OpenFileDialog { Filter = "Jpeg Files |*.jpeg;*.jpg" };// { Filter = "Image Files (*.bmp;*.png;*.jpg)|*.bmp;*.png;*.jpg" };
             if (openFileDialog.ShowDialog() == true)
@@ -205,6 +210,7 @@ namespace Provodnik
                 dc.Bitmap = new Image() { Source = new BitmapImage(uri) };
                 dc.FileName = null;
                 dc.PrinesetK = null;
+                dc.Size = new FileInfo(openFileDialog.FileName).Length; vm.RefreshScansSize();
             }
         }
 

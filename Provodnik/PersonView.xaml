@@ -79,6 +79,10 @@
                 </StackPanel>
             </Expander.Header>
             <Grid Background="#FFE5E5E5" >
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
                 <ListView Name="lstw" Margin="3,3,3,0" SelectionMode="Single" ItemsSource="{Binding Documents}" MinHeight="150">
                     <ListView.View>
                         <GridView>
@@ -92,6 +96,8 @@
                                                     <Image Source="{Binding Bitmap.Source, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
                                                 </Border>
                                                 <Button Content="x" Style="{x:Null}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="14" Height="14" Background="Red" Click="ClearScan_Button_Click" Padding="0,-3,0,0" />
+
+                                                <TextBlock Text="{Binding SizeProp,Mode=OneWay}"  Foreground="DimGray" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="9" Margin="2,1" />
                                             </Grid>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
@@ -121,6 +127,12 @@
                             <local:PersonDocument Name="Прописка"  />
                         </ListView.Items-->
                 </ListView>
+
+                <TextBlock Grid.Row="1">
+                    <Run Text="Размер: "/>
+                    <Run Text="{Binding ScansSize,Mode=OneWay}"/>
+                    <Run Text="Мб" />
+                </TextBlock>
 
 
             </Grid>
@@ -253,10 +265,10 @@
                     <DatePicker SelectedDate="{Binding DogovorDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" Style="{DynamicResource DatePicker}"/>
 
                 </Grid>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="4" VerticalAlignment="Top">                   
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="4" VerticalAlignment="Top">
                     <TextBlock Text="Учебное заведение"/>
                     <ComboBox Name="UchZavedenieComboBox" Text="{Binding UchZavedenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="70" Style="{DynamicResource ComboBox}"
-                          ItemsSource="{Binding UchZavedeniya}" IsReadOnly="False"/>               
+                          ItemsSource="{Binding UchZavedeniya}" IsReadOnly="False"/>
                     <TextBlock Text="Факультет"/>
                     <ComboBox Name="UchFacComboBox" Text="{Binding UchFac, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="70" Style="{DynamicResource ComboBox}"
                           ItemsSource="{Binding UchFacs}" IsReadOnly="False"/>
@@ -361,7 +373,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Grid Margin="3" VerticalAlignment="Top" Grid.ColumnSpan="2" >
+                        <Grid  VerticalAlignment="Top" Grid.ColumnSpan="2" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="auto"/>
@@ -379,12 +391,13 @@
                             <TextBlock Text="дата" Grid.Column="2" HorizontalAlignment="Right"/>
                         </Grid>
                         <DatePicker SelectedDate="{Binding UchebStartDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                        <Grid Margin="3" VerticalAlignment="Top" Grid.Column="3" Grid.ColumnSpan="2" >
+                        <Grid  VerticalAlignment="Top" Grid.Column="3" Grid.ColumnSpan="2" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="срок окончания" Grid.Column="0"/>
@@ -395,6 +408,7 @@
                               SelectedItem="{Binding SelectedUchebGruppa}"
                               DisplayMemberPath="UchebGruppa" IsReadOnly="False" IsEditable="True"/>
                             <TextBlock Text="x" Grid.Column="4" Margin="0,0,0,3" Foreground="Red" Padding="0,3,3,3" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+                            <CheckBox Content="Закончил" IsChecked="{Binding IsUchebFinish, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5"/>
                         </Grid>
                         <TextBlock Text="Практика" Grid.Row="1"/>
                         <TextBlock Text="дата пробной поездки" Grid.Row="1" Grid.Column="1" Margin="10,3,3,3" HorizontalAlignment="Right"/>
@@ -572,7 +586,7 @@
                             <TextBlock Text="действует до" Grid.Column="1" Margin="10,7,3,7"/>
                             <DatePicker SelectedDate="{Binding VaccineSertDatTo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
                         </StackPanel>
-                        
+
                     </Grid>
                 </Expander>
             </Grid>

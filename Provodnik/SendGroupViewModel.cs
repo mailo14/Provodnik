@@ -29,7 +29,6 @@ namespace Provodnik
             RegOtdeleniya = repository.GetRegOtdeleniya();
 
                Cities = repository.GetCities();
-            Marshruts = repository.GetMarshruts();
             PeresadSts= repository.GetPeresadSts();
 
             Persons = new ObservableCollection<SendGroupPersonViewModel>();
@@ -69,8 +68,7 @@ namespace Provodnik
 
             builder.RuleFor(vm => vm.RegOtdelenie).MyNotEmpty();
             builder.RuleFor(vm => vm.City).MyNotEmpty();
-            builder.RuleFor(vm => vm.Depo).MyNotEmpty();
-            builder.RuleFor(vm => vm.Marshrut).MyNotEmpty();
+            builder.RuleFor(vm => vm.Depo).MyNotEmpty(); 
           builder.RuleFor(vm => vm.Uvolnenie).MyNotEmptyDat();
             builder.RuleFor(vm => vm.Poezd).MyNotEmpty();
             builder.RuleFor(vm => vm.Vagon).MyNotEmpty();
@@ -115,7 +113,6 @@ namespace Provodnik
         public List<string> Cities { get; set; }
         public List<string> PeresadSts { get; set; }
         public ObservableCollection<string> Depos { get; set; } = new ObservableCollection<string>();
-        public List<string> Marshruts { get; set; }
 
 
         public ObservableCollection<SendGroupPersonViewModel> Persons { get; set; }
@@ -292,18 +289,6 @@ namespace Provodnik
             set
             {
                 _Vokzal = value;
-                OnPropertyChanged();
-            }
-        }
-
-        string _Marshrut;
-        [DisplayName(DisplayName = "Маршрут")]
-        public string Marshrut 
-        {
-            get => _Marshrut;
-            set
-            {
-                _Marshrut = value;
                 OnPropertyChanged();
             }
         }

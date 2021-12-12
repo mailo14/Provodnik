@@ -177,9 +177,10 @@ namespace Provodnik
             var vm = DataContext as SendGroupViewModel;
 
             excelReport excel = new excelReport();
-            excel.Init(/*(vm.City== "Москва")?"Ф6_Msk.xlsx":*/"Ф6_ost.xlsx", 
-                string.Format(@"Ф6_3_{0}_{1}__{2}_{3}.xlsx",                vm.OtprDat.Value.ToString("dd.MM.yyyy"),                 "Новосибирск",                vm.City,                vm.Persons.Count),
-                otchetDir: otchetDir);
+            excel.Init(/*(vm.City== "Москва")?"Ф6_Msk.xlsx":*/"Ф6_ost.xlsx",
+                $@"Ф6_{vm.OtprDat.Value.ToString("dd.MM.yyyy")}_Новосибирск__{ vm.City}_{vm.Persons.Count}.xlsx",
+                otchetDir: otchetDir//,visible:true
+                );
 
             int            ri =7;
             var db = new ProvodnikContext();
@@ -204,8 +205,14 @@ namespace Provodnik
                 excel.cell[ri, 3].value2 = "Проводник" + Environment.NewLine + "пассажирского" + Environment.NewLine + "вагона";
                 
                 excel.cell[ri, 5].value2 = r.PaspAdres;
-                excel.cell[ri, 6].value2 = r.PaspSeriya+" "+r.PaspNomer+Environment.NewLine+ Helper.FormatSnils(r.Snils);
-                excel.cell[ri, 7].value2 = vm.Marshrut;
+                excel.cell[ri, 6].value2 =
+                    r.Grazdanstvo== "КЗ"? "Паспорт гр-на РК:" : "Паспорт гр-на РФ:"
+                    + Environment.NewLine + r.PaspSeriya+" "+r.PaspNomer
+                    +Environment.NewLine+ Helper.FormatSnils(r.Snils);
+
+                excel.cell[ri, 7].value2 = (!string.IsNullOrWhiteSpace(vm.PeresadSt))
+                    ? $"Новосибирск – {vm.PeresadSt} – {vm.City} – {vm.PeresadSt} – Новосибирск"
+                    : $"Новосибирск – {vm.City} – Новосибирск";
 
                 excel.cell[ri, 11].value2 = vm.Uvolnenie.HasValue ? vm.Uvolnenie.Value.ToString("dd.MM.yyyy") : "";
             }
@@ -254,7 +261,7 @@ namespace Provodnik
 
             var db = new ProvodnikContext();
             var ids = vm.Persons.Select(pp => pp.PersonId);
-            var pe = db.Persons.Where(pp => ids.Contains(pp.Id) && !pp.HasLgota).ToList();
+            var pe = db.Persons.Where(pp => ids.Contains(pp.Id)).ToList();
             if (pe.Count == 0) return;
 
 
@@ -391,18 +398,36 @@ namespace Provodnik
 
         private void PrintButton_Click(object sender, RoutedEventArgs e)
         {
+            var vm = this.DataContext as SendGroupViewModel;
+            if (!vm.Validator.IsValid)
+            {
+                MessageBox.Show(string.Join(Environment.NewLine, vm.Validator.ValidationMessages));
+                return;
+            }
+
             var dialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
             if (dialog.ShowDialog(this).GetValueOrDefault())
             {
-                App.setCursor(true);
-                var vm = this.DataContext as SendGroupViewModel;
-                otchetDir = dialog.SelectedPath + @"\" + string.Format(@"Пакет_{0}_{1}__{2}_{3}",
+                otchetDir = dialog.SelectedPath + @"\" + string.Format(@"{0}_{1}__{2}_{3}",
                 vm.OtprDat.Value.ToString("dd.MM.yyyy"),
                 "Новосибирск",
                 vm.City,
                 vm.Persons.Count);
-                //TODO  del?  DirectoryInfo di = Directory.CreateDirectory(path); di.Delete();
 
+                DirectoryInfo di =new DirectoryInfo(otchetDir);
+                if (di.Exists)
+                    try
+                    {
+                        di.Delete(true);
+                    }
+                    catch (Exception exx)
+                    {
+                        MessageBox.Show("Невозможно удалить существующую папку "+otchetDir
+                            +Environment.NewLine+"закройте открытые документы");
+                        return;
+                    }
+
+                App.setCursor(true);
                 try
                 {
                    VSOP1();// VSOP2();
@@ -411,7 +436,7 @@ namespace Provodnik
                     PismoLgoti();/**/
                     ReestrPeredachi();
 
-                    string path = otchetDir + @"\Сканы";
+                    string path = otchetDir + $@"\Ф6(Архив)_{vm.OtprDat.Value.ToString("dd.MM.yyyy")}_Новосибирск-{vm.City}_{vm.Persons.Count}чел";
                     if (!Directory.Exists(path))
                         Directory.CreateDirectory(path);
                     else;//TODO del?
@@ -437,7 +462,7 @@ namespace Provodnik
 
                         foreach (var d in g)
                         {
-                            var fileName = $@"{path}\{fioInic}\{fioInic}_{d.Description}.jpg";
+                            var fileName = $@"{path}\{g.Key}\{fioInic}_{d.Description}.jpg";
                             using (var client = new FluentFTP.FtpClient())
                             {
                                 App.ConfigureFtpClient(client);
@@ -492,6 +517,13 @@ namespace Provodnik
 
         private void PrintVSOP3Button_Click(object sender, RoutedEventArgs e)
         {
+            var vm = this.DataContext as SendGroupViewModel;
+            if (!vm.Validator.IsValid)
+            {
+                MessageBox.Show(string.Join(Environment.NewLine, vm.Validator.ValidationMessages));
+                return;
+            }
+
             VSOP3(true);
         }
     }

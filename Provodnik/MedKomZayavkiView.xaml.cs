@@ -107,27 +107,8 @@ namespace Provodnik
         {
 
         }
-
-        private void ClearScan_Button_Click(object sender, RoutedEventArgs e)
-        {
-            var dc = (sender as Button).DataContext as PersonViewModel.PersonDocViewModel;
-            dc.Bitmap.Source = null;
-            dc.FileName= null;
-        }
-
-        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
-            {
-                Uri uri = new Uri(openFileDialog.FileName);
-                var dc = (sender as TextBlock).DataContext as PersonViewModel.PersonDocViewModel;
-                dc.Bitmap = new Image() { Source = new BitmapImage(uri) };
-                dc.FileName = null;
-            }
-        }
-
+         
+         
         void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var p = ((FrameworkElement)e.OriginalSource).DataContext as MedKomZayavkaViewModel;

@@ -105,6 +105,7 @@ namespace Provodnik
         public string UchebGruppa { get; set; }
         public DateTime? UchebStartDat { get; set; }
         public DateTime? UchebEndDat { get; set; }
+        public bool IsUchebFinish { get; set; }
         public DateTime? PraktikaDat { get; set; }
         public bool IsPraktika { get; set; }
         public DateTime? ExamenDat { get; set; }
