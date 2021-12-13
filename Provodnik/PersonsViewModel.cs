@@ -338,8 +338,10 @@ private RelayCommand _FindCommand;
                     query = query.Where(pp => pp.IsSanKnizka == SanknizkaExist.Value);
                 if (PsihExist.HasValue)
                     query = query.Where(pp => PsihExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.Психосвидетельствование).FileName != null));
+                    
                 if (MedKommExist.HasValue)
-                    query = query.Where(pp => MedKommExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.ЗаключениеВЭК).FileName != null));
+                    //query = query.Where(pp => MedKommExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.ЗаключениеВЭК).FileName != null));
+                    query = query.Where(pp => PsihExist.Value == (pp.PersonDocs.Count(ppp => (ppp.DocTypeId == DocConsts.ЗаключениеВЭК || ppp.DocTypeId == DocConsts.ЗаключениеВЭК2) && ppp.FileName != null) == 2));
                 //query = query.Where(pp => pp.IsMedKomm== MedKommExist.Value);
                 if (PraktikaExist.HasValue)
                     query = query.Where(pp => pp.IsPraktika == PraktikaExist.Value);

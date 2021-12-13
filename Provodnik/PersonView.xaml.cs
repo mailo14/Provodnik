@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -79,49 +81,53 @@ namespace Provodnik
         }
         private bool Save()
         {
-                        vm = this.DataContext as PersonViewModel;
+            vm = this.DataContext as PersonViewModel;
             List<string> errors = vm.GetModelErrors();
             var enterErrors = errors.Where(pp => /*!pp.StartsWith("Не прикреплен скан документа") && */ !pp.EndsWith(" не заполнено"));
-            if (enterErrors.Any() && MessageBox.Show(string.Join(Environment.NewLine,enterErrors)+ Environment.NewLine+"Чтобы поправить, нажмите Отмена", "", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
+            if (enterErrors.Any() && MessageBox.Show(string.Join(Environment.NewLine, enterErrors) + Environment.NewLine + "Чтобы поправить, нажмите Отмена", "", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
                 return false;
 
             try
             {
                 //await new ProgressRunner().RunAsync(
                 //    new Action<ProgressHandler>((progressChanged) =>
+                {
+
+                    //progressChanged(1, "Сохранение");
+
+
+                    //MessageBox.Show(string.Join(Environment.NewLine, errors));
+
+
+                    var db = new ProvodnikContext();
+
+                    Person p;
+                    if (vm.Id.HasValue)
                     {
+                        p = db.Persons.Single(pp => pp.Id == vm.Id.Value);
 
-                        //progressChanged(1, "Сохранение");
-
-
-                        //MessageBox.Show(string.Join(Environment.NewLine, errors));
-                        
-
-                        var db = new ProvodnikContext();
-
-                        Person p;
-                        if (vm.Id.HasValue)
-                        {
-                            p = db.Persons.Single(pp => pp.Id == vm.Id.Value);
-
-                            MainWindow.Mapper.Value.Map(vm, p);
-                            var currents = vm.Documents.Where(pp => pp.Id.HasValue).Select(pp => pp.Id.Value).ToList();
-                            var toDelete = (from pd in db.PersonDocs
-                                            where pd.PersonId == p.Id && !currents.Contains(pd.Id)
-                                            select pd);
-                            db.PersonDocs.RemoveRange(toDelete);
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            db.Persons.Add(p = new Person());// { Fio = vm.Fio });
-                            MainWindow.Mapper.Value.Map(vm, p);
-                            db.SaveChanges();
-                        }
+                        MainWindow.Mapper.Value.Map(vm, p);
+                        var currents = vm.Documents.Where(pp => pp.Id.HasValue).Select(pp => pp.Id.Value).ToList();
+                        var toDelete = (from pd in db.PersonDocs
+                                        where pd.PersonId == p.Id && !currents.Contains(pd.Id)
+                                        select pd);
+                        db.PersonDocs.RemoveRange(toDelete);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        db.Persons.Add(p = new Person());// { Fio = vm.Fio });
+                        MainWindow.Mapper.Value.Map(vm, p);
+                        db.SaveChanges();
+                    }
 
 
-                        //progressChanged(29, "Загрузка сканов");
-                        var share = 70.0 / vm.Documents.Count;
+                    //progressChanged(29, "Загрузка сканов");
+                    var share = 70.0 / vm.Documents.Count;
+                    using (var client = new FluentFTP.FtpClient())
+                    {
+                        App.ConfigureFtpClient(client);
+                        client.Connect();
                         foreach (var d in vm.Documents)
                         {
                             PersonDoc pd;
@@ -134,37 +140,51 @@ namespace Provodnik
                                 db.PersonDocs.Add(pd = new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = d.DocTypeId, FileName = d.FileName });
                                 db.SaveChanges();
                             }
-                            
+
                             if (d.FileName == null)
                             {
                                 ImageSource source = null;
-                                Application.Current.Dispatcher.Invoke((Action)(() => {
+                                Application.Current.Dispatcher.Invoke((Action)(() =>
+                                {
                                     source = d.Bitmap.Source;
                                 }));
                                 if (source != null)
                                 {
-                                    using (var client = new FluentFTP.FtpClient())
-                                {
-                                    App.ConfigureFtpClient(client);
-                                    client.Connect();
-                                        var remotePath = $@"ProvodnikDocs/{p.Id.ToString()}/{DateTime.Now.Ticks}.jpg";// "/1_Иванов";
+                                    var remotePath = $@"ProvodnikDocs/{p.Id.ToString()}/{DateTime.Now.Ticks}.jpg";// "/1_Иванов";
 
-                                        client.Upload(ToByteArray(source as BitmapSource), remotePath, FtpRemoteExists.Overwrite, true);//, FtpVerify.Retry);
-                                        pd.FileName = remotePath;
-                                    d.FileName= remotePath; //for GetScanErrors(true)
-                                }
+                                    client.Upload(ToByteArray(source as BitmapSource), remotePath, FtpRemoteExists.Overwrite, true);//, FtpVerify.Retry);
+                                    pd.FileName = remotePath;
+                                    d.FileName = remotePath; //for GetScanErrors(true)
+                                                             /**/
+                                                             /*using (WebClient wc = new WebClient() { Credentials = new NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw) })
+                                                             {
+                                                                 var fileName = $@"{DateTime.Now.Ticks}.jpg";
+                                                                 System.IO.File.Copy(d.LocalFileName, fileName);
+
+                                                                 var remotePath = $@"ProvodnikDocs/{p.Id.ToString()}/";// "/1_Иванов";
+                                                                                                                       //  wc.DownloadProgressChanged += wc_DownloadProgressChanged;
+                                                                                                                       //wc.UploadFile("http://u0920601.plsk.regruhosting.ru/" +remotePath, "STOR", fileName);
+                                                                                                                       //wc.UploadData("http://u0920601.plsk.regruhosting.ru/" + remotePath, "STOR", ToByteArray(source as BitmapSource));
+                                                                                                                       //HttpContent stringContent = new StringContent(paramString);
+                                                                                                                       //HttpContent fileStreamContent = new StreamContent(paramFileStream);
+                                                                var res= Upload("http://u0920601.plsk.regruhosting.ru/" + remotePath, ToByteArray(source as BitmapSource));
+                                                             //  var ff=  res.Result;
+                                                                 pd.FileName = remotePath;
+                                                                 d.FileName = remotePath; //for GetScanErrors(true)
+                                                             }*/
                                 }
                                 else pd.FileName = null;
                                 db.SaveChanges();
                             }
-                        pd.PrinesetK = d.PrinesetK;
-                        db.SaveChanges();
+                            pd.PrinesetK = d.PrinesetK;
+                            db.SaveChanges();
                             //progressChanged(share);
                         }
+                    }
 
                     vm.FillMessagesAndAlls(p);
-                        db.SaveChanges();
-                    }//));
+                    db.SaveChanges();
+                }//));
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
 
@@ -173,7 +193,7 @@ namespace Provodnik
             return true;
         }
 
-        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
+            private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
         {
 
         }
@@ -194,6 +214,7 @@ namespace Provodnik
             var dc = (sender as Button).DataContext as PersonViewModel.PersonDocViewModel;
             dc.Bitmap.Source = null;
             dc.FileName= null;
+            dc.LocalFileName= null;
 
             dc.Size = null; vm.RefreshScansSize();
         }
@@ -209,6 +230,7 @@ namespace Provodnik
                 var dc = (sender as TextBlock).DataContext as PersonViewModel.PersonDocViewModel;
                 dc.Bitmap = new Image() { Source = new BitmapImage(uri) };
                 dc.FileName = null;
+                dc.LocalFileName = openFileDialog.FileName;
                 dc.PrinesetK = null;
                 dc.Size = new FileInfo(openFileDialog.FileName).Length; vm.RefreshScansSize();
             }

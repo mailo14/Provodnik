@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -430,7 +431,7 @@ namespace Provodnik
                 App.setCursor(true);
                 try
                 {
-                   VSOP1();// VSOP2();
+                    VSOP1();// VSOP2();
                     VSOP3();
                     F6();
                     PismoLgoti();/**/
@@ -453,24 +454,31 @@ namespace Provodnik
                               group new { pdt.Description, pd.FileName } by p.Fio into gr
                               select gr).ToList();//new { p.Fio, pdt.Description, pd.FileName }
 
-                    foreach (var g in qq)
+                    using (var client = new FluentFTP.FtpClient())
                     {
-                        var fio = new StringHelper().ParseFio(g.Key);
-                        var fioInic = fio[0];
-                        if (fio[1].Length > 0) fioInic += $" {fio[1][0]}.";
-                        if (fio[2].Length > 0) fioInic += $" {fio[2][0]}.";
+                        App.ConfigureFtpClient(client);
+                        client.Connect();
 
-                        foreach (var d in g)
+                        foreach (var g in qq)
                         {
-                            var fileName = $@"{path}\{g.Key}\{fioInic}_{d.Description}.jpg";
-                            using (var client = new FluentFTP.FtpClient())
+                            var fio = new StringHelper().ParseFio(g.Key);
+                            var fioInic = fio[0];
+                            if (fio[1].Length > 0) fioInic += $" {fio[1][0]}.";
+                            if (fio[2].Length > 0) fioInic += $" {fio[2][0]}.";
+
+                            foreach (var d in g)
                             {
-                                App.ConfigureFtpClient(client);
-                                client.Connect();
-                                var result = client.DownloadFile(fileName, d.FileName, FtpLocalExists.Overwrite,FtpVerify.Retry);//, true, FtpVerify.Retry);
+                                var fileName = $@"{path}\{g.Key}\{fioInic}_{d.Description}.jpg";
+
+                                var result = client.DownloadFile(fileName, d.FileName, FtpLocalExists.Overwrite, FtpVerify.Retry);//, true, FtpVerify.Retry);
                                 if (result != FtpStatus.Success)
-                                    throw new Exception("Не удалось загрузить файл "+ System.IO.Path.GetFileName(fileName));
+                                    throw new Exception("Не удалось загрузить файл " + System.IO.Path.GetFileName(fileName));
                             }
+                            /*using (WebClient wc = new WebClient() { Credentials = new NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw) })
+                            {
+                               wc.DownloadFile("http://u0920601.plsk.regruhosting.ru/" + d.FileName,fileName);
+                            bytes = wc.DownloadData("http://u0920601.plsk.regruhosting.ru/" + d.FileName);
+                            }*/
                         }
                     }
                 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
@@ -16,7 +17,7 @@ namespace Provodnik
 {
     public class PersonViewModel : ValidatableObject
     {
-
+        private const string ScanSizeError= "Размер сканов больше 10Мб";
         public static BitmapSource ToBitmapSource(byte[] bytes)
         {
 
@@ -107,12 +108,16 @@ namespace Provodnik
         }
 
         public bool GetAllPasport()
-        {
+        {            
             var allPasports = new string[]{ Fio,Phone,UchZavedenie,UchForma,Grazdanstvo//,Otryad
                 ,UchebCentr,(ExamenDat.HasValue) ? ExamenDat.ToString(): UchebEndDat.ToString()//TODO
                 ,RodPhone,RodFio
-                ,BirthDat.ToString(),MestoRozd,PaspNomer,PaspSeriya,PaspAdres,Snils };
-            return !allPasports.Any(pp => string.IsNullOrWhiteSpace(pp));
+                ,BirthDat.ToString(),PaspNomer,Snils,VaccineSert,VaccineSertDat.ToString() };
+
+            var allPasportsRus = new string[] { MestoRozd, PaspSeriya, PaspAdres };
+
+            return allPasports.All(pp => !string.IsNullOrWhiteSpace(pp))
+                && (Grazdanstvo == "КЗ" || /*Grazdanstvo != "КЗ" && */allPasportsRus.All(pp => !string.IsNullOrWhiteSpace(pp)));
         }
 
         public List<string> GetModelErrors()
@@ -191,7 +196,7 @@ namespace Provodnik
             }
 
             var size = Documents.Select(pp => pp.Size).Sum(pp=>pp??0);
-            if (size>10*1024*1024) errors.Add($"Размер сканов больше 10Мб: {(size/1024/ 1024).ToString("F3")}");
+            if (size>10*1024*1024) errors.Add($"{ScanSizeError}: {(size/1024/ 1024).ToString("F3")}");
 
             return errors;
         }
@@ -208,7 +213,7 @@ namespace Provodnik
 
             Messages = p.Messages = string.Join(Environment.NewLine, allErrors);
             AllPasport = p.AllPasport = GetAllPasport();
-            AllScans = p.AllScans = !scanErrors.Any();
+            AllScans = p.AllScans = !scanErrors.Any(x=>!x.StartsWith(ScanSizeError));
         }
 
         bool IsLoading = true;
@@ -251,12 +256,17 @@ namespace Provodnik
                 await System.Threading.Tasks.Task.Run(
                     () =>
                     {
-                        using (var client = new FluentFTP.FtpClient())
+                        /* using (var client = new FluentFTP.FtpClient())
+                         {
+                             App.ConfigureFtpClient(client);
+                             client.Connect();
+                             client.Download(out bytes, d.FileName);
+                             //Thread.Sleep(2000);
+                         }*/
+
+                        using (WebClient wc = new WebClient() { Credentials = new NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw) })
                         {
-                            App.ConfigureFtpClient(client);
-                            client.Connect();
-                            client.Download(out bytes, d.FileName);
-                            //Thread.Sleep(2000);
+                            bytes = wc.DownloadData("http://u0920601.plsk.regruhosting.ru/" + d.FileName);
                         }
                     });
 
@@ -470,6 +480,8 @@ namespace Provodnik
                     return "";
                 }
             }
+
+            public string LocalFileName { get; internal set; }
         }
 
         public ObservableCollection<PersonDocViewModel> Documents { get; set; }
