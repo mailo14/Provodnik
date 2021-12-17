@@ -229,7 +229,7 @@ namespace Provodnik
 
             var db = new ProvodnikContext();
             var ids = vm.Persons.Select(pp => pp.PersonId);
-            var pe =            db.Persons.Where(pp => ids.Contains(pp.Id) && !pp.HasLgota).ToList();
+            var pe =            db.Persons.Where(pp => ids.Contains(pp.Id) && !(/*pp.HasLgota*/pp.UchForma == UchFormaConsts.Ochnaya)).ToList();
             if (pe.Count == 0) return;
 
 
@@ -400,9 +400,9 @@ namespace Provodnik
         private void PrintButton_Click(object sender, RoutedEventArgs e)
         {
             var vm = this.DataContext as SendGroupViewModel;
-            if (!vm.Validator.IsValid)
+            if (!vm.OtprDat.HasValue || new[] { vm.City, vm.Depo, vm.DepoRod }.Any(x=>string.IsNullOrWhiteSpace(x)))
             {
-                MessageBox.Show(string.Join(Environment.NewLine, vm.Validator.ValidationMessages));
+                MessageBox.Show("Заполните поля Дата отправления, Город назначения, Депо приписки, Депо приписки в родительном падеже");
                 return;
             }
 
@@ -432,7 +432,7 @@ namespace Provodnik
                 try
                 {
                     VSOP1();// VSOP2();
-                    VSOP3();
+                    //VSOP3();
                     F6();
                     PismoLgoti();/**/
                     ReestrPeredachi();

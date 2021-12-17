@@ -155,6 +155,7 @@ namespace Provodnik
             }
             IsChanged = true;
         }
+
     }
 
     /// <summary>
@@ -292,7 +293,41 @@ namespace Provodnik
                 return;
 
             new Reporter().NapravleniyaMed(vm.Persons.ToList());
-            
+
+        }
+        private void VedomostButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as MedKommsViewModel;
+            var db = new ProvodnikContext();
+            if (vm.Persons.Count == 0) return;
+
+
+            var path = (string.Format("{0}\\_шаблоны\\" + "Ведомость мед.комисии.dotx", AppDomain.CurrentDomain.BaseDirectory));
+            Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false };
+            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Open(path, ReadOnly: false, Visible: false);
+            aDoc.Activate();
+
+            object missing = Missing.Value;
+
+            Microsoft.Office.Interop.Word.Range range = aDoc.Content;
+            range.Find.ClearFormatting();
+
+            range.Find.Execute(FindText: "{дата}", ReplaceWith: vm.SelectedDate?.ToString("dd.MM.yyyy"), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+
+
+            var table = aDoc.Tables[1];
+            int iRow = 2;
+
+            foreach (var p in vm.Persons)
+            {
+                if (iRow > 2) table.Rows.Add(ref missing);
+                table.Cell(iRow, 1).Range.Text = (iRow - 1).ToString() + '.';
+                table.Cell(iRow, 2).Range.Text = p.Fio;
+                table.Cell(iRow, 3).Range.Text = p.BirthDat?.ToString("dd.MM.yyyy");
+
+                iRow++;
+            }
+            wordApp.Visible = true;
         }
     }
 }

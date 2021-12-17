@@ -125,15 +125,28 @@ namespace Provodnik
 
         private void SpravkiPSOButton_Click(object sender, RoutedEventArgs e)
         {
+            var db = new ProvodnikContext();
+            
+            var ids = vm.PersonList.Select(pp => pp.Id).ToList();
+            var idsWithSpravka = new HashSet<int>(from p in db.Persons
+                                  where ids.Contains(p.Id)
+                                  join pd in db.PersonDocs on p.Id equals pd.PersonId
+                                  where pd.DocTypeId == DocConsts.СправкаРСО && pd.FileName!=null
+                                  select p.Id);
+
+            var persons = vm.PersonList.Where(p => !idsWithSpravka.Contains(p.Id));
+            if (!persons.Any())
+            {
+                MessageBox.Show("Справки есть у всех");
+                return;
+            }
+
             excelReport excel = new excelReport();
             excel.Init("Справки РСО.xltx", $"Справки РСО { DateTime.Now.Ticks}.xlsx");//,visible:true);//, otchetDir: otchetDir);
 
             int ri = 1;
-            var db = new ProvodnikContext();
-
-            foreach (var r in vm.PersonList)
-            {
-                ri++;
+            foreach (var r in persons){
+               ri++;
                 excel.cell[ri, 1].value2 = ri - 1;
                 excel.cell[ri, 2].value2 = r.Fio;
                 //excel.cell[ri, 3].value2 = "АО \"ФПК\"";
@@ -151,7 +164,7 @@ namespace Provodnik
         private void VoronkaButton_Click(object sender, RoutedEventArgs e)
         {
             excelReport excel = new excelReport();
-            excel.Init("Воронка.xltx", $"Воронка.xltx { DateTime.Today.ToString("dd.MM.yyyy")}.xlsx");//,visible:true);//, otchetDir: otchetDir);
+            excel.Init("Воронка.xltx", $"Воронка { DateTime.Today.ToString("dd.MM.yyyy")}.xlsx");//,visible:true);//, otchetDir: otchetDir);
 
             int ri = 1;
             var db = new ProvodnikContext();
@@ -226,5 +239,51 @@ namespace Provodnik
             excel.myExcel.Visible = true;
         }
 
+        private void ScansButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            excelReport excel = new excelReport();
+            excel.Init("Сканы.xltx", $"Сканы.xlsx");//,visible:true);//, otchetDir: otchetDir);
+
+            int ri = 1;
+            var db = new ProvodnikContext();
+
+            var ids = vm.PersonList.Select(pp => pp.Id).ToList();
+            var qq = from p in db.Persons
+                     join pd in db.PersonDocs on p.Id equals pd.PersonId
+                     //join d in db.DocTypes on 
+                     where ids.Contains(p.Id) && pd.FileName != null
+                     group pd by p into g                     
+                     select new
+                     {
+                         g.Key.Fio,
+                         g.Key.Otryad,
+                         scans=g.Select(pp=>pp.DocTypeId)
+                     };
+
+            var dts = db.DocTypes.ToList();
+            int c = 2;
+            foreach (var dt in dts)
+            {
+                c++;
+                excel.cell[1, c].value2 = dt.Description;
+            }
+                foreach (var r in qq.OrderBy(pp=>pp.Fio))
+            {
+                ri++;
+                excel.cell[ri, 1].value2 = r.Fio;
+                excel.cell[ri, 2].value2 = r.Otryad;
+
+                var set = new HashSet<int>(r.scans);
+                c = 2;
+                foreach (var dt in dts) {
+                    c++;
+                    excel.cell[ri, c].value2 = set.Contains(dt.Id) ? 1 : 0;
+                }
+            }
+
+            excel.setAllBorders(excel.mySheet.Range[excel.cell[1, 1], excel.cell[ri, 2+dts.Count]]);
+            excel.myExcel.Visible = true;
+        }
     }
 }

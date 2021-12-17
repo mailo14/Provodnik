@@ -62,7 +62,7 @@ public    class Repository
         public List<string> GetUchFormas(string uchZavedenie)
         {
             if (uchZavedenie == RepoConsts.NoUchZavedenie) return new List<string> { RepoConsts.NoUchZavedenie };
-            return new List<string> { "ОЧНАЯ", "ЗАОЧНАЯ", "АКАДЕМ", "ОЧНО-ЗАОЧНАЯ" };
+            return new List<string> { UchFormaConsts.Ochnaya, "ЗАОЧНАЯ", "АКАДЕМ", "ОЧНО-ЗАОЧНАЯ", UchFormaConsts.Zakonchil, UchFormaConsts.NeUchitsa};
         }
 
         public string GetCurSezon()
@@ -198,4 +198,13 @@ public    class Repository
         public const string NoUchZavedenie = "не учится";
         public const string NoSezons = "(все)";
     }
+
+
+    public class UchFormaConsts
+    {
+        public const string Ochnaya = "ОЧНАЯ";
+        //, "ЗАОЧНАЯ", "АКАДЕМ", "ОЧНО-ЗАОЧНАЯ", 
+        public const string Zakonchil = "закончил";
+        public const string NeUchitsa = "не учится";
     }
+}

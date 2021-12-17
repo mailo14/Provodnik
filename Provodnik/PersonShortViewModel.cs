@@ -31,6 +31,7 @@ namespace Provodnik
         public string BadgeEng { get; set; }
         public DateTime? BirthDat { get; set; }
         public string MestoRozd { get; set; }
+        public string PaspAdres { get; set; }
         public string UchZavedenie { get; set; }
         public string UchFac { get; set; }
         public string Snils { get; set; }

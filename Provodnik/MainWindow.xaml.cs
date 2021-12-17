@@ -164,7 +164,7 @@ namespace Provodnik
 
         public MainWindow()
         {
-           // Patch_ExecOnceThanDelete();
+           //Patch_ExecOnceThanDelete();
 
 
             p = this;
@@ -197,7 +197,9 @@ namespace Provodnik
                 foreach (var p in db.Persons)
                 {
                     //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.СвидетельствоВакцинации });
-                    db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ЗаключениеВЭК2 });
+                    //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ЗаключениеВЭК2 });
+                    db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка1});
+                    db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка2 });
 
                 }
                 db.SaveChanges();

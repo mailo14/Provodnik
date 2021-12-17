@@ -63,7 +63,8 @@ namespace Provodnik
                             c++; excel.cell[ri, c].value2 = r.UchZavedenie;
                             c++; excel.cell[ri, c].value2 = r.UchForma;
                             c++; excel.cell[ri, c].value2 = r.UchGod;
-                            c++; excel.cell[ri, c].value2 = r.HasLgota ? "да" : "нет";
+                            c++; excel.cell[ri, c].value2 = /*r.HasLgota*/r.UchForma== UchFormaConsts.Ochnaya ? "да" : "нет";
+                            
 
                             c++; excel.cell[ri, c].value2 = r.RodFio;
                             c++; excel.cell[ri, c].value2 = Helper.FormatPhone(r.RodPhone);

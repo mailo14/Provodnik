@@ -152,7 +152,8 @@ namespace Provodnik
                                 {
                                     var remotePath = $@"ProvodnikDocs/{p.Id.ToString()}/{DateTime.Now.Ticks}.jpg";// "/1_Иванов";
 
-                                    client.Upload(ToByteArray(source as BitmapSource), remotePath, FtpRemoteExists.Overwrite, true);//, FtpVerify.Retry);
+                                    while (client.Upload(ToByteArray(source as BitmapSource), remotePath, FtpRemoteExists.Overwrite, true)
+                                        != FtpStatus.Success) { }//, FtpVerify.Retry);
                                     pd.FileName = remotePath;
                                     d.FileName = remotePath; //for GetScanErrors(true)
                                                              /**/

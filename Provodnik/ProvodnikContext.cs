@@ -58,10 +58,12 @@ namespace Provodnik
         public string UchForma { get; set; }
         public string UchFac { get; set; }
         public string UchGod { get; set; }
-        public bool HasLgota { get; set; }
+        //public bool IsUchFinish { get; set; }
+        //public bool HasLgota { get; set; }
         public string RodFio { get; set; }
         public string RodPhone { get; set; }
         public bool HasForma { get; set; }
+        public bool FormaPoluchena { get; set; }
         public string RazmerFormi { get; set; }
         public DateTime? BirthDat { get; set; }
         public string MestoRozd { get; set; }
@@ -210,7 +212,7 @@ namespace Provodnik
         public string Tip { get; set; }
     }
 
-    public class ProvodnikDbInitializer : DropCreateDatabaseAlways<ProvodnikContext>
+   /* public class ProvodnikDbInitializer : DropCreateDatabaseAlways<ProvodnikContext>
     {
         protected override void Seed(ProvodnikContext context)
         {
@@ -243,7 +245,7 @@ namespace Provodnik
        );
             base.Seed(context);
         }
-    }
+    }*/
     public class DocConsts
     {
        public const int Паспорт = 1;
@@ -266,5 +268,7 @@ namespace Provodnik
         public const int ВремРегистрация1 = 19;
         public const int ВремРегистрация2 = 20;
         public const int СвидетельствоВакцинации = 21;
+        public const int ТрудоваяКнижка1 = 22;
+        public const int ТрудоваяКнижка2 = 23;
     }
 }

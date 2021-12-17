@@ -56,6 +56,7 @@ namespace Provodnik
                 var qq = (from pd in db.PersonDocs
                           join dt in db.DocTypes on pd.DocTypeId equals dt.Id
                           where pd.PersonId == personId.Value
+                          orderby pd.DocTypeId
                           select new PersonDocViewModel() { Id = pd.Id, DocTypeId = pd.DocTypeId, Description = dt.Description, FileName = pd.FileName, PrinesetK = pd.PrinesetK, Bitmap = new System.Windows.Controls.Image() }).ToList();
                 //progressChanged(5);
                 var progressShare = 80.0 / qq.Count;
@@ -190,13 +191,21 @@ namespace Provodnik
                                 voenPripisEmpty = true;
                         }));
                     }
+                    else
+                    if (d.DocTypeId == DocConsts.СправкаУчебы && (UchForma==UchFormaConsts.NeUchitsa || UchForma==UchFormaConsts.Zakonchil))
+                    {
+                    }
+                    else
+                    if (d.DocTypeId == DocConsts.ТрудоваяКнижка1 || d.DocTypeId == DocConsts.ТрудоваяКнижка2)
+                    {
+                    }
                     else errors.Add($"Не прикреплен скан документа: {d.Description}");
                     if (voenPripisEmpty) errors.Add($"Не прикреплен скан документа: Приписное или военнный билет");
                 }
             }
 
-            var size = Documents.Select(pp => pp.Size).Sum(pp=>pp??0);
-            if (size>10*1024*1024) errors.Add($"{ScanSizeError}: {(size/1024/ 1024).ToString("F3")}");
+            var size = Documents.Select(pp => pp.Size).Sum(pp => pp ?? 0);
+            if (size > 10 * 1024 * 1024) errors.Add($"{ScanSizeError}: {(size / 1024 / 1024).ToString("F3")}");
 
             return errors;
         }
@@ -245,7 +254,7 @@ namespace Provodnik
                     OnPropertyChanged();
                 }
             }
-        }
+        } 
         private async void LoadFile(PersonDocViewModel d)
         {
             d.Bitmap.Source = new BitmapImage(new Uri("pack://application:,,,/pic/loading.gif"));
@@ -266,7 +275,8 @@ namespace Provodnik
 
                         using (WebClient wc = new WebClient() { Credentials = new NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw) })
                         {
-                            bytes = wc.DownloadData("http://u0920601.plsk.regruhosting.ru/" + d.FileName);
+                            
+                               bytes = wc.DownloadData("http://u0920601.plsk.regruhosting.ru/" + d.FileName);
                         }
                     });
 
@@ -397,8 +407,9 @@ namespace Provodnik
             builder.RuleFor(vm => vm.VibilPrichina).MyNotEmpty()
                 .When(vm => vm.IsVibil, isVibil => isVibil);
             ;//TODO .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie)).Between("1950", "2050");
-
-
+            
+            builder.RuleFor(vm => vm.VaccineSert).MyNotEmpty();
+            builder.RuleFor(vm => vm.VaccineSertDat).MyNotEmptyDat();
 
 
             return builder.Build(this);
@@ -608,7 +619,7 @@ namespace Provodnik
                     if (!Documents.Any(x => x.DocTypeId == DocConsts.Прописка))
                     {
                         var propiskaDoc = new ProvodnikContext().DocTypes.First(x => x.Id == DocConsts.Прописка);
-                        Documents.Add(new PersonDocViewModel() { Description = propiskaDoc.Description, DocTypeId = propiskaDoc.Id, Bitmap = new System.Windows.Controls.Image() });
+                        Documents.Insert(1,new PersonDocViewModel() { Description = propiskaDoc.Description, DocTypeId = propiskaDoc.Id, Bitmap = new System.Windows.Controls.Image() });
                     }
                 }
 
@@ -747,6 +758,17 @@ namespace Provodnik
             }
         }
 
+        /*private bool _IsUchFinish;
+        public bool IsUchFinish
+        {
+            get => _IsUchFinish;
+            set
+            {
+                _IsUchFinish = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool _HasLgota;
         [DisplayName(DisplayName = "Есть льгота")]
         public bool HasLgota
@@ -757,7 +779,7 @@ namespace Provodnik
                 _HasLgota = value;
                 OnPropertyChanged();
             }
-        }
+        }*/
 
         private string _RodFio;
         [DisplayName(DisplayName = "ФИО родителя")]
@@ -790,6 +812,17 @@ namespace Provodnik
             set
             {
                 _HasForma = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _FormaPoluchena;
+        public bool FormaPoluchena
+        {
+            get => _FormaPoluchena;
+            set
+            {
+                _FormaPoluchena = value;
                 OnPropertyChanged();
             }
         }
@@ -867,6 +900,7 @@ namespace Provodnik
         }
 
         private DateTime? _VidanDat;
+        [DisplayName(DisplayName = "Когда выдан")]
         public DateTime? VidanDat
         {
             get => _VidanDat;
@@ -1255,6 +1289,7 @@ namespace Provodnik
         }
 
         private string _VaccineSert;
+        [DisplayName(DisplayName = "Номер сертификата вакцинации")]
         public string VaccineSert
         {
             get => _VaccineSert;
@@ -1266,6 +1301,7 @@ namespace Provodnik
         }
 
         private DateTime? _VaccineSertDat;
+        [DisplayName(DisplayName = "Дата выдачи сертификата вакцинации")]
         public DateTime? VaccineSertDat
         {
             get => _VaccineSertDat;

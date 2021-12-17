@@ -67,7 +67,10 @@
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Button Name="ExcelButton" Content="Экспорт в Excel" Grid.Row="3" HorizontalAlignment="Left" Click="ExcelButton_Click"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="3" >
+            <Button Name="ExcelButton" Content="Экспорт в Excel" HorizontalAlignment="Left" Click="ExcelButton_Click"/>
+            <Button  Content="Ведомость" HorizontalAlignment="Left" Click="VedomostButton_Click"/>
+            </StackPanel>
 
             <Button Content="Добавить из списка" Click="AddFromListButton_Click"/>
             <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
