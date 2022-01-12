@@ -197,9 +197,10 @@ namespace Provodnik
                 foreach (var p in db.Persons)
                 {
                     //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.СвидетельствоВакцинации });
-                    //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ЗаключениеВЭК2 });
-                    db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка1});
-                    db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка2 });
+                    if (!new ProvodnikContext().PersonDocs.Any(x=>x.PersonId==p.Id && x.DocTypeId == DocConsts.ЗаключениеВЭК2))
+                        db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ЗаключениеВЭК2 });
+                    //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка1});
+                    //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка2 });
 
                 }
                 db.SaveChanges();

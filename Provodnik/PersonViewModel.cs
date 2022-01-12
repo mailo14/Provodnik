@@ -619,7 +619,7 @@ namespace Provodnik
                     if (!Documents.Any(x => x.DocTypeId == DocConsts.Прописка))
                     {
                         var propiskaDoc = new ProvodnikContext().DocTypes.First(x => x.Id == DocConsts.Прописка);
-                        Documents.Insert(1,new PersonDocViewModel() { Description = propiskaDoc.Description, DocTypeId = propiskaDoc.Id, Bitmap = new System.Windows.Controls.Image() });
+                        Documents.Insert(Documents.Any()? 1:0, new PersonDocViewModel() { Description = propiskaDoc.Description, DocTypeId = propiskaDoc.Id, Bitmap = new System.Windows.Controls.Image() });
                     }
                 }
 
