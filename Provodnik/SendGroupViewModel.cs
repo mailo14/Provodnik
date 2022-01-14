@@ -169,6 +169,30 @@ namespace Provodnik
             }
         }
 
+        public string _Filial;
+        //[DisplayName(DisplayName = "Станция пересадки")]
+        public string Filial
+        {
+            get => _Filial;
+            set
+            {
+                _Filial = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string _Sp;
+        //[DisplayName(DisplayName = "Станция пересадки")]
+        public string Sp
+        {
+            get => _Sp;
+            set
+            {
+                _Sp = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string _PeresadSt;
         [DisplayName(DisplayName = "Станция пересадки")]
         public string PeresadSt

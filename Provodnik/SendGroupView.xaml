@@ -224,6 +224,7 @@
         <StackPanel VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="11">
             <Button Content="Печать документов" Click="PrintButton_Click"/>
             <Button Content="ВСОП3" Click="PrintVSOP3Button_Click"/>
+            <Button Content="Акт передачи заявлений на 4%" Click="PrintAct4Button_Click"/>
         </StackPanel>
 
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="11">
@@ -239,6 +240,14 @@
             <TextBlock Text="Депо приписки" Grid.Column="2"/>
             <ComboBox Name="DepoComboBox" Text="{Binding Depo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="150" Style="{DynamicResource ComboBox}"
                           ItemsSource="{Binding Depos}" IsReadOnly="False"/>
+
+            <TextBlock Text="Структурное подразделение" Grid.Column="0"/>
+            <TextBox Text="{Binding Sp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="150" Style="{DynamicResource TextBox}"/>
+
+
+            <TextBlock Text="Филиал" Grid.Column="0"/>
+            <TextBox Text="{Binding Filial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="150" Style="{DynamicResource TextBox}" />
+
         </StackPanel>
     </Grid>
 

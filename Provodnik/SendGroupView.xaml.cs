@@ -44,7 +44,11 @@ namespace Provodnik
         private void OnDepoComboBoxTextChanged(object sender, RoutedEventArgs e)
         {
             var vm = DataContext as SendGroupViewModel;
-            vm.DepoRod = new Repository().GetF6Depo(vm.City, vm.Depo);
+           var labels= new Repository().GetDepoLabels(vm.City, vm.Depo);
+
+            vm.DepoRod = labels.DepoRod;
+            vm.Filial = labels.Filial;
+            vm.Sp = labels.Sp;
         }
 
         private void ComboBox_GotFocus(object sender, RoutedEventArgs e)
@@ -266,7 +270,7 @@ namespace Provodnik
             if (pe.Count == 0) return;
 
 
-            var path = (string.Format("{0}\\_шаблоны\\" + "Реестр передачи.docx", AppDomain.CurrentDomain.BaseDirectory));
+            var path = (string.Format("{0}\\_шаблоны\\" + "Акт передачи документов.docx", AppDomain.CurrentDomain.BaseDirectory));
             Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false };
             Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Open(path, ReadOnly: false, Visible: false);
             aDoc.Activate();
@@ -276,9 +280,15 @@ namespace Provodnik
             Microsoft.Office.Interop.Word.Range range = aDoc.Content;
             range.Find.ClearFormatting();
             
-            range.Find.Execute(FindText: "{ВЧ}", ReplaceWith: vm.DepoRod, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll); 
+            range.Find.Execute(FindText: "{City}", ReplaceWith: vm.City, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Filial}", ReplaceWith: vm.Filial, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Sp}", ReplaceWith: vm.Sp, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Ochniki}", ReplaceWith: vm.Persons.Count(x=>x.UchForma== UchFormaConsts.Ochnaya), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Count}", ReplaceWith: vm.Persons.Count(), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
 
-            var table = aDoc.Tables[1];
+            range.Find.Execute(FindText: "{ВЧ}", ReplaceWith: vm.DepoRod, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+
+            var table = aDoc.Tables[3];
             int iRow = 2;
 
             foreach (var p in vm.Persons)
@@ -292,7 +302,7 @@ namespace Provodnik
                 iRow++;
             }
 
-            aDoc.SaveAs(FileName: otchetDir + $@"\Реестр передачи {vm.City}.docx");
+            aDoc.SaveAs(FileName: otchetDir + $@"\Акт передачи документов.docx");
             aDoc.Close();       }
 
         string otchetDir ;
@@ -533,6 +543,43 @@ namespace Provodnik
             }
 
             VSOP3(true);
+        }
+
+        private void PrintAct4Button_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as SendGroupViewModel;
+
+            var path = (string.Format("{0}\\_шаблоны\\" + "Акт передачи заявлений на 4%.dotx", AppDomain.CurrentDomain.BaseDirectory));
+            Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false };
+            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Add(path);
+            aDoc.Activate();
+
+            object missing = Missing.Value;
+
+            Microsoft.Office.Interop.Word.Range range = aDoc.Content;
+            range.Find.ClearFormatting();
+
+            range.Find.Execute(FindText: "{City}", ReplaceWith: vm.City, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Filial}", ReplaceWith: vm.Filial, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Sp}", ReplaceWith: vm.Sp, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Count}", ReplaceWith: vm.Persons.Count(), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+
+            range.Find.Execute(FindText: "{ВЧ}", ReplaceWith: vm.DepoRod, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+
+            var table = aDoc.Tables[2];
+            int iRow = 2;
+
+            foreach (var p in vm.Persons)
+            {
+                if (iRow > 2) table.Rows.Add(ref missing);
+
+                table.Cell(iRow, 1).Range.Text = (iRow - 1).ToString() + '.';
+                table.Cell(iRow, 2).Range.Text = p.Fio;
+                table.Cell(iRow, 3).Range.Text = "есть";
+
+                iRow++;
+            }
+            wordApp.Visible = true;
         }
     }
 }
