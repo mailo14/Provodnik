@@ -10,11 +10,13 @@ public    class Repository
     {
         public List<string> GetCities()
         {
-            return new List<string> { "Адлер", "Москва", "Санкт-Петербург", "Новороссийск" };
+            return new ProvodnikContext().Persons.Select(pp => pp.Gorod).Distinct()
+                .Union(new List<string> { "Адлер", "Москва", "Санкт-Петербург", "Новороссийск","Новосибирск" }).Distinct().OrderBy(pp => pp).ToList();
         }
         public List<string> GetPeresadSts()
         {
-            return new List<string> { "Екатеринбург", "Москва"  };
+            return new ProvodnikContext().SendGroups.Select(pp => pp.PeresadSt).Distinct()
+                .Union(new List<string> { "Екатеринбург", "Москва"  }).Distinct().OrderBy(pp => pp).ToList();
         }
         public List<string> GetDepos(string city)
         {

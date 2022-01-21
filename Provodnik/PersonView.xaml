@@ -319,7 +319,7 @@
                     <TextBlock Text="Желаемый город работы" Grid.Column="2"/>
                     <DatePicker SelectedDate="{Binding VihodDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
                     <ComboBox Name="GorodComboBox" Text="{Binding Gorod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="100" Style="{DynamicResource ComboBox}"
-                       ItemsSource="{Binding Cities}"/>
+                       ItemsSource="{Binding Cities}" IsReadOnly="False"/>
                     <TextBlock Text="Предварительная дата выхода"/>
                 </Grid>
 

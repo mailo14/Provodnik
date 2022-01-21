@@ -32,7 +32,7 @@
     <ProductName>АСУ Проводник</ProductName>
     <MinimumRequiredVersion>1.0.0.37</MinimumRequiredVersion>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>43</ApplicationRevision>
+    <ApplicationRevision>45</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -59,10 +59,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>5915B24F428BAE87C71E8958F8E126E40F4673B9</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>925FB10BAEFE595B1BED46B6A10A0D1DEC4F1F81</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Provodnik_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Provodnik_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -500,6 +500,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Provodnik_1_TemporaryKey.pfx" />
+    <None Include="Provodnik_2_TemporaryKey.pfx" />
     <None Include="Provodnik_TemporaryKey.pfx" />
     <Content Include="Инструкция Проводник.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
