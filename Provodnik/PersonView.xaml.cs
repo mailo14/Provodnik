@@ -331,8 +331,8 @@ namespace Provodnik
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
-            var image = sender as Image;
-            var w=new ScanView();
+            var image = sender as Image; 
+             var w=new ScanView();
             w.image.Source = image.Source;
             w.Topmost = true;
 
@@ -379,6 +379,21 @@ namespace Provodnik
             var vm = this.DataContext as PersonViewModel;
             if (string.IsNullOrEmpty(vm.BadgeRus))
                 RefreshBadges(false);
+        }
+
+        private void RotateScan_Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            vm = this.DataContext as PersonViewModel;
+            var dc = (sender as Button).DataContext as PersonViewModel.PersonDocViewModel;
+            var img =  dc.Bitmap.Source;
+            BitmapSource bmp = (BitmapSource)img;
+            dc.Bitmap.Source=new TransformedBitmap(bmp, new RotateTransform(90));
+
+            dc.FileName = null;
+            //dc.LocalFileName = null;
+
+            dc.Size = null; vm.RefreshScansSize();
         }
     }
 }
