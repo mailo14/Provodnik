@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -38,6 +39,19 @@ namespace Provodnik
             PolComboBox.ItemsSource = new List<string> { "мужской", "женский" };
 
             Loaded += PersonView_Loaded;
+
+           // lstw.DataContextChanged += Lstw_DataContextChanged;
+        }
+
+        /*public void Lstw_DataContextChanged()
+        {
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lstw.ItemsSource);
+            view.SortDescriptions.Add(new SortDescription("DocTypeId", ListSortDirection.Ascending));
+        }*/
+
+        private void PersonView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void PersonView_Loaded(object sender, RoutedEventArgs e)
@@ -287,6 +301,7 @@ namespace Provodnik
             range.Find.Execute(FindText: "{addres}", ReplaceWith: p.PaspAdres, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
             range.Find.Execute(FindText: "{till}", ReplaceWith: DateTime.Today.AddYears(1).ToString("dd.MM.yyyy"), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
 
+
             //string otchetDir = @"C:\_provodnikFTP";
             //aDoc.SaveAs(FileName: otchetDir + @"\Согласие на обработку персональных данных.DOCX");
 
@@ -307,7 +322,7 @@ namespace Provodnik
         {
 
             var vm = this.DataContext as PersonViewModel;
-            vm.ReCreateDocs();
+            vm.ClearDocs();
         }
 
         private void Button_Click_4(object sender, RoutedEventArgs e)

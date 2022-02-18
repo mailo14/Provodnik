@@ -78,7 +78,7 @@ namespace Provodnik
                     UchebCentr = UchebCentri[0];
                 Grazdanstvo = Grazdanstva[0];
                 Sezon = Sezons[0];
-                ReCreateDocs();
+                Helper.RestorePersonDocuments(this);
                 //foreach (var d in db.DocTypes.Where(pp => pp.IsObyazat).ToList())
                 //    Documents.Add(new PersonDocViewModel() { Description = d.Description, DocTypeId = d.Id, Bitmap = new System.Windows.Controls.Image() });
                 //  progressChanged(50);
@@ -106,6 +106,8 @@ namespace Provodnik
             SelectedUchebGruppa = existed;
             //UchebGruppa UchebEndDat UchebStartDat UchebCentr
             IsLoading = false;
+
+            Helper.RestorePersonDocuments(this,true);
         }
 
         public bool GetAllPasport()
@@ -311,6 +313,7 @@ namespace Provodnik
                               qq = (from pd in db.PersonDocs
                                               join dt in db.DocTypes on pd.DocTypeId equals dt.Id
                                               where pd.PersonId == personId.Value
+                                              orderby pd.DocTypeId
                                               select new PersonDocViewModel()
                                               {
                                                   Id = pd.Id,
@@ -338,9 +341,10 @@ namespace Provodnik
            }*/
 
 
-        public void ReCreateDocs()
+        public void ClearDocs()
         {
-            Documents.Clear();
+            Helper.RestorePersonDocuments(this, false,true);
+           /* Documents.Clear();
 
             var db = new ProvodnikContext();
             foreach (var d in db.DocTypes.Where(pp => pp.IsObyazat).ToList())
@@ -348,7 +352,7 @@ namespace Provodnik
             string prev;
             if (!string.IsNullOrWhiteSpace(Pol)) { prev = Pol; Pol = null; Pol = prev; }
             if (!string.IsNullOrWhiteSpace(Grazdanstvo)) { prev = Grazdanstvo; Grazdanstvo = null; Grazdanstvo = prev; }
-            if (!string.IsNullOrWhiteSpace(UchZavedenie)) { prev = UchZavedenie; UchZavedenie = null; UchZavedenie = prev; }
+            if (!string.IsNullOrWhiteSpace(UchZavedenie)) { prev = UchZavedenie; UchZavedenie = null; UchZavedenie = prev; }*/
         }
 
         private IObjectValidator GetValidator()
@@ -495,7 +499,17 @@ namespace Provodnik
             public string LocalFileName { get; internal set; }
         }
 
-        public ObservableCollection<PersonDocViewModel> Documents { get; set; }
+        private ObservableCollection<PersonDocViewModel> _Documents;
+        public ObservableCollection<PersonDocViewModel> Documents
+        {
+            get => _Documents;
+            set
+            {
+                _Documents = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _Phone;
         [DisplayName(DisplayName = "Телефон")]
         public string Phone
@@ -517,7 +531,7 @@ namespace Provodnik
             set
             {
                 _Pol = value;
-                if (Pol == "мужской")
+                /*if (Pol == "мужской")
                 {
                     if (!Documents.Where(pp => pp.DocTypeId >= 12 && pp.DocTypeId <= 14).Any())
                         foreach (var d in new ProvodnikContext().DocTypes.Where(pp => pp.Id >= 12 && pp.Id <= 14))
@@ -528,7 +542,8 @@ namespace Provodnik
                 {
                     foreach (var d in Documents.Where(pp => pp.DocTypeId >= 12 && pp.DocTypeId <= 14).ToList())
                         Documents.Remove(d);
-                }
+                }*/
+                if (!IsLoading) Helper.RestorePersonDocuments(this);
                 OnPropertyChanged();//TODO all nameof(Pol));
             }
         }
@@ -602,7 +617,7 @@ namespace Provodnik
             {
                 _Grazdanstvo = value;
 
-                var docIds = new int[] { 17, 18, 19, 20 };
+                /*var docIds = new int[] { 17, 18, 19, 20 };
                 if (Grazdanstvo == "КЗ")
                 {
                     if (!Documents.Where(pp => docIds.Contains(pp.DocTypeId)).Any())
@@ -621,7 +636,8 @@ namespace Provodnik
                         var propiskaDoc = new ProvodnikContext().DocTypes.First(x => x.Id == DocConsts.Прописка);
                         Documents.Insert(Documents.Any()? 1:0, new PersonDocViewModel() { Description = propiskaDoc.Description, DocTypeId = propiskaDoc.Id, Bitmap = new System.Windows.Controls.Image() });
                     }
-                }
+                }*/
+                if(!IsLoading) Helper.RestorePersonDocuments(this);
 
                 Validator.Revalidate();
                 //TODO миграция Казахи
@@ -694,7 +710,7 @@ namespace Provodnik
                     if (UchFormas.Count == 1) UchForma = UchFormas[0];
                     //UchFacs.Clear(); foreach (var u in repository.GetUchFacs(UchZavedenie)) UchFacs.Add(u);
 
-                    if (!string.IsNullOrWhiteSpace(UchZavedenie) && UchZavedenie != RepoConsts.NoUchZavedenie)
+                    /*if (!string.IsNullOrWhiteSpace(UchZavedenie) && UchZavedenie != RepoConsts.NoUchZavedenie)
                     {
                         if (!Documents.Where(pp => pp.DocTypeId == 15).Any())
                             foreach (var d in new ProvodnikContext().DocTypes.Where(pp => pp.Id == 15))
@@ -704,7 +720,8 @@ namespace Provodnik
                     {
                         foreach (var d in Documents.Where(pp => pp.DocTypeId == 15).ToList())
                             Documents.Remove(d);
-                    }
+                    }*/
+                    if (!IsLoading) Helper.RestorePersonDocuments(this);
                 }
                 OnPropertyChanged();
             }

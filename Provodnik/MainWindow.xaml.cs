@@ -194,7 +194,7 @@ namespace Provodnik
         {
             using (var db = new ProvodnikContext())
             {
-                foreach (var p in db.Persons)
+                foreach (var p in db.Persons.Where(x=>x.Fio== "Белых Артём Александрович"))
                 {
                     //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.СвидетельствоВакцинации });
                     if (!new ProvodnikContext().PersonDocs.Any(x=>x.PersonId==p.Id && x.DocTypeId == DocConsts.ЗаключениеВЭК2))
