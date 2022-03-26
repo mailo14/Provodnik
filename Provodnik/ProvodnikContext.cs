@@ -193,6 +193,7 @@ namespace Provodnik
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime? Dat { get; set; }
+        public string Depo { get; set; }
     }
 
     [Table("MedKomZayavkaPerson")]

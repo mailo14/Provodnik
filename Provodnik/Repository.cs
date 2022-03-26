@@ -18,16 +18,26 @@ public    class Repository
             return new ProvodnikContext().SendGroups.Select(pp => pp.PeresadSt).Distinct()
                 .Union(new List<string> { "Екатеринбург", "Москва"  }).Distinct().OrderBy(pp => pp).ToList();
         }
-        public List<string> GetDepos(string city)
+        public List<string> GetDepos(string city=null)
         {
+            var mosDepos=new List<string> { "М – Николаевка","М – Киевская","М – Ярославская" };
+            var spbDepos= new List<string> { "Санкт-Петербург ВЧ8" };
             switch (city)
             {
+                case null: return mosDepos.Union(spbDepos).Union(new[] { "Адлер", "Новороссийск", "Новосибирск" }).OrderBy(x=>x).ToList();
                 //case "Адлер": return new List<string> { };break;
-                case "Москва": return new List<string> { "М – Николаевка","М – Киевская","М – Ярославская" }; break;
-                case "Санкт-Петербург": return new List<string> { "Санкт-Петербург ВЧ8" }; break;
+                case "Москва": return mosDepos;
+                case "Санкт-Петербург": return spbDepos;
             }
             return new List<string>();
         }
+        public List<string> GetDeposMed()
+        {
+            return new ProvodnikContext().MedKomZayavki.Select(x=>x.Depo).ToList()
+                .Union(GetDepos())
+                .Distinct().OrderBy(pp => pp).ToList();
+        }
+
         public class DepoLabels
         {
             public string DepoRod { get; set; }

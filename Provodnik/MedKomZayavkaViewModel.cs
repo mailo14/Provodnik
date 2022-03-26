@@ -26,6 +26,8 @@ namespace Provodnik
             Validator = GetValidator();
             Persons = new ObservableCollection<MedKomZayavkaPersonViewModel>();
 
+            Depos.Clear(); foreach (var d in repository.GetDeposMed()) Depos.Add(d);
+
             var db = new ProvodnikContext();
             if (medKomZayavkaId .HasValue)
             {
@@ -65,24 +67,32 @@ namespace Provodnik
             }
         }
 
+        public ObservableCollection<string> Depos { get; set; } = new ObservableCollection<string>();
 
-        DateTime? _Dat;
-        [DisplayName(DisplayName = "Планируемая дата трудоустройства")]
-        public DateTime? Dat
+
+        public string _Depo;
+        [DisplayName(DisplayName = "Депо приписки")]
+        public string Depo
         {
-            get => _Dat;
+            get => _Depo;
             set
             {
-                _Dat = value;
-                OnPropertyChanged();
+                if (_Depo != value)
+                {
+                    _Depo = value;
+
+                    // ChangeDepoRod();
+                    OnPropertyChanged();
+                }
             }
         }
+
         private IObjectValidator GetValidator()
         {
             var builder = new ValidationBuilder<MedKomZayavkaViewModel>();
 
             builder.RuleFor(vm => vm.Name).MyNotEmpty();
-            builder.RuleFor(vm => vm.Dat).MyNotEmptyDat();
+            builder.RuleFor(vm => vm.Depo).MyNotEmpty();
 
             return builder.Build(this);
         }

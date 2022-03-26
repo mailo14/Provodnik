@@ -12,7 +12,7 @@
         
         xmlns:local="clr-namespace:Provodnik"
         mc:Ignorable="d"
-        Title="Карточка заявки на мед.комиссию" Width="675.675" WindowStartupLocation="CenterScreen" SizeToContent="Height">
+        Title="Карточка заявки на мед.комиссию" Width="769.129" WindowStartupLocation="CenterScreen" SizeToContent="Height">
     <Window.Resources>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment"
@@ -74,7 +74,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" VerticalAlignment="Top" Grid.Row="0">
+        <Grid HorizontalAlignment="Stretch"  VerticalAlignment="Top" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
@@ -88,17 +88,13 @@
             <!--TextBlock Text="Рег. отделение" Grid.Column="2"/>
             <ComboBox Name="RegOtdelenieComboBox" Text="{Binding RegOtdelenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="150" Style="{DynamicResource ComboBox}"/-->
         </Grid>
-        <Grid HorizontalAlignment="Stretch"  Margin="3,3,3,0" VerticalAlignment="Top" Grid.Row="1" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="268*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Планируемая дата трудоустройства"/>
-            <DatePicker SelectedDate="{Binding Dat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
-        </Grid>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <TextBlock Text="Депо приписки" Grid.Column="2"/>
+            <ComboBox Name="DepoComboBox" Text="{Binding Depo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="150" Style="{DynamicResource ComboBox}"
+                          ItemsSource="{Binding Depos}" IsReadOnly="False"/>
+        </StackPanel>
+
 
         <Expander Header="Бойцы" Grid.Row="4" IsExpanded="True">
             <Grid Background="#FFE5E5E5" >
@@ -128,11 +124,35 @@
                         <DataGridTextColumn Header="Телефон" Binding="{Binding Path=Phone}"></DataGridTextColumn>
                         <!--GridViewColumn Header="Действителен до" DisplayMemberBinding="{Binding Path=ModelNumber}"></GridViewColumn-->
 
-                        <DataGridTemplateColumn Header="Примечания" SortMemberPath="Messages">
+                        <DataGridTemplateColumn Header="Примечания" SortMemberPath="Messages"  Width="*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Messages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource shortStringConverter}}"
                                            ToolTip="{Binding Messages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource splitConverter}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Направление заказано" SortMemberPath="IsNaprMedZakazano" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsNaprMedZakazano, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Получено" SortMemberPath="IsNaprMedPolucheno" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsNaprMedPolucheno, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Выдано" SortMemberPath="IsNaprMedVidano" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsNaprMedVidano, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

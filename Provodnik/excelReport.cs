@@ -28,7 +28,7 @@ namespace Provodnik
        public object myEmp = System.Reflection.Missing.Value;
 
         Excel.Workbooks myBooks = null;
-        Excel._Workbook myBook = null;
+       public Excel._Workbook myBook = null;
         public Excel.Sheets mySheets = null;
         /// <param name="шаблон">например: "работыПоСекциям.xls"</param>
         /// <param name="filename">имя файла отчета. например: "Исполнители.xls"</param>
@@ -55,10 +55,10 @@ namespace Provodnik
                 myExcel.Visible = visible; //myExcel.Visible = true;
 
                 myExcel.DisplayAlerts = false;
-               // var pp = Environment.CurrentDirectory;
-               // var pp2 = System.Reflection.Assembly.GetExecutingAssembly().Location;
-
-                myBook = (Excel._Workbook)(myBooks.Open(string.Format("{0}\\_шаблоны\\" + шаблон, AppDomain.CurrentDomain.BaseDirectory)));
+                // var pp = Environment.CurrentDirectory;
+                // var pp2 = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                
+                 myBook = (Excel._Workbook)(myBooks.Open(string.Format("{0}\\_шаблоны\\" + шаблон, AppDomain.CurrentDomain.BaseDirectory)));
                 mySheets = (Excel.Sheets)myBook.Worksheets;
                 mySheet = (Excel._Worksheet)(mySheets.get_Item(1)); mySheet.Select(); 
                 cell = mySheet.Cells;
@@ -105,8 +105,8 @@ namespace Provodnik
                    // System.Windows.MessageBox.Show("Выберите папку для хранения отчетов!\n", "Ошибка сохранения", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning); MainWindow.p.Dispatcher.Invoke((Action)(() => { (new Выбор_папки_отчетов()).ShowDialog(); }));
 
                 }
-
-            path = otchetDir + @"\" + path;
+            
+            path = otchetDir.TrimEnd(@"\"[0]) + @"\" + path;
             
             try { if (File.Exists(path)) File.Delete(path);
                 myBook.SaveAs(path); }

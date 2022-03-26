@@ -34,9 +34,15 @@ namespace Provodnik
         {
             var vm = DataContext as MedKomZayavkaViewModel;
 
-            excelReport excel = new excelReport();
-            excel.Init("Направление мед.xltx", $"Направление мед { DateTime.Now.Ticks}.xlsx");//,visible:true);//, otchetDir: otchetDir);
+            var num = "";
+            foreach (var n in vm.Name)
+                if (char.IsDigit(n))
+                    num += n;
+                else break;
 
+            excelReport excel = new excelReport();
+            excel.Init("Направление мед.xltx", $"Список на мед.комиссию{num}Новосибирское РО_{vm.Depo}.xlsx",false, System.IO.Path.GetTempPath());//,visible:true);//, otchetDir: otchetDir);
+          
             int ri = 1;
             var db = new ProvodnikContext();            
              
@@ -44,8 +50,8 @@ namespace Provodnik
             {
                 ri++;
                 excel.cell[ri, 1].value2 =ri-1;
-                excel.cell[ri,2].value2 = vm.Dat?.ToString("dd.MM.yyyy");
-                excel.cell[ri, 3].value2 = "ЛВЧ - 7 Новосибирск";
+                excel.cell[ri,2].value2 = r.VihodDat?.ToString("dd.MM.yyyy");
+                excel.cell[ri, 3].value2 = vm.Depo;
                 excel.cell[ri,4].value2 = "Новосибирское РО";
                 excel.cell[ri, 5].value2 = r.Fio;
                 excel.cell[ri, 6].value2 = r.BirthDat?.ToString("dd.MM.yyyy");
@@ -54,6 +60,7 @@ namespace Provodnik
             }
             excel.setAllBorders(excel.get_Range("A1", "H" + ri));
             excel.myExcel.Visible = true;
+            excel.Finish(false);
         }
 
         private void AddFromListButton_Click(object sender, RoutedEventArgs e)
@@ -82,7 +89,7 @@ namespace Provodnik
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var vm= this.DataContext as MedKomZayavkaViewModel;
+            var vm = this.DataContext as MedKomZayavkaViewModel;
             if (!vm.Validator.IsValid)
                 MessageBox.Show(string.Join(Environment.NewLine, vm.Validator.ValidationMessages));
 
@@ -96,29 +103,37 @@ namespace Provodnik
                 MainWindow.Mapper.Value.Map(vm, p);
                 var currents = vm.Persons.Select(pp => pp.PersonId).ToList();
                 var toDelete = (from pd in db.MedKomZayavkaPersons
-                                where pd.MedKomZayavkaId== p.Id && !currents.Contains(pd.PersonId)
+                                where pd.MedKomZayavkaId == p.Id && !currents.Contains(pd.PersonId)
                                 select pd);
                 db.MedKomZayavkaPersons.RemoveRange(toDelete);
                 db.SaveChanges();
             }
             else
-            { p = new MedKomZayavka();
+            {
+                p = new MedKomZayavka();
                 MainWindow.Mapper.Value.Map(vm, p);
-                db.MedKomZayavki.Add( p);
+                db.MedKomZayavki.Add(p);
                 db.SaveChanges();
             }
 
             foreach (var d in vm.Persons)
             {
                 MedKomZayavkaPerson pd;
-                if (d.Id==null)
-                {                    
-                    db.MedKomZayavkaPersons.Add(pd = new MedKomZayavkaPerson() {MedKomZayavkaId=p.Id,PersonId=d.PersonId});
+                if (d.Id == null)
+                {
+                    db.MedKomZayavkaPersons.Add(pd = new MedKomZayavkaPerson() { MedKomZayavkaId = p.Id, PersonId = d.PersonId });
+                    db.SaveChanges();
+                }
+                var person = (from pe in db.Persons where d.PersonId == pe.Id  select pe).FirstOrDefault();
+                if (person != null)
+                {
+                    person.IsNaprMedZakazano = d.IsNaprMedZakazano;
+                    person.IsNaprMedPolucheno = d.IsNaprMedPolucheno;
+                    person.IsNaprMedVidano= d.IsNaprMedVidano;
                     db.SaveChanges();
                 }
             }
             DialogResult = true;
-
         }
 
 
@@ -148,6 +163,13 @@ namespace Provodnik
 
         private void PrintButton_Click(object sender, RoutedEventArgs e)
         {
+            var vm = this.DataContext as MedKomZayavkaViewModel;
+            if (!vm.Validator.IsValid)
+            {
+                MessageBox.Show(string.Join(Environment.NewLine, vm.Validator.ValidationMessages));
+                return;
+            }
+
             Napravleniya();
         }
 
