@@ -1155,6 +1155,17 @@ namespace Provodnik
             }
         }
 
+        private bool _IsGologram;
+        public bool IsGologram
+        {
+            get => _IsGologram;
+            set
+            {
+                _IsGologram = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _UchebCentr;
         [DisplayName(DisplayName = "Учебный центр")]
         public string UchebCentr

@@ -83,6 +83,7 @@ namespace Provodnik
         public bool IsSanKnizka { get; set; }
         public DateTime? MedKommDat { get; set; }
         public bool IsMedKomm { get; set; }
+        public bool IsGologram { get; set; }
         public DateTime? NaprMedZakazanoDat { get; set; }
         public bool IsNaprMedZakazano { get; set; }
         public DateTime? NaprMedPoluchenoDat { get; set; }
@@ -194,6 +195,8 @@ namespace Provodnik
         public string Name { get; set; }
         public DateTime? Dat { get; set; }
         public string Depo { get; set; }
+        public string BolnicaName { get; set; }
+        public string BolnicaAdres { get; set; }
     }
 
     [Table("MedKomZayavkaPerson")]

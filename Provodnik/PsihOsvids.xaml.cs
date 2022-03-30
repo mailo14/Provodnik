@@ -92,10 +92,10 @@ namespace Provodnik
                             pd.PsihDat = null;
                             pd.IsPsih = pd.IsPsihZabral = false;
 
-                            foreach (var pdo in (from pdo in db.PersonDocs
+                           /* foreach (var pdo in (from pdo in db.PersonDocs
                                                  where pdo.PersonId == pd.Id && pdo.DocTypeId == DocConsts.Психосвидетельствование
                                                  select pdo))
-                                pdo.FileName = null;
+                                pdo.FileName = null;*/
 
                             db.SaveChanges();
 
@@ -106,7 +106,7 @@ namespace Provodnik
                     }
                 }
 
-                using (var db = new ProvodnikContext())
+                /*using (var db = new ProvodnikContext())
                 {
                     var news = (from pd in db.Persons
                                 where pd.PsihDat != dat && currents.Contains(pd.Id)
@@ -119,7 +119,7 @@ namespace Provodnik
                             pdo.FileName = null;
                         db.SaveChanges();
                     }
-                }
+                }*/
 
                 using (var db = new ProvodnikContext())
                 {

@@ -49,6 +49,22 @@ namespace Provodnik
                 }
 //Persons.Add(MainWindow.Mapper.Value.Map< MedKomZayavkaPersonViewModel>(db.MedKomZayavkas.Single(pp => pp.Id == MedKomZayavkaId), this);
             }
+            else
+            {
+                var lastZayavka = db.MedKomZayavki.OrderByDescending(x => x.Id).FirstOrDefault();
+                if (lastZayavka != null && !string.IsNullOrEmpty(lastZayavka.BolnicaName))
+                {
+                    BolnicaName = lastZayavka.BolnicaName;
+                    BolnicaAdres = lastZayavka.BolnicaAdres;
+                }
+                else
+                {
+                    BolnicaName = @"Поликлиника: ЧУЗ «КБ «РЖД - Медицина» г.Новосибирск»  
+Псих.освидетельствование:Медицинский психодиагностический центр ""МЕНТАЛ КОНСАЛТИНГ""";
+                    BolnicaAdres = @"Поликлиника: г.Новосибирск, ул.Сибирская, 21
+Псих.осведетельствование: г.Новосибирск, ул.Красный проспект, 99";
+                }
+            }
         }
 
         public ObservableCollection<MedKomZayavkaPersonViewModel> Persons { get; set; }
@@ -82,6 +98,36 @@ namespace Provodnik
                     _Depo = value;
 
                     // ChangeDepoRod();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string _BolnicaName;
+        [DisplayName(DisplayName = "Наименование больницы")]
+        public string BolnicaName
+        {
+            get => _BolnicaName;
+            set
+            {
+                if (_BolnicaName != value)
+                {
+                    _BolnicaName = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string _BolnicaAdres;
+        [DisplayName(DisplayName = "Адрес больницы")]
+        public string BolnicaAdres
+        {
+            get => _BolnicaAdres;
+            set
+            {
+                if (_BolnicaAdres != value)
+                {
+                    _BolnicaAdres = value;
                     OnPropertyChanged();
                 }
             }

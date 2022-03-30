@@ -127,6 +127,10 @@ namespace Provodnik
                         var pe = db.Persons.First(pp => pp.Id == p.Id);
                         pe.MedKommDat = dat;
                         pe.IsMedKomm = p.IsMedKomm;
+                        pe.IsNaprMedVidano = p.IsNaprMedVidano;
+                        pe.IsPsih = p.IsPsih;
+                        if (!pe.IsPsih && pe.PsihDat.HasValue) pe.PsihDat = null;
+                        //pe.IsPsihZabral = p.IsPsihZabral;
                         db.SaveChanges();
 
                         var pvm = new PersonViewModel(pe.Id, false);

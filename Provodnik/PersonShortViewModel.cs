@@ -44,9 +44,11 @@ namespace Provodnik
         public DateTime? ExamenDat { get; set; }
         public bool IsExamen { get; set; }
         public bool IsPraktika { get; set; }
+        public bool IsGologram { get; set; }
         public DateTime? PraktikaDat { get; set; }
         public bool IsMedKomm { get; set; }
         public DateTime? MedKommDat { get; set; }
+        public bool IsNaprMedVidano { get; set; }
 
         public string Messages { get; set; }
         public string Zametki{ get; set; }

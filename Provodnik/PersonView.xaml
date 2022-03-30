@@ -12,7 +12,7 @@
         Title="Карточка бойца"  SizeToContent="Width"  Closing="Window_Closing" WindowStartupLocation="CenterScreen"
      
         xmlns:sample="clr-namespace:Provodnik.SampleViewData"
-    d:DataContext="{d:DesignInstance sample:SamplePersonViewModel, IsDesignTimeCreatable=True}" Width="1238.5" Height="1240.2"  
+    d:DataContext="{d:DesignInstance sample:SamplePersonViewModel, IsDesignTimeCreatable=True}" Width="1200" Height="800"  
         >
     <!--:DataContext="{d:DesignData Source=SampleViewData/PersonViewSample.xaml}"-->
     <Window.Resources>
@@ -338,6 +338,7 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
@@ -359,6 +360,9 @@
                         <TextBlock Text="Медкомиссия" Grid.Row="2" Margin="10,7,0,7"/>
                         <DatePicker SelectedDate="{Binding MedKommDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
                         <TextBlock Text="дата" Grid.Row="2" Grid.Column="1" Margin="10,7,3,7"/>
+                        <TextBlock Text="Голограмма" Grid.Row="3" Margin="10,7,0,7"/>
+                        <CheckBox Content="Проставлена" IsChecked="{Binding IsGologram, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,8,0,8"/>
+
                     </Grid>
                 </Expander>
                 <Expander Header="Обучение" Margin="3,3,3,0" Grid.Row="21"  VerticalAlignment="Top" IsExpanded="True" >

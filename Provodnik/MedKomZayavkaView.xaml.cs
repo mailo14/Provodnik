@@ -55,8 +55,8 @@ namespace Provodnik
                 excel.cell[ri,4].value2 = "Новосибирское РО";
                 excel.cell[ri, 5].value2 = r.Fio;
                 excel.cell[ri, 6].value2 = r.BirthDat?.ToString("dd.MM.yyyy");
-                excel.cell[ri, 7].value2 = "ЧУЗ «КБ «РЖД-Медицина» г. Новосибирск»";
-                excel.cell[ri, 8].value2 = "г. Новосибирск, ул. Сибирская, 21";
+                excel.cell[ri, 7].value2 =vm.BolnicaName;
+                excel.cell[ri, 8].value2 = vm.BolnicaAdres;
             }
             excel.setAllBorders(excel.get_Range("A1", "H" + ri));
             excel.myExcel.Visible = true;

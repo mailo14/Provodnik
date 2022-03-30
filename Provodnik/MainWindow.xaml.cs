@@ -164,6 +164,7 @@ namespace Provodnik
 
         public MainWindow()
         {
+
            //Patch_ExecOnceThanDelete();
 
 
@@ -194,15 +195,22 @@ namespace Provodnik
         {
             using (var db = new ProvodnikContext())
             {
-                foreach (var p in db.Persons.Where(x=>x.Fio== "Белых Артём Александрович"))
-                {
-                    //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.СвидетельствоВакцинации });
-                    if (!new ProvodnikContext().PersonDocs.Any(x=>x.PersonId==p.Id && x.DocTypeId == DocConsts.ЗаключениеВЭК2))
-                        db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ЗаключениеВЭК2 });
-                    //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка1});
-                    //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка2 });
+                /*  foreach (var p in db.Persons.Where(x=>x.Fio== "Белых Артём Александрович"))
+                  {
+                      //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.СвидетельствоВакцинации });
+                      if (!new ProvodnikContext().PersonDocs.Any(x=>x.PersonId==p.Id && x.DocTypeId == DocConsts.ЗаключениеВЭК2))
+                          db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ЗаключениеВЭК2 });
+                      //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка1});
+                      //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка2 });
 
-                }
+                  }*/
+                /*foreach (var p in db.MedKomZayavki)
+                {
+                    p.BolnicaName = @"Поликлиника: ЧУЗ «КБ «РЖД - Медицина» г.Новосибирск»  
+Псих.освидетельствование:Медицинский психодиагностический центр ""МЕНТАЛ КОНСАЛТИНГ""";
+                    p.BolnicaAdres = @"Поликлиника: г.Новосибирск, ул.Сибирская, 21
+Псих.осведетельствование: г.Новосибирск, ул.Красный проспект, 99";
+                }*/
                 db.SaveChanges();
             }
         }

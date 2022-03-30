@@ -27,7 +27,12 @@ namespace Provodnik
         {
             InitializeComponent();
             var db = new ProvodnikContext();
-            var qq = (from g in db.MedKomZayavki orderby g.Id descending select g).ToList();
+            var qq = (from g in db.MedKomZayavki select g)
+                .ToList()
+                .Select(x => new {x, num=int.TryParse(x.Name.Substring(0, x.Name.IndexOf("_")), out var num) ? (int?)num : null})
+                .ToList().OrderByDescending(x=>x.num)
+                .Select(x=>x.x)
+            .ToList();
 
           // var ptt = MainWindow.Mapper.Value.Map<MedKomZayavkaViewModel>(new ProvodnikContext().MedKomZayavkas.First(pp => pp.Id == 2));
             foreach  (var q in qq)

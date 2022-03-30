@@ -70,6 +70,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -94,9 +96,17 @@
             <ComboBox Name="DepoComboBox" Text="{Binding Depo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="150" Style="{DynamicResource ComboBox}"
                           ItemsSource="{Binding Depos}" IsReadOnly="False"/>
         </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <TextBlock Text="Наименование больницы" Grid.Column="2"/>
+            <TextBox Text="{Binding BolnicaName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="500" Style="{DynamicResource TextBox}" AcceptsReturn="True"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="3">
+            <TextBlock Text="Адрес больницы" Grid.Column="2"/>
+            <TextBox Text="{Binding BolnicaAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="549" Style="{DynamicResource TextBox}" AcceptsReturn="True" />
+        </StackPanel>
 
 
-        <Expander Header="Бойцы" Grid.Row="4" IsExpanded="True">
+        <Expander Header="Бойцы" Grid.Row="6" IsExpanded="True">
             <Grid Background="#FFE5E5E5" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -168,10 +178,10 @@
             </Grid>
         </Expander>
 
-        <Button Content="Сформировать направления" Click="PrintButton_Click" Grid.Row="9"/>
-        
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="9">
-            
+        <Button Content="Сформировать направления" Click="PrintButton_Click" Grid.Row="11"/>
+
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="11">
+
             <Button Content="Отмена" Click="CancelButton_Click" />
             <Button Content="Сохранить" Click="SaveButton_Click"/>
         </StackPanel>

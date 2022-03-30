@@ -85,12 +85,20 @@
                       Grid.Row="1">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="№" Binding="{Binding Index}" CellStyle="{StaticResource CenteredCell}"/>
-                    <DataGridTextColumn Header="ФИО" Binding="{Binding Fio}" Width="*"/>
+                    <DataGridTextColumn Header="ФИО" Binding="{Binding Fio}" />
                     <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDat, StringFormat=\{0:dd.MM.yyyy\}}" CellStyle="{StaticResource CenteredCell}"/>
                     <DataGridTextColumn Header="Место рождения" Binding="{Binding MestoRozd}"/>
                     <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" CellStyle="{StaticResource CenteredCell}"/>
                     <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}" CellStyle="{StaticResource CenteredCell}"/>
 
+                    <DataGridTemplateColumn Header="Псих.освид." SortMemberPath="IsPsih" Width="auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
                     <DataGridTemplateColumn Header="Санкнижка получена" SortMemberPath="IsSanKnizka">
                         <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -98,6 +106,14 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Выдано напр. на МК" SortMemberPath="IsNaprMedVidano" Width="auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsNaprMedVidano, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Заключение ВЭК получено" SortMemberPath="IsMedKomm">
                         <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

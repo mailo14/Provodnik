@@ -68,7 +68,7 @@
                     <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Name}"/>
                     <!--GridViewColumn Header="#" DisplayMemberBinding="{Binding Id}"/-->
                     <!--GridViewColumn Header="Дата создания" DisplayMemberBinding="{Binding Path=BirthDat,StringFormat=\{0:dd.MM.yyyy\}}"/-->
-                    <GridViewColumn Header="Планируемая дата трудоустройства" DisplayMemberBinding="{Binding Path=Dat,StringFormat=\{0:dd.MM.yyyy\}}"/>
+                    <GridViewColumn Header="Депо" DisplayMemberBinding="{Binding Depo}"/>
                    
                 </GridView>
             </ListView.View>

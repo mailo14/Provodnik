@@ -91,20 +91,27 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Псих.освид." SortMemberPath="IsPsihZabral">
+                    <DataGridTemplateColumn Header="Псих.освид." SortMemberPath="IsPsih">
                         <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsPsihZabral, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" HorizontalAlignment="Center"/>
+                                <CheckBox IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" HorizontalAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Мед.комиссия" SortMemberPath="IsMedKomm">
                         <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
+                            <DataTemplate>
                                 <CheckBox IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Голограмма" SortMemberPath="IsGologram">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsGologram, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
                     <DataGridTemplateColumn Header="Практика пройдена" SortMemberPath="IsPraktika">
                         <DataGridTemplateColumn.CellTemplate>
