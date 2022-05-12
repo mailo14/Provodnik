@@ -8,9 +8,14 @@ namespace Provodnik
 {
 public    class Repository
     {
-        public List<string> GetCities()
+        public List<string> GetPersonCities()
         {
             return new ProvodnikContext().Persons.Select(pp => pp.Gorod).Distinct()
+                .Union(new List<string> { "Адлер", "Москва", "Санкт-Петербург", "Новороссийск","Новосибирск" }).Distinct().OrderBy(pp => pp).ToList();
+        }
+        public List<string> GetCities()
+        {
+            return new ProvodnikContext().Persons.Select(pp => pp.Gorod).Where(pp=>!pp.Contains(",") && !pp.Contains("Москва-")).Distinct()
                 .Union(new List<string> { "Адлер", "Москва", "Санкт-Петербург", "Новороссийск","Новосибирск" }).Distinct().OrderBy(pp => pp).ToList();
         }
         public List<string> GetPeresadSts()
@@ -24,10 +29,11 @@ public    class Repository
             var spbDepos= new List<string> { "Санкт-Петербург ВЧ8" };
             switch (city)
             {
-                case null: return mosDepos.Union(spbDepos).Union(new[] { "Адлер", "Новороссийск", "Новосибирск" }).OrderBy(x=>x).ToList();
+                case null: return mosDepos.Union(spbDepos).Union(new[] { "Адлер", "Новороссийск", "Новосибирск-Главный" }).OrderBy(x=>x).ToList();
                 //case "Адлер": return new List<string> { };break;
                 case "Москва": return mosDepos;
                 case "Санкт-Петербург": return spbDepos;
+                case "Новосибирск": return new List<string> { "Новосибирск-Главный" }; 
             }
             return new List<string>();
         }
@@ -51,6 +57,7 @@ public    class Repository
             if (city == "Адлер") { ret.DepoRod = "Вагонного участка Адлер Северо-Кавказского филиала АО «ФПК»"; ret.Filial = "Северо-Кавказский филиал АО «ФПК"; ret.Sp = "вагонный участок Адлер"; }
             if (city == "Санкт-Петербург") { ret.DepoRod = "Вагонного участка Санкт-Петербург-Московский Северо-Западного филиала АО «ФПК»"; ret.Filial = "Северо-Западный филиал АО «ФПК"; ret.Sp = "вагонный участок Санкт-Петербург-Московский"; }
             if (city == "Новороссийск") { ret.DepoRod = "Пассажирского вагонного депо Новороссийск Северо-Кавказского филиала АО «ФПК»"; ret.Filial = "Северо-Кавказский филиал АО «ФПК"; ret.Sp = "вагонный участок Новороссийск"; }
+            if (city == "Новосибирск") { ret.DepoRod = "Вагонного участка Новосибирск-Главный Западно-Сибирского филиала АО «ФПК»"; ret.Filial = "Западно-Сибирский филиал АО «ФПК"; ret.Sp = "вагонный участок Новосибирск-Главный"; }
 
             if (depo == "М – Николаевка") { ret.DepoRod = "Пассажирского вагонного депо Николаевка Московского филиала АО «ФПК»"; ret.Filial = "Московский филиал АО «ФПК"; ret.Sp = "депо Николаевка"; }
             if (depo == "М – Киевская") { ret.DepoRod = "Пассажирского вагонного депо Москва-Киевская Московского филиала АО «ФПК»"; ret.Filial = "Московский филиал АО «ФПК"; ret.Sp = "депо Москва-Киевская"; }

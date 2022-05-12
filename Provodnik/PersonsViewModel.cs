@@ -164,7 +164,7 @@ namespace Provodnik
 
        public void InitCollectionsForCombo()
         {
-            Cities.Clear(); foreach (var pp in repository.GetCities()) Cities.Add(pp);
+            Cities.Clear(); foreach (var pp in repository.GetPersonCities()) Cities.Add(pp);
             Otryadi.Clear(); foreach (var pp in repository.GetOtryadi()) Otryadi.Add(pp);
             Grazdanstva.Clear(); foreach (var pp in repository.GetGrazdanstva()) Grazdanstva.Add(pp);
             UchZavedeniya.Clear(); foreach (var pp in repository.GetUchZavedeniya()) UchZavedeniya.Add(pp);

@@ -49,7 +49,7 @@ namespace Provodnik
         public static List<DocType> GetDocuments(string Pol, string Grazdanstvo, string UchZavedenie)
         {var db = new ProvodnikContext();
 
-            var Documents = db.DocTypes.Where(pp => pp.IsObyazat).ToList();
+            var Documents = db.DocTypes.Where(pp => pp.IsObyazat).OrderBy(pp=>pp.OrderId).ToList();
 
 
             if (Pol == "мужской")
@@ -145,7 +145,9 @@ namespace Provodnik
             foreach (var d in toDelete.ToList())
                 p.Documents.Remove(d);
 
-            p.Documents = new ObservableCollection<PersonDocViewModel>(p.Documents.OrderBy(x => x.DocTypeId));
+            var dtOrders = db.DocTypes.ToDictionary(x => x.Id, x => x.OrderId);
+
+            p.Documents = new ObservableCollection<PersonDocViewModel>(p.Documents.OrderBy(x => dtOrders[x.DocTypeId]));
         }
         
     }

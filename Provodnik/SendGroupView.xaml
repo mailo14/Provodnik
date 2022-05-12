@@ -12,7 +12,7 @@
         
         xmlns:local="clr-namespace:Provodnik"
         mc:Ignorable="d"
-        Title="Карточка группы для отправки" Width="895.339" WindowStartupLocation="CenterScreen" SizeToContent="Height">
+        Title="Карточка группы для отправки" Width="895.339" WindowStartupLocation="CenterScreen" SizeToContent="Height" Height="517.95">
     <Window.Resources>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment"
@@ -65,7 +65,7 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
     </Window.Resources>
-    <Grid VerticalAlignment="Top">
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -73,11 +73,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid HorizontalAlignment="Stretch"  VerticalAlignment="Top" Grid.Row="0">
+        <Grid HorizontalAlignment="Stretch" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
@@ -115,7 +115,7 @@
             <Grid Background="#FFE5E5E5" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid VerticalAlignment="Top" Margin="0" Grid.Row="0" >
@@ -128,7 +128,7 @@
                     <ComboBox Visibility="Collapsed" SelectedItem="{Binding City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource ComboBox}" MinWidth="150" ItemsSource="{Binding Cities}" Grid.Column="1"/>
                     <Button Content="Добавить из списка" Grid.Column="2" Click="AddFromListButton_Click"/>
                 </Grid>
-                <DataGrid MinHeight="200" Margin="3" Name="PersonsListView" AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch"
+                <DataGrid  Margin="3" Name="PersonsListView" AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch"
                       RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionMode="Single" VerticalAlignment="Stretch" 
                       ItemsSource="{Binding Persons}" KeyUp="PersonsListView_KeyUp"   MouseDoubleClick="ListView_MouseDoubleClick" Sorting="PersonsListView_Sorting"
                       Grid.Row="1">

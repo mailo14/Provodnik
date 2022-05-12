@@ -195,15 +195,15 @@ namespace Provodnik
         {
             using (var db = new ProvodnikContext())
             {
-                /*  foreach (var p in db.Persons.Where(x=>x.Fio== "Белых Артём Александрович"))
+                 foreach (var p in db.Persons)
                   {
                       //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.СвидетельствоВакцинации });
-                      if (!new ProvodnikContext().PersonDocs.Any(x=>x.PersonId==p.Id && x.DocTypeId == DocConsts.ЗаключениеВЭК2))
-                          db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ЗаключениеВЭК2 });
-                      //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка1});
-                      //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка2 });
+ //                     if (!new ProvodnikContext().PersonDocs.Any(x=>x.PersonId==p.Id && x.DocTypeId == DocConsts.СвидетельствоВакцинации2))
+                          db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.СвидетельствоВакцинации2 });
+                    //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка1});
+                    //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка2 });
 
-                  }*/
+                }/* */
                 /*foreach (var p in db.MedKomZayavki)
                 {
                     p.BolnicaName = @"Поликлиника: ЧУЗ «КБ «РЖД - Медицина» г.Новосибирск»  

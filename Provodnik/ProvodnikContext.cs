@@ -167,6 +167,8 @@ namespace Provodnik
         public string PeresadSt { get; set; }
         public string Depo { get; set; }
         public string DepoRod { get; set; }
+        public string Sp { get; set; }
+        public string Filial { get; set; }
         public string RegOtdelenie { get; set; }
         public string Poezd { get; set; }
         public string Vagon { get; set; }
@@ -216,40 +218,40 @@ namespace Provodnik
         public string Tip { get; set; }
     }
 
-   /* public class ProvodnikDbInitializer : DropCreateDatabaseAlways<ProvodnikContext>
-    {
-        protected override void Seed(ProvodnikContext context)
-        {
-            context.DocTypes.AddRange(new List<DocType>
-            {
-                new DocType { Id = 1, OrderId = 1, Description = "Паспорт",IsObyazat=true },
-                new DocType { Id = 2, OrderId = 1, Description = "Прописка",IsObyazat=false },
-                new DocType { Id = 3, OrderId = 1, Description = "СНИЛС",IsObyazat=true },
-                new DocType { Id = 4, OrderId = 1, Description = "ИНН",IsObyazat=true },
-                new DocType { Id = 5, OrderId = 1, Description = "Психиатрическое освидетельствование",IsObyazat=true },
-                new DocType { Id = 6, OrderId = 1, Description = "Заключение ВЭК",IsObyazat=true },
-                new DocType { Id = 7, OrderId = 1, Description = "Заключение ВЭК 2",IsObyazat=true },
-                //new DocType { Id = 8, OrderId = 1, Description = "Заключение ВЭК 3",IsObyazat=true },
-                new DocType { Id = 9, OrderId = 1, Description = "Согласие на обработку персональных данных",IsObyazat=true },
-                new DocType { Id = 10, OrderId = 1, Description = "Свидетельство о присвоении профессии",IsObyazat=true },
-                new DocType { Id = 11, OrderId = 1, Description = "Реквизиты банковской (зарплатной) карты",IsObyazat=true },
+    /* public class ProvodnikDbInitializer : DropCreateDatabaseAlways<ProvodnikContext>
+     {
+         protected override void Seed(ProvodnikContext context)
+         {
+             context.DocTypes.AddRange(new List<DocType>
+             {
+                 new DocType { Id = 1, OrderId = 1, Description = "Паспорт",IsObyazat=true },
+                 new DocType { Id = 2, OrderId = 1, Description = "Прописка",IsObyazat=false },
+                 new DocType { Id = 3, OrderId = 1, Description = "СНИЛС",IsObyazat=true },
+                 new DocType { Id = 4, OrderId = 1, Description = "ИНН",IsObyazat=true },
+                 new DocType { Id = 5, OrderId = 1, Description = "Психиатрическое освидетельствование",IsObyazat=true },
+                 new DocType { Id = 6, OrderId = 1, Description = "Заключение ВЭК",IsObyazat=true },
+                 new DocType { Id = 7, OrderId = 1, Description = "Заключение ВЭК 2",IsObyazat=true },
+                 //new DocType { Id = 8, OrderId = 1, Description = "Заключение ВЭК 3",IsObyazat=true },
+                 new DocType { Id = 9, OrderId = 1, Description = "Согласие на обработку персональных данных",IsObyazat=true },
+                 new DocType { Id = 10, OrderId = 1, Description = "Свидетельство о присвоении профессии",IsObyazat=true },
+                 new DocType { Id = 11, OrderId = 1, Description = "Реквизиты банковской (зарплатной) карты",IsObyazat=true },
 
-                new DocType { Id = 12, OrderId = 1, Description = "Приписное 1", IsObyazat = false },
-            new DocType { Id = 13, OrderId = 1, Description = "Приписное 2", IsObyazat = false },
-            new DocType { Id = 14, OrderId = 1, Description = "Военный билет", IsObyazat = false },
-            new DocType { Id = 15, OrderId = 1, Description = "Справка с места учебы", IsObyazat = false },
-            new DocType { Id = 16, OrderId = 1, Description = "Справка-подтверждение  МООО  «РСО»" ,IsObyazat=true},
-            new DocType { Id = 17, OrderId = 1, Description = "Миграционная карта 1", IsObyazat = false },
-            new DocType { Id = 18, OrderId = 1, Description = "Миграционная карта 2", IsObyazat = false },
-            new DocType { Id = 19, OrderId = 1, Description = "Временная регистрация 1", IsObyazat = false },
-            new DocType { Id = 20, OrderId = 1, Description = "Временная регистрация 2", IsObyazat = false },
-            new DocType { Id = 21, OrderId = 1, Description = "Свидетельство о вакцинации", IsObyazat = true },
+                 new DocType { Id = 12, OrderId = 1, Description = "Приписное 1", IsObyazat = false },
+             new DocType { Id = 13, OrderId = 1, Description = "Приписное 2", IsObyazat = false },
+             new DocType { Id = 14, OrderId = 1, Description = "Военный билет", IsObyazat = false },
+             new DocType { Id = 15, OrderId = 1, Description = "Справка с места учебы", IsObyazat = false },
+             new DocType { Id = 16, OrderId = 1, Description = "Справка-подтверждение  МООО  «РСО»" ,IsObyazat=true},
+             new DocType { Id = 17, OrderId = 1, Description = "Миграционная карта 1", IsObyazat = false },
+             new DocType { Id = 18, OrderId = 1, Description = "Миграционная карта 2", IsObyazat = false },
+             new DocType { Id = 19, OrderId = 1, Description = "Временная регистрация 1", IsObyazat = false },
+             new DocType { Id = 20, OrderId = 1, Description = "Временная регистрация 2", IsObyazat = false },
+             new DocType { Id = 21, OrderId = 1, Description = "Свидетельство о вакцинации", IsObyazat = true },
 
-}
-       );
-            base.Seed(context);
-        }
-    }*/
+ }
+        );
+             base.Seed(context);
+         }
+     }*/
     public class DocConsts
     {
        public const int Паспорт = 1;
@@ -274,5 +276,6 @@ namespace Provodnik
         public const int СвидетельствоВакцинации = 21;
         public const int ТрудоваяКнижка1 = 22;
         public const int ТрудоваяКнижка2 = 23;
+        public const int СвидетельствоВакцинации2 = 24;
     }
 }

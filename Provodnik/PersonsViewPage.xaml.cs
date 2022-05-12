@@ -126,13 +126,13 @@ namespace Provodnik
         private void SpravkiPSOButton_Click(object sender, RoutedEventArgs e)
         {
             var db = new ProvodnikContext();
-            
+
             var ids = vm.PersonList.Select(pp => pp.Id).ToList();
             var idsWithSpravka = new HashSet<int>(from p in db.Persons
-                                  where ids.Contains(p.Id)
-                                  join pd in db.PersonDocs on p.Id equals pd.PersonId
-                                  where pd.DocTypeId == DocConsts.СправкаРСО && pd.FileName!=null
-                                  select p.Id);
+                                                  where ids.Contains(p.Id)
+                                                  join pd in db.PersonDocs on p.Id equals pd.PersonId
+                                                  where pd.DocTypeId == DocConsts.СправкаРСО && pd.FileName != null
+                                                  select p.Id);
 
             var persons = vm.PersonList.Where(p => !idsWithSpravka.Contains(p.Id));
             if (!persons.Any())
@@ -145,8 +145,9 @@ namespace Provodnik
             excel.Init("Справки РСО.xltx", $"Справки РСО { DateTime.Now.Ticks}.xlsx");//,visible:true);//, otchetDir: otchetDir);
 
             int ri = 1;
-            foreach (var r in persons){
-               ri++;
+            foreach (var r in persons)
+            {
+                ri++;
                 excel.cell[ri, 1].value2 = ri - 1;
                 excel.cell[ri, 2].value2 = r.Fio;
                 //excel.cell[ri, 3].value2 = "АО \"ФПК\"";
@@ -170,7 +171,7 @@ namespace Provodnik
             var db = new ProvodnikContext();
 
             var ids = vm.PersonList.Select(pp => pp.Id).ToList();
-            var qq = from p in  db.Persons
+            var qq = from p in db.Persons
                      where ids.Contains(p.Id)
                      select new
                      {
@@ -210,7 +211,7 @@ namespace Provodnik
             {
                 ri++;
                 excel.cell[ri, startCol + 2].value2 = r.Key ? "Всего новички" : "Старики";
-                excel.cell[ri, startCol + 3].value2 = r.Count(x=>x.seliObuch);
+                excel.cell[ri, startCol + 3].value2 = r.Count(x => x.seliObuch);
                 excel.cell[ri, startCol + 4].value2 = r.Count(x => x.vibilObuch);
                 excel.cell[ri, startCol + 5].value2 = r.Count(x => x.ostObuch);
                 excel.cell[ri, startCol + 6].value2 = r.Count(x => x.IsExamen);
@@ -252,13 +253,13 @@ namespace Provodnik
             var qq = from p in db.Persons
                      join pd in db.PersonDocs on p.Id equals pd.PersonId
                      //join d in db.DocTypes on 
-                     where ids.Contains(p.Id) && pd.FileName != null
-                     group pd by p into g                     
+                     where ids.Contains(p.Id)
+                     group pd by p into g
                      select new
                      {
                          g.Key.Fio,
                          g.Key.Otryad,
-                         scans=g.Select(pp=>pp.DocTypeId)
+                         scans = g.Where(pp=> pp.FileName != null).Select(pp => pp.DocTypeId)
                      };
 
             var dts = db.DocTypes.ToList();
@@ -268,7 +269,7 @@ namespace Provodnik
                 c++;
                 excel.cell[1, c].value2 = dt.Description;
             }
-                foreach (var r in qq.OrderBy(pp=>pp.Fio))
+            foreach (var r in qq.OrderBy(pp => pp.Fio))
             {
                 ri++;
                 excel.cell[ri, 1].value2 = r.Fio;
@@ -276,13 +277,14 @@ namespace Provodnik
 
                 var set = new HashSet<int>(r.scans);
                 c = 2;
-                foreach (var dt in dts) {
+                foreach (var dt in dts)
+                {
                     c++;
                     excel.cell[ri, c].value2 = set.Contains(dt.Id) ? 1 : 0;
                 }
             }
 
-            excel.setAllBorders(excel.mySheet.Range[excel.cell[1, 1], excel.cell[ri, 2+dts.Count]]);
+            excel.setAllBorders(excel.mySheet.Range[excel.cell[1, 1], excel.cell[ri, 2 + dts.Count]]);
             excel.myExcel.Visible = true;
         }
     }

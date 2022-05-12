@@ -36,7 +36,7 @@ namespace Provodnik
             // Load(personId);
             var db = new ProvodnikContext();
 
-            Cities = repository.GetCities();
+            Cities = repository.GetPersonCities();
             VibilPrichini = db.Persons.Select(pp => pp.VibilPrichina).Distinct().ToList();
             Otryadi = db.Persons.Select(pp => pp.Otryad).Distinct().ToList();
             UchebCentri = repository.GetUchebCentri();
@@ -56,7 +56,7 @@ namespace Provodnik
                 var qq = (from pd in db.PersonDocs
                           join dt in db.DocTypes on pd.DocTypeId equals dt.Id
                           where pd.PersonId == personId.Value
-                          orderby pd.DocTypeId
+                          orderby dt.OrderId
                           select new PersonDocViewModel() { Id = pd.Id, DocTypeId = pd.DocTypeId, Description = dt.Description, FileName = pd.FileName, PrinesetK = pd.PrinesetK, Bitmap = new System.Windows.Controls.Image() }).ToList();
                 //progressChanged(5);
                 var progressShare = 80.0 / qq.Count;
