@@ -351,6 +351,9 @@ private RelayCommand _FindCommand;
                 if (AllScansExist.HasValue)
                     query = query.Where(pp => pp.AllScans == AllScansExist.Value);
 
+                if (IsTrudoustroen.HasValue)
+                    query = query.Where(pp => pp.IsTrudoustroen == IsTrudoustroen.Value);
+
                 if (!string.IsNullOrWhiteSpace(Gorod))
                     query = query.Where(pp => pp.Gorod == null || pp.Gorod == Gorod);
 
@@ -693,6 +696,21 @@ private RelayCommand _FindCommand;
                 if (_AllScansExist != value)
                 {
                     _AllScansExist = value;
+                    ReCalcReady();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        bool? _IsTrudoustroen;
+        public bool? IsTrudoustroen
+        {
+            get => _IsTrudoustroen;
+            set
+            {
+                if (_IsTrudoustroen != value)
+                {
+                    _IsTrudoustroen = value;
                     ReCalcReady();
                     OnPropertyChanged();
                 }

@@ -148,6 +148,14 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
+                        <DataGridTemplateColumn Header="Трудоустроен" SortMemberPath="IsTrudoustroen" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
                         <DataGridTemplateColumn Header="Примечания" SortMemberPath="Messages">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

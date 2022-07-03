@@ -22,7 +22,8 @@ namespace Provodnik
     /// </summary>
     public partial class SendGroupsView : Window
     {
-        ObservableCollection<SendGroupViewModel> groups = new ObservableCollection<SendGroupViewModel>();
+
+        ObservableCollection<SendGroupShortViewModel> groups = new ObservableCollection<SendGroupShortViewModel>();
         public SendGroupsView()
         {
             InitializeComponent();
@@ -32,26 +33,8 @@ namespace Provodnik
           // var ptt = MainWindow.Mapper.Value.Map<SendGroupViewModel>(new ProvodnikContext().SendGroups.First(pp => pp.Id == 2));
             foreach  (var q in qq)
             {
-                var g = MainWindow.Mapper.Value.Map<SendGroupViewModel>(q);
-  
-                /*  SendGroupViewModel g = new SendGroupViewModel()
-                {
-                    City = q.City,
-                    Depo = q.Depo,
-                    Id = q.Id,
-                    Marshrut = q.Marshrut,
-                    OtprDat = q.OtprDat,
-                    Poezd = q.Poezd,
-                    PribDat = q.PribDat,
-                    PribTime = q.PribTime,
-                    RegOtdelenie = q.RegOtdelenie,
-                    Uvolnenie = q.Uvolnenie,
-                    Vagon = q.Vagon,
-                    Vokzal = q.Vokzal,
-                    Vstrechat = q.Vstrechat
-                };*/
-                //MainWindow.Mapper.Value.Map(q,g);g.Id = q.Id;
-                groups.Add(g);
+                var g = MainWindow.Mapper.Value.Map<SendGroupShortViewModel>(q);
+                  groups.Add(g);
             }
 
             GroupsListView.ItemsSource = groups;
@@ -84,11 +67,11 @@ namespace Provodnik
             {
                 groups.Clear();
                 var db = new ProvodnikContext();
-                var qq = (from g in db.SendGroups select g);
+                var qq = (from g in db.SendGroups orderby g.Id descending select g);
 
                 foreach (var q in qq)
                 {
-                    groups.Add(MainWindow.Mapper.Value.Map<SendGroupViewModel>(q));
+                    groups.Add(MainWindow.Mapper.Value.Map<SendGroupShortViewModel>(q));
                 }
             }
         }
@@ -111,7 +94,7 @@ namespace Provodnik
 
         void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var p = ((FrameworkElement)e.OriginalSource).DataContext as SendGroupViewModel;
+            var p = ((FrameworkElement)e.OriginalSource).DataContext as SendGroupShortViewModel;
             if (p != null)
             {
                 var pw = new SendGroupView();
@@ -122,7 +105,7 @@ namespace Provodnik
                     groups.RemoveAt(ind);
 
 
-                    p = MainWindow.Mapper.Value.Map<SendGroupViewModel>(new ProvodnikContext().SendGroups.First(pp => pp.Id == p.Id));
+                    p = MainWindow.Mapper.Value.Map<SendGroupShortViewModel>(new ProvodnikContext().SendGroups.First(pp => pp.Id == p.Id));
                     groups.Insert(ind, p);
                     //vm.RefreshPersonList();
                     //TODO goto if exist or add anyway and goto
@@ -137,7 +120,7 @@ namespace Provodnik
                 if (GroupsListView.SelectedItem != null &&
                 MessageBox.Show("Удалить?", "Подтверждение удаления", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
-                    var g = GroupsListView.SelectedItem as SendGroupViewModel;
+                    var g = GroupsListView.SelectedItem as SendGroupShortViewModel;
                     groups.Remove(g);
                     var db = new ProvodnikContext();
                     db.SendGroups.Remove(db.SendGroups.First(pp=>pp.Id==g.Id));

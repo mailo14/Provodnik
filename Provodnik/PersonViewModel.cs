@@ -1250,6 +1250,17 @@ namespace Provodnik
             }
         }
 
+        private bool _IsTrudoustroen;
+        public bool IsTrudoustroen
+        {
+            get => _IsTrudoustroen;
+            set
+            {
+                _IsTrudoustroen = value;
+                OnPropertyChanged();
+            }
+        }
+
         private DateTime? _ExamenDat;
         public DateTime? ExamenDat
         {

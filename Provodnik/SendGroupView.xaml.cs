@@ -371,9 +371,14 @@ namespace Provodnik
                     if (d.Id == null)
                     {
                         db.SendGroupPersons.Add(pd = new SendGroupPerson() { IsMain = d.IsMain, SendGroupId = p.Id, PersonId = d.PersonId });
-                        db.SaveChanges();
+                        //db.SaveChanges();
                     }
+
+                    var pe = db.Persons.First(pp => pp.Id == d.PersonId);
+                    pe.IsTrudoustroen = d.IsTrudoustroen;
                 }
+                    db.SaveChanges();
+
                 DialogResult = true;
             }
             catch (Exception ex)

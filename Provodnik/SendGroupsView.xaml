@@ -72,7 +72,7 @@
                     <GridViewColumn Header="Город" DisplayMemberBinding="{Binding City}"/>
                     <GridViewColumn Header="Депо приписки" DisplayMemberBinding="{Binding Depo}"/>
                     <!--GridViewColumn Header="Количество бойцов" DisplayMemberBinding="{Binding Phone}"/-->
-                    <GridViewColumn Header="Предполагаемая дата увольнения" DisplayMemberBinding="{Binding Path=Uvolnenie,StringFormat=\{0:dd.MM.yyyy\}}"/>
+                    <!--GridViewColumn Header="Предполагаемая дата увольнения" DisplayMemberBinding="{Binding Path=Uvolnenie,StringFormat=\{0:dd.MM.yyyy\}}"/-->
                     <!--GridViewColumn Header="Статус/статистика" DisplayMemberBinding="{Binding Phone}"/>
                     <GridViewColumn Header="Действителен до" DisplayMemberBinding="{Binding Path=ModelNumber}"></GridViewColumn-->
 

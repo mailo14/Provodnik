@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentFTP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -94,13 +95,25 @@ namespace Provodnik
         {
             if (e.Key == Key.Delete)
                 if (PersonsListView.SelectedItem != null &&
-                MessageBox.Show("Удалить?", "Подтверждение удаления", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+                    MessageBox.Show("Удалить?", "Подтверждение удаления", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
                     var g = PersonsListView.SelectedItem as PersonShortViewModel;
+                    var personId = g.Id;
                     vm.PersonList.Remove(g);
                     var db = new ProvodnikContext();
                     db.Persons.Remove(db.Persons.First(pp => pp.Id == g.Id));
                     db.SaveChanges();
+
+                    using (var client = new FluentFTP.FtpClient())
+                    {
+                        App.ConfigureFtpClient(client);
+
+                        client.Connect();
+
+                        var remotePath = $@"ProvodnikDocs/"+ personId.ToString();
+                        if (client.DirectoryExists(remotePath))
+                            client.DeleteDirectory(remotePath );
+                    }
                 }
         }
 

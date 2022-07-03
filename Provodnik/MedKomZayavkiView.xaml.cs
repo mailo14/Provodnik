@@ -22,45 +22,35 @@ namespace Provodnik
     /// </summary>
     public partial class MedKomZayavkiView : Window
     {
-        ObservableCollection<MedKomZayavkaViewModel> groups = new ObservableCollection<MedKomZayavkaViewModel>();
+        ObservableCollection<MedKomZayavkaShortViewModel> groups = new ObservableCollection<MedKomZayavkaShortViewModel>();
         public MedKomZayavkiView()
         {
             InitializeComponent();
-            var db = new ProvodnikContext();
+            GroupsListView.ItemsSource = groups;
+
+            FillGroups();
+
+          //  this.DataContext = new PersonViewModel(new ProvodnikContext().Persons.FirstOrDefault()==null?(int?)null:1);
+        }
+
+        private void FillGroups()
+        {
+            groups.Clear();
+
+               var db = new ProvodnikContext();
             var qq = (from g in db.MedKomZayavki select g)
                 .ToList();
-               qq=qq.Select(x => new {x, num=int.TryParse(x.Name.Substring(0, x.Name.IndexOf("_")), out var num) ? (int?)num : null})
-                .ToList().OrderByDescending(x=>x.num)
-                .Select(x=>x.x)
-            .ToList();
+            qq = qq.Select(x => new { x, num = int.TryParse(x.Name.Substring(0, x.Name.IndexOf("_")), out var num) ? (int?)num : null })
+             .ToList().OrderByDescending(x => x.num)
+             .Select(x => x.x)
+         .ToList();
 
-          // var ptt = MainWindow.Mapper.Value.Map<MedKomZayavkaViewModel>(new ProvodnikContext().MedKomZayavkas.First(pp => pp.Id == 2));
-            foreach  (var q in qq)
+            // var ptt = MainWindow.Mapper.Value.Map<MedKomZayavkaViewModel>(new ProvodnikContext().MedKomZayavkas.First(pp => pp.Id == 2));
+            foreach (var q in qq)
             {
-                var g = MainWindow.Mapper.Value.Map<MedKomZayavkaViewModel>(q);
-  
-                /*  MedKomZayavkaViewModel g = new MedKomZayavkaViewModel()
-                {
-                    City = q.City,
-                    Depo = q.Depo,
-                    Id = q.Id,
-                    Marshrut = q.Marshrut,
-                    OtprDat = q.OtprDat,
-                    Poezd = q.Poezd,
-                    PribDat = q.PribDat,
-                    PribTime = q.PribTime,
-                    RegOtdelenie = q.RegOtdelenie,
-                    Uvolnenie = q.Uvolnenie,
-                    Vagon = q.Vagon,
-                    Vokzal = q.Vokzal,
-                    Vstrechat = q.Vstrechat
-                };*/
-                //MainWindow.Mapper.Value.Map(q,g);g.Id = q.Id;
+                var g = MainWindow.Mapper.Value.Map<MedKomZayavkaShortViewModel>(q);
                 groups.Add(g);
             }
-
-            GroupsListView.ItemsSource = groups;
-          //  this.DataContext = new PersonViewModel(new ProvodnikContext().Persons.FirstOrDefault()==null?(int?)null:1);
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -87,14 +77,7 @@ namespace Provodnik
             pw.DataContext = new MedKomZayavkaViewModel(null);// new ProvodnikContext().Persons.FirstOrDefault()==null?(int?)null:1);
             if (pw.ShowDialog() == true)
             {
-                groups.Clear();
-                var db = new ProvodnikContext();
-                var qq = (from g in db.MedKomZayavki select g);
-
-                foreach (var q in qq)
-                {
-                    groups.Add(MainWindow.Mapper.Value.Map<MedKomZayavkaViewModel>(q));
-                }
+                FillGroups();
             }
         }
 
@@ -116,7 +99,7 @@ namespace Provodnik
          
         void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var p = ((FrameworkElement)e.OriginalSource).DataContext as MedKomZayavkaViewModel;
+            var p = ((FrameworkElement)e.OriginalSource).DataContext as MedKomZayavkaShortViewModel;
             if (p != null)
             {
                 var pw = new MedKomZayavkaView();
@@ -127,7 +110,7 @@ namespace Provodnik
                     groups.RemoveAt(ind);
 
 
-                    p = MainWindow.Mapper.Value.Map<MedKomZayavkaViewModel>(new ProvodnikContext().MedKomZayavki.First(pp => pp.Id == p.Id));
+                    p = MainWindow.Mapper.Value.Map<MedKomZayavkaShortViewModel>(new ProvodnikContext().MedKomZayavki.First(pp => pp.Id == p.Id));
                     groups.Insert(ind, p);
                     //vm.RefreshPersonList();
                     //TODO goto if exist or add anyway and goto
@@ -142,7 +125,7 @@ namespace Provodnik
                 if (GroupsListView.SelectedItem != null &&
                 MessageBox.Show("Удалить?", "Подтверждение удаления", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
-                    var g = GroupsListView.SelectedItem as MedKomZayavkaViewModel;
+                    var g = GroupsListView.SelectedItem as MedKomZayavkaShortViewModel;
                     groups.Remove(g);
                     var db = new ProvodnikContext();
                     db.MedKomZayavki.Remove(db.MedKomZayavki.First(pp=>pp.Id==g.Id));

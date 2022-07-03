@@ -33,6 +33,17 @@ namespace Provodnik
             }
         }
 
+        private bool _IsTrudoustroen;
+        public bool IsTrudoustroen
+        {
+            get => _IsTrudoustroen;
+            set
+            {
+                _IsTrudoustroen = value;
+                OnPropertyChanged();
+            }
+        }
+
         bool _IsMain;
         public bool IsMain
         {

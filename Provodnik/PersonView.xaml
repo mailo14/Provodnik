@@ -315,13 +315,15 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="111*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="Желаемый город работы" Grid.Column="2"/>
+                    <TextBlock Text="Желаемый город работы" Grid.Column="2" />
                     <DatePicker SelectedDate="{Binding VihodDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
                     <ComboBox Name="GorodComboBox" Text="{Binding Gorod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="100" Style="{DynamicResource ComboBox}"
                        ItemsSource="{Binding Cities}" IsReadOnly="False"/>
                     <TextBlock Text="Предварительная дата выхода"/>
+                    <CheckBox Content="Трудоустроен" IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"/>
                 </Grid>
 
                 <Grid Margin="3,3,3,0" Grid.Row="24" VerticalAlignment="Top">

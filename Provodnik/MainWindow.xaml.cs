@@ -136,7 +136,9 @@ namespace Provodnik
                 .ForMember(dest => dest.Id, act => act.Ignore())
                 .ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.Id));//.ReverseMap();
                 cfg.CreateMap<SendGroup, SendGroupViewModel>();//.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id.Value));
+                cfg.CreateMap<SendGroup, SendGroupShortViewModel>();
                 cfg.CreateMap<SendGroupViewModel, SendGroup>().ForMember(dest => dest.Id, act => act.Ignore());//.ReverseMap();
+
 
 
 
@@ -150,6 +152,7 @@ namespace Provodnik
                 .ForMember(dest => dest.Id, act => act.Ignore())
                 .ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.Id));//.ReverseMap();
                 cfg.CreateMap<MedKomZayavka, MedKomZayavkaViewModel>();//.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id.Value));
+                cfg.CreateMap<MedKomZayavka, MedKomZayavkaShortViewModel>();
                 cfg.CreateMap<MedKomZayavkaViewModel, MedKomZayavka>().ForMember(dest => dest.Id, act => act.Ignore());//.ReverseMap();
 
 
@@ -193,26 +196,42 @@ namespace Provodnik
 
         private void Patch_ExecOnceThanDelete()
         {
-            using (var db = new ProvodnikContext())
+            var db = new ProvodnikContext();
+            using (var client = new FluentFTP.FtpClient())
+            {
+                App.ConfigureFtpClient(client);
+
+                client.Connect();
+
+                var remotePath = $@"ProvodnikDocs/";
+                foreach (FtpListItem item in client.GetListing(remotePath))
+                {
+                    if (item.Type == FtpFileSystemObjectType.Directory)
+                    {
+                        var personId = int.Parse( item.Name);
+                        if (db.Persons.FirstOrDefault(x => x.Id == personId) == null)
+                        {
+                            client.DeleteDirectory(remotePath + item.Name);
+                        }
+                    }
+                }
+            }
+
+            return;
+
+            /*using (var db = new ProvodnikContext())
             {
                  foreach (var p in db.Persons)
                   {
                       //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.СвидетельствоВакцинации });
  //                     if (!new ProvodnikContext().PersonDocs.Any(x=>x.PersonId==p.Id && x.DocTypeId == DocConsts.СвидетельствоВакцинации2))
-                          db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.СвидетельствоВакцинации2 });
+ //                         db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.СвидетельствоВакцинации2 });
                     //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка1});
                     //db.PersonDocs.Add(new PersonDoc() { PersonId = p.Id, IsActive = true, DocTypeId = DocConsts.ТрудоваяКнижка2 });
 
-                }/* */
-                /*foreach (var p in db.MedKomZayavki)
-                {
-                    p.BolnicaName = @"Поликлиника: ЧУЗ «КБ «РЖД - Медицина» г.Новосибирск»  
-Псих.освидетельствование:Медицинский психодиагностический центр ""МЕНТАЛ КОНСАЛТИНГ""";
-                    p.BolnicaAdres = @"Поликлиника: г.Новосибирск, ул.Сибирская, 21
-Псих.осведетельствование: г.Новосибирск, ул.Красный проспект, 99";
-                }*/
+                }
                 db.SaveChanges();
-            }
+            }*/
         }
 
         public static byte[] ToByteArray(BitmapSource bitmapSource)

@@ -29,5 +29,6 @@ namespace Provodnik
         {
             (sender as ComboBox).IsDropDownOpen = true;
         }
+
     }
 }

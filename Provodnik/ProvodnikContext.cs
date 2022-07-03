@@ -92,6 +92,7 @@ namespace Provodnik
         public bool IsNaprMedPoluchenoSOshibkoi { get; set; }
         public DateTime? NaprMedVidanoDat { get; set; }
         public bool IsNaprMedVidano { get; set; }
+        public bool IsTrudoustroen { get; set; }
         public string VaccineSert { get; set; }
         public DateTime? VaccineSertDat { get; set; }
         public DateTime? VaccineSertDatTo { get; set; }

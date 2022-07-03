@@ -32,7 +32,7 @@
     <ProductName>АСУ Проводник</ProductName>
     <MinimumRequiredVersion>1.0.0.37</MinimumRequiredVersion>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>54</ApplicationRevision>
+    <ApplicationRevision>55</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -146,6 +146,7 @@
     <Compile Include="AlarmsView.xaml.cs">
       <DependentUpon>AlarmsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MedKomZayavkaShortViewModel.cs" />
     <Compile Include="Migrations\202111280459299_init12.cs" />
     <Compile Include="Migrations\202111280459299_init12.designer.cs">
       <DependentUpon>202111280459299_init12.cs</DependentUpon>
@@ -202,6 +203,10 @@
     <Compile Include="Migrations\202204131250044_init25.designer.cs">
       <DependentUpon>202204131250044_init25.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202207030523439_init26.cs" />
+    <Compile Include="Migrations\202207030523439_init26.designer.cs">
+      <DependentUpon>202207030523439_init26.cs</DependentUpon>
+    </Compile>
     <Compile Include="Obuchenie.xaml.cs">
       <DependentUpon>Obuchenie.xaml</DependentUpon>
     </Compile>
@@ -257,6 +262,7 @@
     <Compile Include="MedKomZayavkaView.xaml.cs">
       <DependentUpon>MedKomZayavkaView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SendGroupShortViewModel.cs" />
     <Compile Include="ShortStringConverter.cs" />
     <Compile Include="DelimitedStringToMultilineConverter.cs" />
     <Compile Include="excelReport.cs" />
@@ -510,6 +516,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202204131250044_init25.resx">
       <DependentUpon>202204131250044_init25.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202207030523439_init26.resx">
+      <DependentUpon>202207030523439_init26.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

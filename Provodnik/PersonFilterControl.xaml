@@ -87,33 +87,15 @@
                 <!--CheckBox Content="Только актуализированные" IsChecked="{Binding ActualOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/-->
             </WrapPanel>
 
-            <Grid HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="2" VerticalAlignment="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="86"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Отряд" Grid.Column="2"/>
-                <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="80" Style="{DynamicResource ComboBox}"
-                       IsEditable="True" ItemsSource="{Binding Otryadi}" IsReadOnly="False"/>
+            <WrapPanel HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="2" VerticalAlignment="Top">
                 <TextBlock Text="Сезон" Grid.Column="0"/>
                 <ComboBox Name="SezonComboBox" Text="{Binding Sezon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="70" Style="{DynamicResource ComboBox}"
                           ItemsSource="{Binding Sezons}" IsReadOnly="False" />
+                
+                <TextBlock Text="Отряд" Grid.Column="2"/>
+                <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="80" Style="{DynamicResource ComboBox}"
+                       IsEditable="True" ItemsSource="{Binding Otryadi}" IsReadOnly="False"/>
+                
                 <TextBlock Text="Учебное заведение" Grid.Column="4"/>
                 <ComboBox Name="UchZavedenieComboBox" Text="{Binding UchZavedenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="70" Style="{DynamicResource ComboBox}"
                           ItemsSource="{Binding UchZavedeniya}" IsReadOnly="False"/>
@@ -121,6 +103,7 @@
                 <TextBlock Text="Гражданство" Grid.Column="6"/>
                 <ComboBox Name="GrazdanstvoComboBox" Text="{Binding Grazdanstvo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="50" Style="{DynamicResource ComboBox}"
                       ItemsSource="{Binding Grazdanstva}"  IsReadOnly="False"/>
+                
                 <CheckBox Content="Новичок" IsChecked="{Binding IsNovichok, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True"/>
 
                 <TextBlock Text="Группа обучения" Grid.Column="9"/>
@@ -130,7 +113,9 @@
                 <TextBlock Text="Дата медкомиссии" Grid.Column="11"/>
                 <ComboBox Text="{Binding MedKommDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="12" MinWidth="50" Style="{DynamicResource ComboBox}"
                       ItemsSource="{Binding MedKommDats}"  IsReadOnly="False"/>
-            </Grid>
+
+                <CheckBox Content="Трудоустроен" IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"/>
+            </WrapPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="3" VerticalAlignment="Top">
                 <TextBlock Text="Направления на МК:" />
