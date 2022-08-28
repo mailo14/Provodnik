@@ -38,7 +38,6 @@ namespace Provodnik
         public string Inn { get; set; }
 
         public bool IsPsih { get; set; }
-        public bool IsPsihZabral { get; set; }
         public DateTime? SanKnizkaDat { get; set; }
         public bool IsSanKnizka { get; set; }
         public DateTime? ExamenDat { get; set; }
@@ -63,6 +62,7 @@ namespace Provodnik
             set
             {
                 _IsSelected = value;
+                Parent.RefreshIsPersonsSelected();
                 OnPropertyChanged();
             }
         }
@@ -76,5 +76,7 @@ namespace Provodnik
                 OnPropertyChanged();
             }
         }
+
+        public PersonsViewModel Parent { get; internal set; }
     }
 }

@@ -29,6 +29,7 @@ namespace Provodnik
             RegOtdeleniya = repository.GetRegOtdeleniya();
 
                Cities = repository.GetCities();
+            
             PeresadSts= repository.GetPeresadSts();
 
             Persons = new ObservableCollection<SendGroupPersonViewModel>();
@@ -38,6 +39,7 @@ namespace Provodnik
             {
                 Id = sendGroupId;
                 MainWindow.Mapper.Value.Map(db.SendGroups.Single(pp => pp.Id == sendGroupId), this);
+                if (City != null) { LoadDepos(City); }
 
                 var qq = (from pd in db.SendGroupPersons join p in db.Persons on pd.PersonId equals p.Id
                           where pd.SendGroupId == sendGroupId
@@ -150,23 +152,41 @@ namespace Provodnik
             get => _City;
             set
             {
+                if (string.IsNullOrWhiteSpace(value)) value = null;
+
                 if (_City != value)
                 {
-                    if (Depos != null)
+                    _City = value;
+
+                    if (_isLoaded)
                     {
-                        Depos.Clear(); foreach (var d in repository.GetDepos(value)) Depos.Add(d);
-                        if (_City != null) Depo = null;
+                        Depo = null;
+                        LoadDepos(City);
+
                         if (Depos.Count == 1)
                             Depo = Depos[0];
-
-
+                        else
+                        {
+                            ClearDepoRod();
+                        }
                     }
-                    _City = value;
 
                   //  ChangeDepoRod();
                     OnPropertyChanged();
                 }
             }
+        }
+
+        private void ClearDepoRod()
+        {
+            DepoRod =            Filial =             Sp =null;
+        }
+
+        private void LoadDepos(string city)
+        {
+            Depos.Clear();
+            if (city!=null)
+                foreach (var d in repository.GetDepos(city)) Depos.Add(d);
         }
 
         public string _Filial;
@@ -212,13 +232,33 @@ namespace Provodnik
             get => _Depo;
             set
             {
+                if (string.IsNullOrWhiteSpace(value)) value = null;
+
                 if (_Depo != value)
                 {
                     _Depo = value;
 
-                   // ChangeDepoRod();
+                    if (_isLoaded)
+                    {
+                        if (Depo != null) ChangeDepoRod();
+                        else ClearDepoRod();
+                    }
+
                     OnPropertyChanged();
                 }
+            }
+        }
+
+        private void ChangeDepoRod()
+        {
+            var labels = new Repository().GetDepoLabels(City, Depo);
+            if (labels == null)
+                ClearDepoRod();
+            else
+            {
+                DepoRod = labels.DepoRod;
+                Filial = labels.Filial;
+                Sp = labels.Sp;
             }
         }
 

@@ -6,55 +6,66 @@ using System.Threading.Tasks;
 
 namespace Provodnik
 {
-public    class Repository
+    public class Repository
     {
         public List<string> GetPersonCities()
         {
             return new ProvodnikContext().Persons.Select(pp => pp.Gorod).Distinct()
-                .Union(new List<string> { "Адлер", "Москва", "Санкт-Петербург", "Новороссийск","Новосибирск" }).Distinct().OrderBy(pp => pp).ToList();
+                .Union(new List<string> { "Адлер", "Москва", "Санкт-Петербург", "Новороссийск", "Новосибирск" }).Distinct().OrderBy(pp => pp).ToList();
         }
         public List<string> GetCities()
         {
-            return new ProvodnikContext().Persons.Select(pp => pp.Gorod).Where(pp=>!pp.Contains(",") && !pp.Contains("Москва-")).Distinct()
-                .Union(new List<string> { "Адлер", "Москва", "Санкт-Петербург", "Новороссийск","Новосибирск" }).Distinct().OrderBy(pp => pp).ToList();
+            return new ProvodnikContext().SendGroups.Where(pp => !string.IsNullOrEmpty(pp.City)).Select(x=>x.City).Distinct()
+                .Union(new List<string> { "Адлер", "Москва", "Санкт-Петербург", "Новороссийск", "Новосибирск" })
+                .Distinct().OrderBy(pp => pp).ToList();
         }
         public List<string> GetPeresadSts()
         {
             return new ProvodnikContext().SendGroups.Select(pp => pp.PeresadSt).Distinct()
-                .Union(new List<string> { "Екатеринбург", "Москва"  }).Distinct().OrderBy(pp => pp).ToList();
+                .Union(new List<string> { "Екатеринбург", "Москва" }).Distinct().OrderBy(pp => pp).ToList();
         }
-        public List<string> GetDepos(string city=null)
+        public List<string> GetDepos(string city = null)
         {
-            var mosDepos=new List<string> { "М – Николаевка","М – Киевская","М – Ярославская" };
-            var spbDepos= new List<string> { "Санкт-Петербург ВЧ8" };
+            //GetFixedDepos()
+            return (new ProvodnikContext().SendGroups.Where(x => (city == null || x.City == city) && x.Depo != null).Select(pp => pp.Depo)).ToList()
+                .Union(GetFixedDepos(city))
+                .Distinct().ToList();
+
+        }
+        public List<string> GetFixedDepos(string city = null)
+        {
+            var mosDepos = new List<string> { "М – Николаевка", "М – Киевская", "М – Ярославская" };
+            var spbDepos = new List<string> { "Санкт-Петербург ВЧ8" };
             switch (city)
             {
-                case null: return mosDepos.Union(spbDepos).Union(new[] { "Адлер", "Новороссийск", "Новосибирск-Главный" }).OrderBy(x=>x).ToList();
+                case null: return mosDepos.Union(spbDepos).Union(new[] { "Адлер", "Новороссийск", "Новосибирск-Главный" }).OrderBy(x => x).ToList();
                 //case "Адлер": return new List<string> { };break;
                 case "Москва": return mosDepos;
                 case "Санкт-Петербург": return spbDepos;
-                case "Новосибирск": return new List<string> { "Новосибирск-Главный" }; 
+                case "Новосибирск": return new List<string> { "Новосибирск-Главный" };
             }
             return new List<string>();
         }
         public List<string> GetDeposMed()
         {
-            return new ProvodnikContext().MedKomZayavki.Select(x=>x.Depo).ToList()
-                .Union(GetDepos())
+            return new ProvodnikContext().MedKomZayavki.Select(x => x.Depo).ToList()
+                .Union(GetFixedDepos())
                 .Distinct().OrderBy(pp => pp).ToList();
         }
 
         public class DepoLabels
         {
             public string DepoRod { get; set; }
-            public string Filial { get;  set; }
-            public string Sp { get;  set; }
+            public string Filial { get; set; }
+            public string Sp { get; set; }
         }
         public DepoLabels GetDepoLabels(string city, string depo)
         {
             var ret = new DepoLabels();
 
-            if (city == "Адлер") { ret.DepoRod = "Вагонного участка Адлер Северо-Кавказского филиала АО «ФПК»"; ret.Filial = "Северо-Кавказский филиал АО «ФПК"; ret.Sp = "вагонный участок Адлер"; }
+            if (city == null || depo == null) return ret;
+
+  /*              if (city == "Адлер") { ret.DepoRod = "Вагонного участка Адлер Северо-Кавказского филиала АО «ФПК»"; ret.Filial = "Северо-Кавказский филиал АО «ФПК"; ret.Sp = "вагонный участок Адлер"; }
             if (city == "Санкт-Петербург") { ret.DepoRod = "Вагонного участка Санкт-Петербург-Московский Северо-Западного филиала АО «ФПК»"; ret.Filial = "Северо-Западный филиал АО «ФПК"; ret.Sp = "вагонный участок Санкт-Петербург-Московский"; }
             if (city == "Новороссийск") { ret.DepoRod = "Пассажирского вагонного депо Новороссийск Северо-Кавказского филиала АО «ФПК»"; ret.Filial = "Северо-Кавказский филиал АО «ФПК"; ret.Sp = "вагонный участок Новороссийск"; }
             if (city == "Новосибирск") { ret.DepoRod = "Вагонного участка Новосибирск-Главный Западно-Сибирского филиала АО «ФПК»"; ret.Filial = "Западно-Сибирский филиал АО «ФПК"; ret.Sp = "вагонный участок Новосибирск-Главный"; }
@@ -62,8 +73,35 @@ public    class Repository
             if (depo == "М – Николаевка") { ret.DepoRod = "Пассажирского вагонного депо Николаевка Московского филиала АО «ФПК»"; ret.Filial = "Московский филиал АО «ФПК"; ret.Sp = "депо Николаевка"; }
             if (depo == "М – Киевская") { ret.DepoRod = "Пассажирского вагонного депо Москва-Киевская Московского филиала АО «ФПК»"; ret.Filial = "Московский филиал АО «ФПК"; ret.Sp = "депо Москва-Киевская"; }
             if (depo == "М – Ярославская") { ret.DepoRod = "Пассажирского вагонного депо Москва-Ярославская Московского филиала АО «ФПК»"; ret.Filial = "Московский филиал АО «ФПК"; ret.Sp = "депо Москва-Ярославская"; }
+            */
 
-            return ret;
+            var query =new ProvodnikContext().SendGroups
+                .Where(x => x.City == city)
+                .Where(x => x.Depo== depo);
+
+            var rr = (from s in query
+                      select new { id = s.Id, labels = new DepoLabels { DepoRod = s.DepoRod, Filial = s.Filial, Sp = s.Sp } }).ToList();
+            if (ret.DepoRod != null)
+                rr.Add(new { id = 1, labels = ret });
+
+            return rr.OrderByDescending(x => x.id).FirstOrDefault()?.labels;
+        }
+
+        public void DeletePerson(int personId)
+        {
+            var db = new ProvodnikContext();
+            db.Persons.Remove(db.Persons.First(pp => pp.Id == personId));
+            db.SaveChanges();
+
+            using (var client = new FluentFTP.FtpClient())
+            {
+                App.ConfigureFtpClient(client);
+                client.Connect();
+
+                var remotePath = $@"ProvodnikDocs/" + personId.ToString();
+                if (client.DirectoryExists(remotePath))
+                    client.DeleteDirectory(remotePath);
+            }
         }
 
         public List<string> GetRegOtdeleniya()

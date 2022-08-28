@@ -87,14 +87,7 @@
                     <DataGridTemplateColumn Header="Прошел" SortMemberPath="IsPsih" >
                         <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Забрал" SortMemberPath="IsPsihZabral" >
-                        <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsPsihZabral, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                <CheckBox IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" IsEnabled="False"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

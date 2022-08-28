@@ -21,6 +21,7 @@ namespace Provodnik
         public string UchForma { get; set; }
         public string Phone { get; set; }
         public string Messages { get; set; }
+        public string Sezon { get; set; }
 
         private DateTime? _BirthDat;
         public DateTime? BirthDat

@@ -117,7 +117,7 @@ namespace Provodnik
                 ,RodPhone,RodFio
                 ,BirthDat.ToString(),PaspNomer,Snils,VaccineSert,VaccineSertDat.ToString() };
 
-            var allPasportsRus = new string[] { MestoRozd, PaspSeriya, PaspAdres };
+            var allPasportsRus = new string[] { MestoRozd, PaspSeriya, PaspAdres, PaspKodPodr };
 
             return allPasports.All(pp => !string.IsNullOrWhiteSpace(pp))
                 && (Grazdanstvo == "КЗ" || /*Grazdanstvo != "КЗ" && */allPasportsRus.All(pp => !string.IsNullOrWhiteSpace(pp)));
@@ -215,6 +215,12 @@ namespace Provodnik
         public void RefreshScansSize()
         {
             OnPropertyChanged(nameof(ScansSize));
+        }
+
+        public void RefreshMedPsihOnScanChanded()
+        {
+            IsMedKomm = Documents.Count(x => (x.FileName != null || x.LocalFileName != null) && (x.DocTypeId == DocConsts.ЗаключениеВЭК || x.DocTypeId == DocConsts.ЗаключениеВЭК2)) == 2;
+            IsPsih = Documents.Any(x => (x.FileName != null || x.LocalFileName != null) && x.DocTypeId == DocConsts.Психосвидетельствование);
         }
 
         public void FillMessagesAndAlls(Person p)
@@ -344,6 +350,9 @@ namespace Provodnik
         public void ClearDocs()
         {
             Helper.RestorePersonDocuments(this, false,true);
+
+            IsMedKomm = false;
+            IsPsih = false;
            /* Documents.Clear();
 
             var db = new ProvodnikContext();
@@ -395,6 +404,8 @@ namespace Provodnik
             builder.RuleFor(vm => vm.VidanDat).MyNotEmptyDat();
             builder.RuleFor(vm => vm.PaspAdres).MyNotEmpty().When(vm => vm.Grazdanstvo != "КЗ");
             builder.RuleFor(vm => vm.FactAdres).MyNotEmpty();
+            builder.RuleFor(vm => vm.PaspKodPodr).MyNotEmpty().When(vm => vm.Grazdanstvo != "КЗ")
+                .Matches(@"^\d{3}-\d{3}$").WithMessage("{PropertyName} должен быть в формате 000-000").When(vm => vm.Grazdanstvo != "КЗ");
 
             builder.RuleFor(vm => vm.VremRegDat).MyNotEmptyDat()
                 .When(vm => vm.Grazdanstvo, grazdanstvo => grazdanstvo == "КЗ");
@@ -904,6 +915,18 @@ namespace Provodnik
             }
         }
 
+        private string _PaspKodPodr;
+        [DisplayName(DisplayName = "Код подразделения")]
+        public string PaspKodPodr
+        {
+            get => _PaspKodPodr;
+            set
+            {
+                _PaspKodPodr = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _PaspVidan;
         [DisplayName(DisplayName = "Кем выдан")]
         public string PaspVidan
@@ -1006,17 +1029,6 @@ namespace Provodnik
             set
             {
                 _IsPsih = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _IsPsihZabral;
-        public bool IsPsihZabral
-        {
-            get => _IsPsihZabral;
-            set
-            {
-                _IsPsihZabral = value;
                 OnPropertyChanged();
             }
         }
@@ -1155,13 +1167,13 @@ namespace Provodnik
             }
         }
 
-        private bool _IsGologram;
-        public bool IsGologram
+        private bool _IsMedKommNeGoden;
+        public bool IsMedKommNeGoden
         {
-            get => _IsGologram;
+            get => _IsMedKommNeGoden;
             set
             {
-                _IsGologram = value;
+                _IsMedKommNeGoden = value;
                 OnPropertyChanged();
             }
         }

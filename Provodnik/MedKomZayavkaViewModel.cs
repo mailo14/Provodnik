@@ -133,6 +133,34 @@ namespace Provodnik
             }
         }
 
+        public DateTime? _NaprMedZakazanoDat;
+        public DateTime? NaprMedZakazanoDat
+        {
+            get => _NaprMedZakazanoDat;
+            set
+            {
+                if (_NaprMedZakazanoDat != value)
+                {
+                    _NaprMedZakazanoDat = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public DateTime? _NaprMedPoluchenoDat;
+        public DateTime? NaprMedPoluchenoDat
+        {
+            get => _NaprMedPoluchenoDat;
+            set
+            {
+                if (_NaprMedPoluchenoDat != value)
+                {
+                    _NaprMedPoluchenoDat = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private IObjectValidator GetValidator()
         {
             var builder = new ValidationBuilder<MedKomZayavkaViewModel>();

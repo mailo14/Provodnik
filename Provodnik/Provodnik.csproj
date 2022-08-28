@@ -32,7 +32,7 @@
     <ProductName>АСУ Проводник</ProductName>
     <MinimumRequiredVersion>1.0.0.37</MinimumRequiredVersion>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>55</ApplicationRevision>
+    <ApplicationRevision>60</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -206,6 +206,10 @@
     <Compile Include="Migrations\202207030523439_init26.cs" />
     <Compile Include="Migrations\202207030523439_init26.designer.cs">
       <DependentUpon>202207030523439_init26.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202208261613082_init27.cs" />
+    <Compile Include="Migrations\202208261613082_init27.designer.cs">
+      <DependentUpon>202208261613082_init27.cs</DependentUpon>
     </Compile>
     <Compile Include="Obuchenie.xaml.cs">
       <DependentUpon>Obuchenie.xaml</DependentUpon>
@@ -519,6 +523,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202207030523439_init26.resx">
       <DependentUpon>202207030523439_init26.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202208261613082_init27.resx">
+      <DependentUpon>202208261613082_init27.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

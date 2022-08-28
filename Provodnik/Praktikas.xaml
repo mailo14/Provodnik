@@ -105,13 +105,6 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Голограмма" SortMemberPath="IsGologram">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsGologram, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" HorizontalAlignment="Center"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
 
                     <DataGridTemplateColumn Header="Практика пройдена" SortMemberPath="IsPraktika">
                         <DataGridTemplateColumn.CellTemplate>

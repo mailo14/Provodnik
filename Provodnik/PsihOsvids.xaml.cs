@@ -90,7 +90,7 @@ namespace Provodnik
                         foreach (var pd in toDelete)
                         {
                             pd.PsihDat = null;
-                            pd.IsPsih = pd.IsPsihZabral = false;
+                            pd.IsPsih =  false;
 
                            /* foreach (var pdo in (from pdo in db.PersonDocs
                                                  where pdo.PersonId == pd.Id && pdo.DocTypeId == DocConsts.Психосвидетельствование
@@ -128,7 +128,6 @@ namespace Provodnik
                         var pe = db.Persons.First(pp => pp.Id == p.Id);
                         pe.PsihDat = dat;
                         pe.IsPsih = p.IsPsih;
-                        pe.IsPsihZabral = p.IsPsihZabral;
                         db.SaveChanges();
 
                         var pvm = new PersonViewModel(pe.Id, false);
@@ -152,7 +151,7 @@ namespace Provodnik
                 if (Persons.FirstOrDefault(pp => pp.Id == id) != null) continue;
 
                 var np = MainWindow.Mapper.Value.Map<PersonShortViewModel>(db.Persons.First(pp => pp.Id == id));
-                np.IsPsih =np.IsPsihZabral= false;
+                np.IsPsih = false;
 
                 Persons.Add(np);
             }

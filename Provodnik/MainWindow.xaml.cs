@@ -168,7 +168,7 @@ namespace Provodnik
         public MainWindow()
         {
 
-           //Patch_ExecOnceThanDelete();
+           Patch_ExecOnceThanDelete();
 
 
             p = this;
@@ -196,8 +196,10 @@ namespace Provodnik
 
         private void Patch_ExecOnceThanDelete()
         {
-            var db = new ProvodnikContext();
-            using (var client = new FluentFTP.FtpClient())
+            return;
+             
+            
+          /*  using (var client = new FluentFTP.FtpClient())
             {
                 App.ConfigureFtpClient(client);
 
@@ -215,7 +217,7 @@ namespace Provodnik
                         }
                     }
                 }
-            }
+            }*/
 
             return;
 

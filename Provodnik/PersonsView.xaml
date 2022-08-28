@@ -112,10 +112,10 @@
                            ItemsSource="{Binding PersonList}"  MouseDoubleClick="ListView_MouseDoubleClick" KeyUp="PersonsListView_KeyUp" Sorting="PersonsListView_Sorting"
                           >
             <DataGrid.Columns>
-                  
-                <DataGridTemplateColumn Width="auto" >
+
+                <DataGridTemplateColumn Width="auto">
                     <DataGridTemplateColumn.Header>
-                        <CheckBox IsChecked="False" HorizontalAlignment="Center"/>
+                        <CheckBox IsChecked="{Binding Path=DataContext.IsPersonsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" HorizontalAlignment="Center" IsThreeState="True"/>
                     </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

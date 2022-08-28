@@ -59,6 +59,7 @@ namespace Provodnik
         public ObservableCollection<string> Cities { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Otryadi { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Grazdanstva { get; set; } = new ObservableCollection<string>();
+
         public ObservableCollection<string> Obucheniyas { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> MedKommDats { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> UchZavedeniya { get; set; } = new ObservableCollection<string>();
@@ -198,6 +199,42 @@ new ScanCheck{DisplayName="Справка-подтверждение МООО  
 new ScanCheck{DisplayName="Миграционная карта и временная регистрация",DocType=DocConsts.Миграционная1},
 
             };
+        }
+
+     //   bool IsPersonsSelectedInProgress = false;
+
+        //private bool? _IsPersonsSelected;
+        public bool? IsPersonsSelected
+        {
+            get
+            {
+                var anySelected = PersonList.Any(x => x.IsSelected);
+                if (anySelected && PersonList.Any(x => !x.IsSelected))
+                    return null;
+                else
+                    return anySelected;
+            }
+                set
+            {
+                /*      _IsPersonsSelected = value;
+
+                      if (!IsPersonsSelectedInProgress)
+                      {
+                          IsPersonsSelectedInProgress = true;
+
+                          _IsPersonsSelected = value??false;
+                          //foreach (var p in PersonList) p.IsSelected = _IsPersonsSelected.Value;
+                          IsPersonsSelectedInProgress = false;
+                      }
+                      */
+                foreach (var p in PersonList) p.IsSelected = value ?? false;
+
+                OnPropertyChanged();
+            }
+        }
+        public void RefreshIsPersonsSelected()
+        {
+            OnPropertyChanged(nameof(IsPersonsSelected));          
         }
 
         private string _Gorod;
@@ -341,7 +378,7 @@ private RelayCommand _FindCommand;
                     
                 if (MedKommExist.HasValue)
                     //query = query.Where(pp => MedKommExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.ЗаключениеВЭК).FileName != null));
-                    query = query.Where(pp => PsihExist.Value == (pp.PersonDocs.Count(ppp => (ppp.DocTypeId == DocConsts.ЗаключениеВЭК || ppp.DocTypeId == DocConsts.ЗаключениеВЭК2) && ppp.FileName != null) == 2));
+                    query = query.Where(pp => MedKommExist.Value == (pp.PersonDocs.Count(ppp => (ppp.DocTypeId == DocConsts.ЗаключениеВЭК || ppp.DocTypeId == DocConsts.ЗаключениеВЭК2) && ppp.FileName != null) == 2));
                 //query = query.Where(pp => pp.IsMedKomm== MedKommExist.Value);
                 if (PraktikaExist.HasValue)
                     query = query.Where(pp => pp.IsPraktika == PraktikaExist.Value);
@@ -482,6 +519,7 @@ private RelayCommand _FindCommand;
             {
                 //select new PersonShortViewModel() { Id = p.Id, Fio = p.Fio, Phone = p.Phone })) // IdName { Id = p.Id, Name = p.Fio }))
                 var pe = MainWindow.Mapper.Value.Map<PersonShortViewModel>(i);
+                pe.Parent = this;
                 PersonList.Add(pe);
             }
             Helper.SetPersonShortIndexes(PersonList);

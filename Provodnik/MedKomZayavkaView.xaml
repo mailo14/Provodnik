@@ -72,6 +72,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -104,9 +105,17 @@
             <TextBlock Text="Адрес больницы" Grid.Column="2"/>
             <TextBox Text="{Binding BolnicaAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="549" Style="{DynamicResource TextBox}" AcceptsReturn="True" />
         </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="4">
+            <TextBlock Text="Направление заказано" Grid.Column="2"/>
+            <DatePicker SelectedDate="{Binding NaprMedZakazanoDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="4" HorizontalAlignment="Right" >
+            <TextBlock Text="Получено" Grid.Column="2"/>
+            <DatePicker SelectedDate="{Binding NaprMedPoluchenoDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+        </StackPanel>
 
 
-        <Expander Header="Бойцы" Grid.Row="6" IsExpanded="True">
+        <Expander Header="Бойцы" Grid.Row="7" IsExpanded="True">
             <Grid Background="#FFE5E5E5" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -158,14 +167,6 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
-                        <DataGridTemplateColumn Header="Выдано" SortMemberPath="IsNaprMedVidano" Width="auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsNaprMedVidano, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
 
@@ -178,9 +179,9 @@
             </Grid>
         </Expander>
 
-        <Button Content="Сформировать направления" Click="PrintButton_Click" Grid.Row="11"/>
+        <Button Content="Сформировать направления" Click="PrintButton_Click" Grid.Row="12"/>
 
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="11">
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="12">
 
             <Button Content="Отмена" Click="CancelButton_Click" />
             <Button Content="Сохранить" Click="SaveButton_Click"/>

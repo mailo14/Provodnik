@@ -43,12 +43,12 @@ namespace Provodnik
 
         private void OnDepoComboBoxTextChanged(object sender, RoutedEventArgs e)
         {
-            var vm = DataContext as SendGroupViewModel;
+           /* var vm = DataContext as SendGroupViewModel;
            var labels= new Repository().GetDepoLabels(vm.City, vm.Depo);
 
             vm.DepoRod = labels.DepoRod;
             vm.Filial = labels.Filial;
-            vm.Sp = labels.Sp;
+            vm.Sp = labels.Sp;*/
         }
 
         private void ComboBox_GotFocus(object sender, RoutedEventArgs e)
@@ -281,6 +281,7 @@ namespace Provodnik
             range.Find.ClearFormatting();
             
             range.Find.Execute(FindText: "{City}", ReplaceWith: vm.City, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Year}", ReplaceWith: vm.Persons.FirstOrDefault()?.Sezon??DateTime.Today.Year.ToString(), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
             range.Find.Execute(FindText: "{Filial}", ReplaceWith: vm.Filial, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
             range.Find.Execute(FindText: "{Sp}", ReplaceWith: vm.Sp, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
             range.Find.Execute(FindText: "{Ochniki}", ReplaceWith: vm.Persons.Count(x=>x.UchForma== UchFormaConsts.Ochnaya), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
@@ -376,6 +377,7 @@ namespace Provodnik
 
                     var pe = db.Persons.First(pp => pp.Id == d.PersonId);
                     pe.IsTrudoustroen = d.IsTrudoustroen;
+                    pe.Gorod = vm.City;
                 }
                     db.SaveChanges();
 

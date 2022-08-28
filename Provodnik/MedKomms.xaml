@@ -58,7 +58,6 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Calendar Name="GroupCalendar" Margin="3"
-                  SelectedDatesChanged="GroupCalendar_SelectedDatesChanged"
                   SelectedDate="{Binding SelectedDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   />
         <Grid Grid.Column="1" Margin="3">
@@ -94,7 +93,7 @@
                     <DataGridTemplateColumn Header="Псих.освид." SortMemberPath="IsPsih" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                <CheckBox IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" IsEnabled="False"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -117,7 +116,7 @@
                     <DataGridTemplateColumn Header="Заключение ВЭК получено" SortMemberPath="IsMedKomm">
                         <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                                <CheckBox IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" IsEnabled="False"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

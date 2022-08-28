@@ -40,7 +40,7 @@ namespace Provodnik
                var db = new ProvodnikContext();
             var qq = (from g in db.MedKomZayavki select g)
                 .ToList();
-            qq = qq.Select(x => new { x, num = int.TryParse(x.Name.Substring(0, x.Name.IndexOf("_")), out var num) ? (int?)num : null })
+            qq = qq.Select(x => new { x, num = int.TryParse(x.Name?.Substring(0, Math.Max(1, x.Name.IndexOf("_"))), out var num) ? (int?)num : null })
              .ToList().OrderByDescending(x => x.num)
              .Select(x => x.x)
          .ToList();

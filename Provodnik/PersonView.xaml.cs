@@ -232,6 +232,8 @@ namespace Provodnik
             dc.LocalFileName= null;
 
             dc.Size = null; vm.RefreshScansSize();
+
+            vm.RefreshMedPsihOnScanChanded();
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -248,6 +250,7 @@ namespace Provodnik
                 dc.LocalFileName = openFileDialog.FileName;
                 dc.PrinesetK = null;
                 dc.Size = new FileInfo(openFileDialog.FileName).Length; vm.RefreshScansSize();
+                vm.RefreshMedPsihOnScanChanded();
             }
         }
 

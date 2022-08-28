@@ -34,12 +34,17 @@
         </Style>
         <Style x:Key="TextBox" TargetType="TextBox">
             <Setter Property="Margin" Value="3"/>
+            <!--Setter Property="SpellCheck.IsEnabled" Value="True"/-->
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="MinHeight" Value="22"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
 
             <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
             <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+        </Style>
+        <Style x:Key="SpellCheckTextBox" BasedOn="{StaticResource TextBox}" TargetType="TextBox">
+            <Setter Property="SpellCheck.IsEnabled" Value="True"/>
+            <Setter Property="TextBox.Language" Value="ru-ru"/>
         </Style>
         <Style x:Key="ComboBox" TargetType="ComboBox">
             <Setter Property="Margin" Value="3"/>
@@ -195,7 +200,7 @@
                     <TextBlock Text="ФИО"/>
                     <TextBlock Text="Отряд" Grid.Column="11"/>
                     <TextBlock Text="Гражданство" Grid.Column="8"/>
-                    <TextBox Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="250" Style="{DynamicResource TextBox}"/>
+                    <TextBox Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="250" Style="{DynamicResource SpellCheckTextBox}"/>
                     <ComboBox Name="GrazdanstvoComboBox" Text="{Binding Grazdanstvo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" MinWidth="50"
                       ItemsSource="{Binding Grazdanstva}" SelectionChanged="GrazdanstvoComboBox_SelectionChanged"/>
                     <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="12" MinWidth="80" Style="{DynamicResource ComboBox}"
@@ -215,7 +220,7 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Бейдж (рус.)" Margin="10,6,0,6"/>
-                    <TextBox Text="{Binding BadgeRus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="200" Style="{DynamicResource TextBox}" GotFocus="TextBox_GotFocus"/>
+                    <TextBox Text="{Binding BadgeRus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="200" Style="{DynamicResource SpellCheckTextBox}" GotFocus="TextBox_GotFocus"/>
 
                     <TextBlock Text="Бейдж (англ.)" Grid.Column="2" Margin="10,6,0,6"/>
                     <TextBox Text="{Binding BadgeEng, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" MinWidth="200" Style="{DynamicResource TextBox}"/>
@@ -292,7 +297,7 @@
                     <TextBlock Text="Контактный телефон родителей" Grid.Column="2"/>
                     <TextBlock Text="+7" Grid.Column="3"/>
                     <TextBox Text="{Binding RodPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" RenderTransformOrigin="-1.701,3.479" Grid.Column="4" MinWidth="70" Style="{DynamicResource TextBox}"/>
-                    <TextBox Text="{Binding RodFio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="200" Style="{DynamicResource TextBox}"/>
+                    <TextBox Text="{Binding RodFio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="200" Style="{DynamicResource SpellCheckTextBox}"/>
                 </Grid>
 
 
@@ -349,9 +354,10 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <CheckBox Content="Пройдена" IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" Margin="10,8,0,8"/>
-                        <CheckBox Content="Пройдено" IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3"  Margin="10,8,0,8"/>
-                        <CheckBox Content="Забрал справку" IsChecked="{Binding IsPsihZabral, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"  Margin="10,8,0,8"/>
+                        <CheckBox Content="Пройдена" IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="3" Margin="10,8,0,8" IsEnabled="False"/>
+                        <CheckBox Content="Не годен" IsChecked="{Binding IsMedKommNeGoden, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="4" Margin="10,8,0,8"/>
+
+                        <CheckBox Content="Пройдено" IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3"  Margin="10,8,0,8" IsEnabled="False"/>
                         <TextBlock Text="Психосвидетельствование" Margin="10,7,0,7"/>
                         <DatePicker SelectedDate="{Binding PsihDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
                         <TextBlock Text="дата" Grid.Column="1" Margin="10,7,3,7"/>
@@ -362,8 +368,6 @@
                         <TextBlock Text="Медкомиссия" Grid.Row="2" Margin="10,7,0,7"/>
                         <DatePicker SelectedDate="{Binding MedKommDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
                         <TextBlock Text="дата" Grid.Row="2" Grid.Column="1" Margin="10,7,3,7"/>
-                        <TextBlock Text="Голограмма" Grid.Row="3" Margin="10,7,0,7"/>
-                        <CheckBox Content="Проставлена" IsChecked="{Binding IsGologram, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,8,0,8"/>
 
                     </Grid>
                 </Expander>
@@ -452,7 +456,7 @@
                                 <TextBlock Text="Дата рождения"/>
                                 <TextBlock Text="Место рождения" Grid.Column="2"  Visibility="{Binding IsRussia,Converter={StaticResource booleanToVisibilityConverter }}"/>
                                 <DatePicker SelectedDate="{Binding BirthDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource DatePicker}"/>
-                                <TextBox Text="{Binding MestoRozd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{DynamicResource TextBox}"
+                                <TextBox Text="{Binding MestoRozd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{DynamicResource SpellCheckTextBox}"
                                           Visibility="{Binding IsRussia,Converter={StaticResource booleanToVisibilityConverter }}"/>
                             </Grid>
                             <Grid Margin="3,3,3,0" Grid.Row="8" VerticalAlignment="Top">
@@ -461,13 +465,19 @@
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="394*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Серия паспорта" Visibility="{Binding IsRussia,Converter={StaticResource booleanToVisibilityConverter }}"/>
+                                <TextBlock Text="Серия паспорта" Visibility="{Binding IsRussia,Converter={StaticResource booleanToVisibilityConverter }}" Margin="10,6,0,6"/>
                                 <TextBox Text="{Binding PaspSeriya, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}" MinWidth="40"
                                           Visibility="{Binding IsRussia,Converter={StaticResource booleanToVisibilityConverter }}"/>
-                                <TextBlock Text="Номер паспорта " Grid.Column="2"/>
+                                <TextBlock Text="Номер паспорта " Grid.Column="2" Margin="10,6,0,6"/>
                                 <TextBox Text="{Binding PaspNomer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Style="{DynamicResource TextBox}" MinWidth="57"/>
+
+                                <TextBlock Text="Код подразделения" Grid.Column="4" Margin="10,6,0,6" 
+                                           Visibility="{Binding IsRussia,Converter={StaticResource booleanToVisibilityConverter }}"/>
+                                <TextBox Text="{Binding PaspKodPodr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" Style="{DynamicResource TextBox}" MinWidth="75"
+                                         Visibility="{Binding IsRussia,Converter={StaticResource booleanToVisibilityConverter }}"/>
                             </Grid>
                             <Grid Margin="3,3,3,0" Grid.Row="9" VerticalAlignment="Top">
                                 <Grid.ColumnDefinitions>
@@ -475,7 +485,7 @@
                                     <ColumnDefinition Width="21*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Кем выдан"  Visibility="{Binding IsRussia,Converter={StaticResource booleanToVisibilityConverter }}"/>
-                                <TextBox Text="{Binding PaspVidan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}"
+                                <TextBox Text="{Binding PaspVidan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource SpellCheckTextBox}"
                                           Visibility="{Binding IsRussia,Converter={StaticResource booleanToVisibilityConverter }}"/>
                             </Grid>
                             <Grid Margin="3,3,3,0" Grid.Row="10" VerticalAlignment="Top" >
@@ -493,7 +503,7 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Прописка по паспорту"  Visibility="{Binding IsRussia,Converter={StaticResource booleanToVisibilityConverter }}"/>
-                                <TextBox Text="{Binding PaspAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}" AcceptsReturn="True"
+                                <TextBox Text="{Binding PaspAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource SpellCheckTextBox}" AcceptsReturn="True"
                                           Visibility="{Binding IsRussia,Converter={StaticResource booleanToVisibilityConverter }}"/>
                             </Grid>
 
@@ -503,7 +513,7 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Адрес фактического места жительства"/>
-                                <TextBox Text="{Binding FactAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource TextBox}"/>
+                                <TextBox Text="{Binding FactAdres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Style="{DynamicResource SpellCheckTextBox}"/>
                             </Grid>
 
                             <Grid Margin="3,3,3,0" Grid.Row="13" VerticalAlignment="Top">
@@ -560,9 +570,9 @@
                         <CheckBox Content="Заказано" IsChecked="{Binding IsNaprMedZakazano, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"  Margin="10,8,0,8"/>
                         <CheckBox Content="Получено" IsChecked="{Binding IsNaprMedPolucheno, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0" Margin="10,8,0,8"/>
                         <CheckBox Content="Выдано" IsChecked="{Binding IsNaprMedVidano, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="0" Margin="10,8,0,8"/>
-                        <DatePicker SelectedDate="{Binding NaprMedZakazanoDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+                        <DatePicker SelectedDate="{Binding NaprMedZakazanoDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{DynamicResource DatePicker}" IsEnabled="False"/>
                         <TextBlock Text="дата" Grid.Column="1" Margin="10,7,3,7"/>
-                        <DatePicker SelectedDate="{Binding NaprMedPoluchenoDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
+                        <DatePicker SelectedDate="{Binding NaprMedPoluchenoDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}" IsEnabled="False"/>
                         <TextBlock Text="дата" Grid.Row="1" Grid.Column="1" Margin="10,7,3,7"/>
                         <DatePicker SelectedDate="{Binding NaprMedVidanoDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
                         <TextBlock Text="дата" Grid.Row="2" Grid.Column="1" Margin="10,7,3,7"/>

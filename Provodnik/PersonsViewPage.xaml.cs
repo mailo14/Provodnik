@@ -75,6 +75,7 @@ namespace Provodnik
                     vm.PersonList.RemoveAt(ind);
 
                     p = MainWindow.Mapper.Value.Map<PersonShortViewModel>(new ProvodnikContext().Persons.First(pp => pp.Id == p.Id));
+                    p.Parent = vm;
                     vm.PersonList.Insert(ind, p);
                     //vm.RefreshPersonList();
                     //TODO goto if exist or add anyway and goto
@@ -94,27 +95,39 @@ namespace Provodnik
         private void PersonsListView_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Delete)
-                if (PersonsListView.SelectedItem != null &&
-                    MessageBox.Show("Удалить?", "Подтверждение удаления", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+            {
+                List<PersonShortViewModel> list =null;
+
+                if (vm.IsPersonsSelected == false)
                 {
-                    var g = PersonsListView.SelectedItem as PersonShortViewModel;
-                    var personId = g.Id;
-                    vm.PersonList.Remove(g);
-                    var db = new ProvodnikContext();
-                    db.Persons.Remove(db.Persons.First(pp => pp.Id == g.Id));
-                    db.SaveChanges();
-
-                    using (var client = new FluentFTP.FtpClient())
+                    if (PersonsListView.SelectedItem != null)
                     {
-                        App.ConfigureFtpClient(client);
-
-                        client.Connect();
-
-                        var remotePath = $@"ProvodnikDocs/"+ personId.ToString();
-                        if (client.DirectoryExists(remotePath))
-                            client.DeleteDirectory(remotePath );
+                        list = new List<PersonShortViewModel> { PersonsListView.SelectedItem as PersonShortViewModel };
                     }
                 }
+                else
+                {
+                    list = vm.PersonList.Where(x => x.IsSelected).ToList();
+                }
+
+                if (list != null) { 
+                    var listToAsk = list.Select(x => x.Fio).Take(5).ToList();
+                    if (list.Count > 5) listToAsk.Add($"... (всего {list.Count})");
+                    var message = "Удалить следующих бойцов:"
+                        + Environment.NewLine+ Environment.NewLine
+                        + string.Join(Environment.NewLine, listToAsk)
+                        + "?";
+
+                    if (MessageBox.Show(message, "Подтверждение удаления", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+                    {
+                        foreach (var g in list)
+                        {
+                            vm.PersonList.Remove(g);
+                            new Repository().DeletePerson(g.Id);
+                        }
+                    }
+                }
+            }
         }
 
         private async void ExcelButton_Click(object sender, RoutedEventArgs e)
@@ -193,15 +206,15 @@ namespace Provodnik
                          vibilObuch = p.UchebGruppa != null && p.IsVibil, //p.VibilPrichina == "выбыл с обучения",
                          ostObuch = p.UchebGruppa != null && !p.IsVibil,//p.VibilPrichina != "выбыл с обучения",
                          p.IsExamen,
-                         p.IsExamenFailed,
-                         oshibokSvidet = p.IsSertificatError,
+                         //p.IsExamenFailed,
+                         //oshibokSvidet = p.IsSertificatError,
                          poluchenoSvidet = p.SertificatDat.HasValue,//db.PersonDocs.Any(x=>x.PersonId==p.Id && x.DocTypeId==DocConsts.СвидетельствоПрофессии && x.FileName!=null),
                          zakazanoNapr = p.IsNaprMedZakazano,
                          gotovoNapr = p.IsNaprMedPolucheno,
                          vishel = p.IsNaprMedVidano,
-                         goden = p.IsMedKomm,
-                         neGoden = p.VibilPrichina == "не допущен медкомиссией", //"не годен",
-
+                         goden = p.IsPsih && p.IsMedKomm ,
+                         neGoden =p.IsMedKommNeGoden, //p.VibilPrichina == "не допущен медкомиссией", //"не годен",
+                         trudoustroen=p.IsTrudoustroen,
                          p.IsNovichok
                      };
 
@@ -215,9 +228,7 @@ namespace Provodnik
                 excel.cell[ri, startCol + 4].value2 = r.Count(x => x.vibilObuch);
                 excel.cell[ri, startCol + 5].value2 = r.Count(x => x.ostObuch);
                 excel.cell[ri, startCol + 6].value2 = r.Count(x => x.IsExamen);
-                excel.cell[ri, startCol + 7].value2 = r.Count(x => x.IsExamenFailed);
-                excel.cell[ri, startCol + 8].value2 = r.Count(x => x.oshibokSvidet);
-                excel.cell[ri, startCol + 9].value2 = r.Count(x => x.poluchenoSvidet);
+                excel.cell[ri, startCol + 7].value2 = r.Count(x => x.poluchenoSvidet);
             }
 
             foreach (var r in qq.GroupBy(x => x.IsNovichok).OrderByDescending(x => x.Key))
@@ -228,28 +239,27 @@ namespace Provodnik
                 excel.cell[ri, startCol + 4].value2 = r.Count(x => x.vibilObuch);
                 excel.cell[ri, startCol + 5].value2 = r.Count(x => x.ostObuch);
                 excel.cell[ri, startCol + 6].value2 = r.Count(x => x.IsExamen);
-                excel.cell[ri, startCol + 7].value2 = r.Count(x => x.IsExamenFailed);
-                excel.cell[ri, startCol + 8].value2 = r.Count(x => x.oshibokSvidet);
-                excel.cell[ri, startCol + 9].value2 = r.Count(x => x.poluchenoSvidet);
+                excel.cell[ri, startCol + 7].value2 = r.Count(x => x.poluchenoSvidet);
             }
 
-            excel.cell[2, startCol + 10].value2 = qq.Count(x => x.zakazanoNapr);
-            excel.cell[2, startCol + 11].value2 = qq.Count(x => x.gotovoNapr);
-            excel.cell[2, startCol + 12].value2 = qq.Count(x => x.vishel);
-            excel.cell[2, startCol + 13].value2 = qq.Count(x => x.goden);
-            excel.cell[2, startCol + 14].value2 = qq.Count(x => x.neGoden);
+            excel.cell[2, startCol + 8].value2 = qq.Count(x => x.zakazanoNapr);
+            excel.cell[2, startCol + 9].value2 = qq.Count(x => x.gotovoNapr);
+            excel.cell[2, startCol + 10].value2 = qq.Count(x => x.vishel);
+            excel.cell[2, startCol + 11].value2 = qq.Count(x => x.goden);
+            excel.cell[2, startCol + 12].value2 = qq.Count(x => x.neGoden);
+            excel.cell[2, startCol + 13].value2 = qq.Count(x => x.trudoustroen);
 
             ri++;
             excel.cell[ri, startCol + 2].value2 = "ИТОГО:";
-            excel.cell[ri, startCol + 3].Formula = excel.cell[ri, startCol + 9].Formula = "=R[-1]C+R[-2]C";
-            for (int i = 10; i <= 14; i++)
+            excel.cell[ri, startCol + 3].Formula = excel.cell[ri, startCol + 7].Formula = "=R[-1]C+R[-2]C";
+            for (int i = 8; i <= 13; i++)
             {
                 excel.mySheet.Range[excel.cell[2, startCol + i], excel.cell[ri - 1, startCol + i]].Merge();
                 excel.cell[ri, startCol + i].Formula = "=R2C";
             }
             excel.cell[2, startCol + 1].value2 = ids.Count;//.Formula = $"=R{ri}C{startCol +3}";
 
-            excel.setAllBorders(excel.get_Range("A1", "P" + ri));
+            excel.setAllBorders(excel.get_Range("A1", "O" + ri));
             excel.myExcel.Visible = true;
         }
 

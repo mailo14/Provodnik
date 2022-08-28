@@ -130,6 +130,8 @@ namespace Provodnik
                     person.IsNaprMedZakazano = d.IsNaprMedZakazano;
                     person.IsNaprMedPolucheno = d.IsNaprMedPolucheno;
                     person.IsNaprMedVidano= d.IsNaprMedVidano;
+                    person.NaprMedZakazanoDat = p.NaprMedZakazanoDat;
+                    person.NaprMedPoluchenoDat = p.NaprMedPoluchenoDat;
                     db.SaveChanges();
                 }
             }

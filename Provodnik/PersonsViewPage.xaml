@@ -109,7 +109,7 @@
 
                 <DataGridTemplateColumn Width="auto">
                     <DataGridTemplateColumn.Header>
-                        <CheckBox IsChecked="False" HorizontalAlignment="Center"/>
+                        <CheckBox IsChecked="{Binding Path=DataContext.IsPersonsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" HorizontalAlignment="Center" IsThreeState="True"/>
                     </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

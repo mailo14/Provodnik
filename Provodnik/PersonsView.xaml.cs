@@ -85,6 +85,7 @@ namespace Provodnik
                     vm.PersonList.RemoveAt(ind);
 
                     p = MainWindow.Mapper.Value.Map<PersonShortViewModel>(new ProvodnikContext().Persons.First(pp => pp.Id == p.Id));
+                    p.Parent = vm;
                     vm.PersonList.Insert(ind, p);
                     //vm.RefreshPersonList();
                     //TODO goto if exist or add anyway and goto
@@ -104,16 +105,7 @@ namespace Provodnik
 
         private void PersonsListView_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Delete)
-                if (PersonsListView.SelectedItem != null &&
-                MessageBox.Show("Удалить?", "Подтверждение удаления", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
-                {
-                    var g = PersonsListView.SelectedItem as PersonShortViewModel;
-                    vm.PersonList.Remove(g);
-                    var db = new ProvodnikContext();
-                    db.Persons.Remove(db.Persons.First(pp => pp.Id == g.Id));
-                    db.SaveChanges();
-                }
+            
         }
 
         private void PersonsListView_Sorting(object sender, DataGridSortingEventArgs e)

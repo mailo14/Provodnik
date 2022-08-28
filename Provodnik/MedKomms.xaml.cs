@@ -62,7 +62,7 @@ namespace Provodnik
             var dat = SelectedDate.Value;
             Persons.Clear();
             var db = new ProvodnikContext();
-            var qq = (from pp in db.Persons where pp.MedKommDat == dat orderby pp.Fio select pp);
+            var qq = (from pp in db.Persons where pp.NaprMedVidanoDat == dat orderby pp.Fio select pp);
             foreach (var q in qq)
                 Persons.Add(MainWindow.Mapper.Value.Map<PersonShortViewModel>(q));
 
@@ -81,7 +81,7 @@ namespace Provodnik
                 using (var db = new ProvodnikContext())
                 {
                     var toDelete = (from pd in db.Persons
-                                    where pd.MedKommDat == dat && !currents.Contains(pd.Id)
+                                    where pd.NaprMedVidanoDat == dat && !currents.Contains(pd.Id)
                                     select pd).ToList();
                     if (toDelete.Any())
                     {
@@ -89,11 +89,11 @@ namespace Provodnik
                             + Environment.NewLine + string.Join(Environment.NewLine, toDelete.Select(pp => pp.Fio)));
                         foreach (var pd in toDelete)
                         {
-                            pd.MedKommDat = null;
-                            pd.IsMedKomm = false;
+                            pd.NaprMedVidanoDat = null;
+                            //pd.IsMedKomm = false; TODO clear scans and FillMessagesAndAlls
 
                             foreach (var pdo in (from pdo in db.PersonDocs
-                                                 where pdo.PersonId == pd.Id && pdo.DocTypeId == DocConsts.ЗаключениеВЭК//>= 6 && pdo.DocTypeId <= 8
+                                                 where pdo.PersonId == pd.Id && (pdo.DocTypeId == DocConsts.ЗаключениеВЭК || pdo.DocTypeId == DocConsts.ЗаключениеВЭК2)//>= 6 && pdo.DocTypeId <= 8
                                                  select pdo))
                                 pdo.FileName = null;
                             db.SaveChanges();
@@ -108,12 +108,12 @@ namespace Provodnik
                 using (var db = new ProvodnikContext())
                 {
                     var news = (from pd in db.Persons
-                                where pd.MedKommDat != dat && currents.Contains(pd.Id)
+                                where pd.NaprMedVidanoDat != dat && currents.Contains(pd.Id)
                                 select pd).ToList();
                     foreach (var p in news)
                     {
                         foreach (var pdo in (from pdo in db.PersonDocs
-                                             where pdo.PersonId == p.Id && pdo.DocTypeId == DocConsts.ЗаключениеВЭК//>= 6 && pdo.DocTypeId <= 8
+                                             where pdo.PersonId == p.Id && (pdo.DocTypeId == DocConsts.ЗаключениеВЭК || pdo.DocTypeId == DocConsts.ЗаключениеВЭК2)//>= 6 && pdo.DocTypeId <= 8
                                              select pdo))
                             pdo.FileName = null;
                         db.SaveChanges();
@@ -125,11 +125,11 @@ namespace Provodnik
                     foreach (var p in Persons)
                     {
                         var pe = db.Persons.First(pp => pp.Id == p.Id);
-                        pe.MedKommDat = dat;
-                        pe.IsMedKomm = p.IsMedKomm;
+                        pe.NaprMedVidanoDat = dat;
+                        //pe.IsMedKomm = p.IsMedKomm;
                         pe.IsNaprMedVidano = p.IsNaprMedVidano;
-                        pe.IsPsih = p.IsPsih;
-                        if (!pe.IsPsih && pe.PsihDat.HasValue) pe.PsihDat = null;
+                        //pe.IsPsih = p.IsPsih;
+                        //if (!pe.IsPsih && pe.PsihDat.HasValue) pe.PsihDat = null;
                         //pe.IsPsihZabral = p.IsPsihZabral;
                         db.SaveChanges();
 
@@ -154,7 +154,7 @@ namespace Provodnik
                 if (Persons.FirstOrDefault(pp => pp.Id == id) != null) continue;
 
                 var np = MainWindow.Mapper.Value.Map<PersonShortViewModel>(db.Persons.First(pp => pp.Id == id));
-                np.IsMedKomm = false;
+                //np.IsMedKomm = false; TODO clear scans and FillMessagesAndAlls?
                 Persons.Add(np);
             }
             IsChanged = true;
@@ -245,13 +245,6 @@ namespace Provodnik
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             (DataContext as MedKommsViewModel).ReloadPersons();
-        }
-
-
-
-        private void GroupCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
 

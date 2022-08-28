@@ -69,6 +69,7 @@ namespace Provodnik
         public string MestoRozd { get; set; }
         public string PaspSeriya { get; set; }
         public string PaspNomer { get; set; }
+        public string PaspKodPodr { get; set; }
         public string PaspVidan { get; set; }
         public DateTime? VidanDat { get; set; }
         public string PaspAdres { get; set; }
@@ -83,6 +84,7 @@ namespace Provodnik
         public bool IsSanKnizka { get; set; }
         public DateTime? MedKommDat { get; set; }
         public bool IsMedKomm { get; set; }
+        public bool IsMedKommNeGoden { get; set; }
         public bool IsGologram { get; set; }
         public DateTime? NaprMedZakazanoDat { get; set; }
         public bool IsNaprMedZakazano { get; set; }
@@ -200,6 +202,8 @@ namespace Provodnik
         public string Depo { get; set; }
         public string BolnicaName { get; set; }
         public string BolnicaAdres { get; set; }
+        public DateTime? NaprMedZakazanoDat { get; set; }
+        public DateTime? NaprMedPoluchenoDat { get; set; }
     }
 
     [Table("MedKomZayavkaPerson")]
