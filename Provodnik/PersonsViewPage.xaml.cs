@@ -212,7 +212,7 @@ namespace Provodnik
                          zakazanoNapr = p.IsNaprMedZakazano,
                          gotovoNapr = p.IsNaprMedPolucheno,
                          vishel = p.IsNaprMedVidano,
-                         goden = p.IsPsih && p.IsMedKomm ,
+                         goden = p.IsMedKomm ,
                          neGoden =p.IsMedKommNeGoden, //p.VibilPrichina == "не допущен медкомиссией", //"не годен",
                          trudoustroen=p.IsTrudoustroen,
                          p.IsNovichok

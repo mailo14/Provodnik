@@ -356,11 +356,7 @@
                         </Grid.ColumnDefinitions>
                         <CheckBox Content="Пройдена" IsChecked="{Binding IsMedKomm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="3" Margin="10,8,0,8" IsEnabled="False"/>
                         <CheckBox Content="Не годен" IsChecked="{Binding IsMedKommNeGoden, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="4" Margin="10,8,0,8"/>
-
-                        <CheckBox Content="Пройдено" IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3"  Margin="10,8,0,8" IsEnabled="False"/>
-                        <TextBlock Text="Психосвидетельствование" Margin="10,7,0,7"/>
-                        <DatePicker SelectedDate="{Binding PsihDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
-                        <TextBlock Text="дата" Grid.Column="1" Margin="10,7,3,7"/>
+                        
                         <CheckBox Content="Получена" IsChecked="{Binding IsSanKnizka, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="10,8,0,8"/>
                         <TextBlock Text="Санкнижка" Grid.Row="1" Margin="10,7,0,7"/>
                         <DatePicker SelectedDate="{Binding SanKnizkaDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>

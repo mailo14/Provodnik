@@ -220,7 +220,6 @@ namespace Provodnik
         public void RefreshMedPsihOnScanChanded()
         {
             IsMedKomm = Documents.Count(x => (x.FileName != null || x.LocalFileName != null) && (x.DocTypeId == DocConsts.ЗаключениеВЭК || x.DocTypeId == DocConsts.ЗаключениеВЭК2)) == 2;
-            IsPsih = Documents.Any(x => (x.FileName != null || x.LocalFileName != null) && x.DocTypeId == DocConsts.Психосвидетельствование);
         }
 
         public void FillMessagesAndAlls(Person p)
@@ -352,7 +351,6 @@ namespace Provodnik
             Helper.RestorePersonDocuments(this, false,true);
 
             IsMedKomm = false;
-            IsPsih = false;
            /* Documents.Clear();
 
             var db = new ProvodnikContext();

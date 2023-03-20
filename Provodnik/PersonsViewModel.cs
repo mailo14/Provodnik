@@ -373,9 +373,7 @@ private RelayCommand _FindCommand;
                     query = query.Where(pp => pp.AllPasport == PasportEntered.Value);
                 if (SanknizkaExist.HasValue)
                     query = query.Where(pp => pp.IsSanKnizka == SanknizkaExist.Value);
-                if (PsihExist.HasValue)
-                    query = query.Where(pp => PsihExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.Психосвидетельствование).FileName != null));
-                    
+                                    
                 if (MedKommExist.HasValue)
                     //query = query.Where(pp => MedKommExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.ЗаключениеВЭК).FileName != null));
                     query = query.Where(pp => MedKommExist.Value == (pp.PersonDocs.Count(ppp => (ppp.DocTypeId == DocConsts.ЗаключениеВЭК || ppp.DocTypeId == DocConsts.ЗаключениеВЭК2) && ppp.FileName != null) == 2));
@@ -582,14 +580,13 @@ private RelayCommand _FindCommand;
             get => _ReadyOnly;
             set
             {
-              //  if (_ReadyOnly != value)
+                //  if (_ReadyOnly != value)
                 {
                     if (!CascadeMode)
                     {
                         ExceptVibil =
                        PasportEntered =
                        SanknizkaExist =
-                       PsihExist =
                        MedKommExist =
                        PraktikaExist =
                     ExamenExist =
@@ -608,7 +605,6 @@ private RelayCommand _FindCommand;
                ExceptVibil,
                PasportEntered ,
                SanknizkaExist,
-               PsihExist ,
                MedKommExist ,
                PraktikaExist,
             ExamenExist ,

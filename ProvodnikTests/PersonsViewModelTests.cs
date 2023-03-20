@@ -37,6 +37,44 @@ namespace Provodnik.Tests
         }
 
         [Test()]
+        public void RefreshPersonListTest2()
+        {
+            #region Fill db
+            var persons0 = new List<Person>
+            {
+                new Person { Id=1,Pol= "мужской" },
+                new Person { Id=2,Pol= "мужской" },
+                new Person { Id=3,Pol= "мужской" },
+                new Person { Id=4},//no docs
+            };
+            var persons= persons0.AsQueryable();
+
+            var personDocs = new List<PersonDoc>
+            {
+                new PersonDoc { PersonId=1,DocTypeId=DocConsts.ВоенныйБилет,FileName="file"},
+                new PersonDoc { PersonId=1,DocTypeId=DocConsts.Паспорт,FileName="file"},
+                new PersonDoc { PersonId=1,DocTypeId=DocConsts.Прописка,FileName="file"},
+
+                new PersonDoc { PersonId=2,DocTypeId=DocConsts.Паспорт,FileName="file"},
+                new PersonDoc { PersonId=2,DocTypeId=DocConsts.Прописка},
+                new PersonDoc { PersonId=2,DocTypeId=DocConsts.ВоенныйБилет},
+
+                new PersonDoc { PersonId=3,DocTypeId=DocConsts.Приписное1,FileName="file"},
+                new PersonDoc { PersonId=3,DocTypeId=DocConsts.Приписное2,FileName="file"},
+                new PersonDoc { PersonId=3,DocTypeId=DocConsts.Паспорт,FileName="file"},
+                new PersonDoc { PersonId=3,DocTypeId=DocConsts.Прописка,FileName="file"},
+            }.AsQueryable();
+
+            SetUpMocks(persons, personDocs);
+            #endregion
+
+            var db = NinjectContext.Get<ProvodnikContext>();//new ProvodnikContext();
+            db.Persons.Add(new Person { Fio = "dfgdf" });
+            db.SaveChanges();
+            var query = db.Persons.AsQueryable();
+        }
+
+        [Test()]
         public void RefreshPersonListTest()
         {
             #region Fill db

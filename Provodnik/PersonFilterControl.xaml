@@ -79,7 +79,6 @@
                 <CheckBox Content="Исключить выбывших" IsChecked="{Binding ExceptVibil, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
                 <CheckBox Content="Введены данные для ВСОП" IsChecked="{Binding PasportEntered, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
                 <CheckBox Content="Получена санкнижка" IsChecked="{Binding SanknizkaExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
-                <CheckBox Content="Пройдено псих.освидетельствование" IsChecked="{Binding PsihExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
                 <CheckBox Content="Получено заключение ВЭК" IsChecked="{Binding MedKommExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
                 <CheckBox Content="Пройдена практика" IsChecked="{Binding PraktikaExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
                 <CheckBox Content="Получено свидетельство" IsChecked="{Binding ExamenExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>

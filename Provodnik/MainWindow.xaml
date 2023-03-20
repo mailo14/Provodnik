@@ -11,7 +11,6 @@
             <MenuItem Visibility="Collapsed" Header="Бойцы" Click="PersonsMenuItem_Click"/>
             <MenuItem Header="Группы подготовки" >
                 <MenuItem Header="Группы обучения" Click="ObucheniyasMenuItem_Click"/>
-                <MenuItem Header="Группы на псих.освидетельствование" Click="PsihOsvidsMenuItem_Click"/>
                 <MenuItem Header="Группы на санкнижки" Click="SanknizkiMenuItem_Click"/>
                 <MenuItem Header="Группы на мед.комиссию" Click="MedKommsMenuItem_Click"/>
                 <MenuItem Header="Группы на практику" Click="PraktikasMenuItem_Click"/>

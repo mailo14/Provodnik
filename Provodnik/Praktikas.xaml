@@ -91,13 +91,6 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Псих.освид." SortMemberPath="IsPsih">
-                        <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" HorizontalAlignment="Center"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Мед.комиссия" SortMemberPath="IsMedKomm">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

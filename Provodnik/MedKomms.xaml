@@ -89,14 +89,6 @@
                     <DataGridTextColumn Header="Место рождения" Binding="{Binding MestoRozd}"/>
                     <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" CellStyle="{StaticResource CenteredCell}"/>
                     <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}" CellStyle="{StaticResource CenteredCell}"/>
-
-                    <DataGridTemplateColumn Header="Псих.освид." SortMemberPath="IsPsih" Width="auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsPsih, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" IsEnabled="False"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                     
                     <DataGridTemplateColumn Header="Санкнижка получена" SortMemberPath="IsSanKnizka">
                         <DataGridTemplateColumn.CellTemplate>

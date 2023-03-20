@@ -221,7 +221,7 @@ namespace Provodnik
             var pswVm=psw.DataContext as PersonsViewModel; pswVm.ReadyOnly = null;
             pswVm.ExamenExist = false;
             pswVm.PraktikaExist =true;
-            pswVm.SanknizkaExist = pswVm.PsihExist = pswVm.MedKommExist = true;
+            pswVm.SanknizkaExist = pswVm.MedKommExist = true;
             pswVm.ExceptVibil = true;
  pswVm.PersonSearch = null; //run find, should be last            pswVm.FindCommand.Execute(null);//psw.FindButton_Click(null, null);    
 
