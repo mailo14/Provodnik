@@ -220,6 +220,7 @@ namespace Provodnik
         public void RefreshMedPsihOnScanChanded()
         {
             IsMedKomm = Documents.Count(x => (x.FileName != null || x.LocalFileName != null) && (x.DocTypeId == DocConsts.ЗаключениеВЭК || x.DocTypeId == DocConsts.ЗаключениеВЭК2)) == 2;
+            IsUchebFinish= Documents.Any(x => (x.FileName != null || x.LocalFileName != null) && x.DocTypeId == DocConsts.СвидетельствоПрофессии);
         }
 
         public void FillMessagesAndAlls(Person p)
@@ -874,6 +875,8 @@ namespace Provodnik
             {
                 _BirthDat = value;
                 OnPropertyChanged();
+
+                OnPropertyChanged(nameof(Vozrast));
             }
         }
 
@@ -1053,6 +1056,28 @@ namespace Provodnik
             }
         }
 
+        private DateTime? _SanGigObuchenieDat;
+        public DateTime? SanGigObuchenieDat
+        {
+            get => _SanGigObuchenieDat;
+            set
+            {
+                _SanGigObuchenieDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsSanGigObuchenie;
+        public bool IsSanGigObuchenie
+        {
+            get => _IsSanGigObuchenie;
+            set
+            {
+                _IsSanGigObuchenie = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         private DateTime? _NaprMedZakazanoDat;
         public DateTime? NaprMedZakazanoDat
@@ -1061,6 +1086,28 @@ namespace Provodnik
             set
             {
                 _NaprMedZakazanoDat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _NaprMedDepo;
+        public string NaprMedDepo
+        {
+            get => _NaprMedDepo;
+            set
+            {
+                _NaprMedDepo = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _NaprMedBolnicaName;
+        public string NaprMedBolnicaName
+        {
+            get => _NaprMedBolnicaName;
+            set
+            {
+                _NaprMedBolnicaName = value;
                 OnPropertyChanged();
             }
         }
@@ -1267,6 +1314,17 @@ namespace Provodnik
             set
             {
                 _IsTrudoustroen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _TrudoustroenDepo;
+        public string TrudoustroenDepo
+        {
+            get => _TrudoustroenDepo;
+            set
+            {
+                _TrudoustroenDepo = value;
                 OnPropertyChanged();
             }
         }
@@ -1488,6 +1546,8 @@ namespace Provodnik
                 return (Documents.Select(pp => pp.Size).Sum(pp => pp ?? 0)/ 1024 / 1024).ToString("F3");
             }
         }
+
+        public int? Vozrast => Helper.GetVozrast(BirthDat);
 
         //      LastUpdated
 

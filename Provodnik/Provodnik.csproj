@@ -32,7 +32,7 @@
     <ProductName>АСУ Проводник</ProductName>
     <MinimumRequiredVersion>1.0.0.37</MinimumRequiredVersion>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>60</ApplicationRevision>
+    <ApplicationRevision>62</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -59,10 +59,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>925FB10BAEFE595B1BED46B6A10A0D1DEC4F1F81</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>4601ED1CE4C5457C3497B18D8E72A6D07C89FBC5</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Provodnik_2_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Provodnik_3_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -143,6 +143,7 @@
     <Compile Include="AboutBox1.designer.cs">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </Compile>
+    <Compile Include="AgeToColorConverter.cs" />
     <Compile Include="AlarmsView.xaml.cs">
       <DependentUpon>AlarmsView.xaml</DependentUpon>
     </Compile>
@@ -211,6 +212,10 @@
     <Compile Include="Migrations\202208261613082_init27.designer.cs">
       <DependentUpon>202208261613082_init27.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202303211746296_init28.cs" />
+    <Compile Include="Migrations\202303211746296_init28.designer.cs">
+      <DependentUpon>202303211746296_init28.cs</DependentUpon>
+    </Compile>
     <Compile Include="Obuchenie.xaml.cs">
       <DependentUpon>Obuchenie.xaml</DependentUpon>
     </Compile>
@@ -255,6 +260,9 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="Reporter.cs" />
     <Compile Include="SampleViewData\SamplePersonViewModel.cs" />
+    <Compile Include="SanGigObucheniyas.xaml.cs">
+      <DependentUpon>SanGigObucheniyas.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScanView.xaml.cs">
       <DependentUpon>ScanView.xaml</DependentUpon>
     </Compile>
@@ -389,6 +397,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Examens.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SanGigObucheniyas.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -527,6 +539,9 @@
     <EmbeddedResource Include="Migrations\202208261613082_init27.resx">
       <DependentUpon>202208261613082_init27.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202303211746296_init28.resx">
+      <DependentUpon>202303211746296_init28.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -538,6 +553,7 @@
     </None>
     <None Include="Provodnik_1_TemporaryKey.pfx" />
     <None Include="Provodnik_2_TemporaryKey.pfx" />
+    <None Include="Provodnik_3_TemporaryKey.pfx" />
     <None Include="Provodnik_TemporaryKey.pfx" />
     <Content Include="Инструкция Проводник.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -573,6 +589,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="_шаблоны\Акт передачи заявлений на 4%25.dotx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_шаблоны\Ведомость сан.гиг обучение.dotx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="pic\loading.gif" />

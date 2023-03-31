@@ -12,6 +12,7 @@
             <MenuItem Header="Группы подготовки" >
                 <MenuItem Header="Группы обучения" Click="ObucheniyasMenuItem_Click"/>
                 <MenuItem Header="Группы на санкнижки" Click="SanknizkiMenuItem_Click"/>
+                <MenuItem Header="Группы на сан.гиг. обучение" Click="SanGigObuchenieMenuItem_Click"/>
                 <MenuItem Header="Группы на мед.комиссию" Click="MedKommsMenuItem_Click"/>
                 <MenuItem Header="Группы на практику" Click="PraktikasMenuItem_Click"/>
                 <MenuItem Header="Группы записи на экзамен" Click="ExamensMenuItem_Click"/>

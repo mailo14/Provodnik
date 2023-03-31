@@ -196,6 +196,44 @@ namespace Provodnik
 
         private void Patch_ExecOnceThanDelete()
         {
+           /* using (var db = new ProvodnikContext())
+            {
+                foreach (var z in db.MedKomZayavki.OrderBy(x => x.Id).Select(x=>x).ToList())
+                {
+                    foreach (var zp in db.MedKomZayavkaPersons.Select(x => x).Where(x => x.MedKomZayavkaId == z.Id))
+                    {
+                        var newDb = new ProvodnikContext();
+                        var person = newDb.Persons.FirstOrDefault(x => x.Id == zp.PersonId);
+                        if (person != null)
+                        {
+                            person.NaprMedDepo = z.Depo;
+                            person.NaprMedBolnicaName = z.BolnicaName;
+                        }
+                        newDb.SaveChanges();
+                    }
+                }
+
+                
+            }
+
+            using (var db = new ProvodnikContext())
+            {
+                foreach (var s in db.SendGroups.OrderBy(x => x.Id).ToList())
+                {
+                    foreach (var sp in db.SendGroupPersons.Where(x => x.SendGroupId == s.Id))
+                    {
+                        var newDb = new ProvodnikContext();
+                        var person = newDb.Persons.FirstOrDefault(x => x.Id == sp.PersonId);
+                        if (person != null)
+                        {
+                            person.TrudoustroenDepo = s.Depo;
+                        }
+                        newDb.SaveChanges();
+                    }
+                }
+
+            }*/
+
             return;
              
             
@@ -422,6 +460,12 @@ namespace Provodnik
         private void MedKomZayavkiMenuItem_Click(object sender, RoutedEventArgs e)
         {
             new MedKomZayavkiView().ShowDialog();
+        }
+
+        private void SanGigObuchenieMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            new SanGigObucheniyas().ShowDialog();
+            (MainFrame.Content as PersonsViewPage).vm.FindCommand.Execute(null);
         }
     }
 }

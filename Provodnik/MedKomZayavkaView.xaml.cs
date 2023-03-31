@@ -55,10 +55,11 @@ namespace Provodnik
                 excel.cell[ri,4].value2 = "Новосибирское РО";
                 excel.cell[ri, 5].value2 = r.Fio;
                 excel.cell[ri, 6].value2 = r.BirthDat?.ToString("dd.MM.yyyy");
-                excel.cell[ri, 7].value2 =vm.BolnicaName;
-                excel.cell[ri, 8].value2 = vm.BolnicaAdres;
+                excel.cell[ri, 7].value2 = Helper.FormatSnils(db.Persons.SingleOrDefault(x=>x.Id==r.PersonId)?.Snils);
+                excel.cell[ri, 8].value2 =vm.BolnicaName;
+                excel.cell[ri, 9].value2 = vm.BolnicaAdres;
             }
-            excel.setAllBorders(excel.get_Range("A1", "H" + ri));
+            excel.setAllBorders(excel.get_Range("A1", "I" + ri));
             excel.myExcel.Visible = true;
             excel.Finish(false);
         }
@@ -105,8 +106,23 @@ namespace Provodnik
                 var toDelete = (from pd in db.MedKomZayavkaPersons
                                 where pd.MedKomZayavkaId == p.Id && !currents.Contains(pd.PersonId)
                                 select pd);
+                var personsToDeleteIds = toDelete.Select(x => x.PersonId).ToList();
                 db.MedKomZayavkaPersons.RemoveRange(toDelete);
                 db.SaveChanges();
+
+                foreach(var  person in (from pe in db.Persons where personsToDeleteIds.Contains(  pe.Id) select pe))
+                {
+                    person.IsNaprMedZakazano = 
+                    person.IsNaprMedPolucheno = 
+                    person.IsNaprMedVidano = false;
+                    person.NaprMedZakazanoDat = 
+                    person.NaprMedPoluchenoDat = null;
+
+                    person.NaprMedDepo = 
+                    person.NaprMedBolnicaName = null;
+
+                }
+                    db.SaveChanges();
             }
             else
             {
@@ -132,6 +148,10 @@ namespace Provodnik
                     person.IsNaprMedVidano= d.IsNaprMedVidano;
                     person.NaprMedZakazanoDat = p.NaprMedZakazanoDat;
                     person.NaprMedPoluchenoDat = p.NaprMedPoluchenoDat;
+
+                    person.NaprMedDepo = p.Depo;
+                    person.NaprMedBolnicaName = p.BolnicaName;
+
                     db.SaveChanges();
                 }
             }

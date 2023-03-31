@@ -215,7 +215,10 @@ namespace Provodnik
                          goden = p.IsMedKomm ,
                          neGoden =p.IsMedKommNeGoden, //p.VibilPrichina == "не допущен медкомиссией", //"не годен",
                          trudoustroen=p.IsTrudoustroen,
-                         p.IsNovichok
+                         p.IsNovichok ,
+                         medKnizkaPoluchena= p.IsNovichok && p.IsSanKnizka,
+                         medKnizkaZakazana= p.IsNovichok && p.SanKnizkaDat.HasValue
+
                      };
 
             int startCol = 2;
@@ -242,24 +245,27 @@ namespace Provodnik
                 excel.cell[ri, startCol + 7].value2 = r.Count(x => x.poluchenoSvidet);
             }
 
-            excel.cell[2, startCol + 8].value2 = qq.Count(x => x.zakazanoNapr);
-            excel.cell[2, startCol + 9].value2 = qq.Count(x => x.gotovoNapr);
-            excel.cell[2, startCol + 10].value2 = qq.Count(x => x.vishel);
-            excel.cell[2, startCol + 11].value2 = qq.Count(x => x.goden);
-            excel.cell[2, startCol + 12].value2 = qq.Count(x => x.neGoden);
-            excel.cell[2, startCol + 13].value2 = qq.Count(x => x.trudoustroen);
+            excel.cell[2, startCol + 8].value2 = qq.Count(x => x.medKnizkaZakazana);
+            excel.cell[2, startCol + 9].value2 = qq.Count(x => x.medKnizkaPoluchena);
+
+            excel.cell[2, startCol + 10].value2 = qq.Count(x => x.zakazanoNapr);
+            excel.cell[2, startCol + 11].value2 = qq.Count(x => x.gotovoNapr);
+            excel.cell[2, startCol + 12].value2 = qq.Count(x => x.vishel);
+            excel.cell[2, startCol + 13].value2 = qq.Count(x => x.goden);
+            excel.cell[2, startCol + 14].value2 = qq.Count(x => x.neGoden);
+            excel.cell[2, startCol + 15].value2 = qq.Count(x => x.trudoustroen);
 
             ri++;
             excel.cell[ri, startCol + 2].value2 = "ИТОГО:";
             excel.cell[ri, startCol + 3].Formula = excel.cell[ri, startCol + 7].Formula = "=R[-1]C+R[-2]C";
-            for (int i = 8; i <= 13; i++)
+            for (int i = 8; i <= 15; i++)
             {
                 excel.mySheet.Range[excel.cell[2, startCol + i], excel.cell[ri - 1, startCol + i]].Merge();
                 excel.cell[ri, startCol + i].Formula = "=R2C";
             }
             excel.cell[2, startCol + 1].value2 = ids.Count;//.Formula = $"=R{ri}C{startCol +3}";
 
-            excel.setAllBorders(excel.get_Range("A1", "O" + ri));
+            excel.setAllBorders(excel.get_Range("A1", "Q" + ri));
             excel.myExcel.Visible = true;
         }
 

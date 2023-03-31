@@ -53,6 +53,28 @@ namespace Provodnik
                 .Distinct().OrderBy(pp => pp).ToList();
         }
 
+        public List<string> GetBolnicaNames()
+        {
+            return new ProvodnikContext().MedKomZayavki.Where(x => x.Id >= 104).Select(x => x.BolnicaName).ToList()
+                .Union(new List<string> { "Поликлиника: ЧУЗ «КБ «РЖД - Медицина» г.Новосибирск»", "Поликлиника: ООО \"ДоброМед.НСК\"" })
+                .Distinct().OrderBy(pp => pp).ToList();
+        }
+
+        public string GetBolnicaAdres(string bolnicaName)
+        {
+            var result= new ProvodnikContext().MedKomZayavki.Where(x => x.Id >= 104 && x.BolnicaName == bolnicaName && x.BolnicaAdres != null && x.BolnicaAdres != "")
+                .OrderByDescending(x => x.Id).Select(x => x.BolnicaAdres).FirstOrDefault();
+            if (result == null)
+            {
+                if (bolnicaName == "Поликлиника: ЧУЗ «КБ «РЖД - Медицина» г.Новосибирск»")
+                    result = "г.Новосибирск, ул.Сибирская, 21";
+                else if (bolnicaName == "Поликлиника: ООО \"ДоброМед.НСК\"")
+                    result = "г.Новосибирск, ул. Ломоносова, дом 55";
+
+            }
+                return result;
+        }
+
         public class DepoLabels
         {
             public string DepoRod { get; set; }
@@ -270,5 +292,10 @@ namespace Provodnik
         //, "ЗАОЧНАЯ", "АКАДЕМ", "ОЧНО-ЗАОЧНАЯ", 
         public const string Zakonchil = "закончил";
         public const string NeUchitsa = "не учится";
+    }
+public class CommonConsts
+    {
+        public const int Sovershennolentie = 18;
+        public const string Sgups ="СГУПС";
     }
 }

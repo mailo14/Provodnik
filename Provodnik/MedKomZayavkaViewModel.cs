@@ -13,13 +13,13 @@ namespace Provodnik
 {
     public class MedKomZayavkaViewModel : ValidatableObject// : System.ComponentModel.INotifyPropertyChanged
     {
-       /* public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(prop));
-        }*/
-
+        /* public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+         public void OnPropertyChanged([CallerMemberName]string prop = "")
+         {
+             if (PropertyChanged != null)
+                 PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(prop));
+         }*/
+        bool isLoading = false;
         Repository repository = new Repository();
         public MedKomZayavkaViewModel(int? medKomZayavkaId =null)
         {
@@ -27,12 +27,16 @@ namespace Provodnik
             Persons = new ObservableCollection<MedKomZayavkaPersonViewModel>();
 
             Depos.Clear(); foreach (var d in repository.GetDeposMed()) Depos.Add(d);
+            BolnicaNames.Clear(); foreach (var d in repository.GetBolnicaNames()) BolnicaNames.Add(d);
 
             var db = new ProvodnikContext();
             if (medKomZayavkaId .HasValue)
             {
                 Id = medKomZayavkaId ;
+                isLoading = true;
                 MainWindow.Mapper.Value.Map(db.MedKomZayavki.Single(pp => pp.Id == medKomZayavkaId ), this);
+                //if (!string.IsNullOrEmpty(BolnicaName) && !BolnicaNames.Contains(BolnicaName)) BolnicaNames.Add(BolnicaName);
+                isLoading = false;
 
                 var qq = (from pd in db.MedKomZayavkaPersons join p in db.Persons on pd.PersonId equals p.Id
                           where pd.MedKomZayavkaId == medKomZayavkaId 
@@ -45,25 +49,8 @@ namespace Provodnik
                     MainWindow.Mapper.Value.Map(q.p, pe);
                     pe.MedKomZayavkaViewModel = this;
                     Persons.Add(pe);
-
                 }
 //Persons.Add(MainWindow.Mapper.Value.Map< MedKomZayavkaPersonViewModel>(db.MedKomZayavkas.Single(pp => pp.Id == MedKomZayavkaId), this);
-            }
-            else
-            {
-                var lastZayavka = db.MedKomZayavki.OrderByDescending(x => x.Id).FirstOrDefault();
-                if (lastZayavka != null && !string.IsNullOrEmpty(lastZayavka.BolnicaName))
-                {
-                    BolnicaName = lastZayavka.BolnicaName;
-                    BolnicaAdres = lastZayavka.BolnicaAdres;
-                }
-                else
-                {
-                    BolnicaName = @"Поликлиника: ЧУЗ «КБ «РЖД - Медицина» г.Новосибирск»  
-Псих.освидетельствование:Медицинский психодиагностический центр ""МЕНТАЛ КОНСАЛТИНГ""";
-                    BolnicaAdres = @"Поликлиника: г.Новосибирск, ул.Сибирская, 21
-Псих.осведетельствование: г.Новосибирск, ул.Красный проспект, 99";
-                }
             }
         }
 
@@ -84,6 +71,7 @@ namespace Provodnik
         }
 
         public ObservableCollection<string> Depos { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> BolnicaNames { get; set; } = new ObservableCollection<string>();
 
 
         public string _Depo;
@@ -113,6 +101,12 @@ namespace Provodnik
                 if (_BolnicaName != value)
                 {
                     _BolnicaName = value;
+
+                    if (!isLoading && !string.IsNullOrEmpty(BolnicaName))
+                    {
+                        BolnicaAdres = repository.GetBolnicaAdres(BolnicaName);
+                    }
+
                     OnPropertyChanged();
                 }
             }

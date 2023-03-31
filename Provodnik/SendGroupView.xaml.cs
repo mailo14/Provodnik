@@ -138,12 +138,12 @@ namespace Provodnik
           if (!otdelno)  excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}__{2}_{3}.xlsx",
                 vm.OtprDat.Value.ToString("dd.MM.yyyy"), 
                 "Новосибирск",
-                vm.City,
+                (vm.City== "Москва")?vm.Depo.Replace(" ",""): vm.City,
                 vm.Persons.Count),otchetDir: otchetDir);
             else excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}__{2}_{3}.xlsx",
                  vm.OtprDat.Value.ToString("dd.MM.yyyy"),
                  "Новосибирск",
-                 vm.City,
+                (vm.City == "Москва") ? vm.Depo.Replace(" ", "") : vm.City,
                  vm.Persons.Count), true);
 
             int            ri = 1;
@@ -211,9 +211,10 @@ namespace Provodnik
                 
                 excel.cell[ri, 5].value2 = r.PaspAdres;
                 excel.cell[ri, 6].value2 =
-                    r.Grazdanstvo== "КЗ"? "Паспорт гр-на РК:" : "Паспорт гр-на РФ:"
+                    (r.Grazdanstvo== "КЗ"? "Паспорт гр-на РК:" : "Паспорт гр-на РФ:")
                     + Environment.NewLine + r.PaspSeriya+" "+r.PaspNomer
-                    +Environment.NewLine+ Helper.FormatSnils(r.Snils);
+                    +Environment.NewLine+ Helper.FormatSnils(r.Snils)
+                    + Environment.NewLine + r.Inn;
 
                 excel.cell[ri, 7].value2 = (!string.IsNullOrWhiteSpace(vm.PeresadSt))
                     ? $"Новосибирск – {vm.PeresadSt} – {vm.City} – {vm.PeresadSt} – Новосибирск"
@@ -355,7 +356,17 @@ namespace Provodnik
                     var toDelete = (from pd in db.SendGroupPersons
                                     where pd.SendGroupId == p.Id && !currents.Contains(pd.PersonId)
                                     select pd);
+                    var personsToDeleteIds = toDelete.Select(x => x.PersonId).ToList();
                     db.SendGroupPersons.RemoveRange(toDelete);
+                    db.SaveChanges();
+
+                    foreach (var person in (from pe in db.Persons where personsToDeleteIds.Contains(pe.Id) select pe))
+                    {
+                        person.IsTrudoustroen =false;
+                        person.TrudoustroenDepo = null;
+                        person.Gorod = vm.City;
+
+                    }
                     db.SaveChanges();
                 }
                 else
@@ -377,6 +388,7 @@ namespace Provodnik
 
                     var pe = db.Persons.First(pp => pp.Id == d.PersonId);
                     pe.IsTrudoustroen = d.IsTrudoustroen;
+                    pe.TrudoustroenDepo = vm.Depo;
                     pe.Gorod = vm.City;
                 }
                     db.SaveChanges();

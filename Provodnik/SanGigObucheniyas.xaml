@@ -1,0 +1,116 @@
+﻿<Window x:Class="Provodnik.SanGigObucheniyas"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Provodnik"
+        
+             xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation"
+             xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
+        xmlns:Behaviors="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation" 
+    xmlns:Templates="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
+        
+        mc:Ignorable="d"
+        Title="Группы на сан.гиг. обучение" Width="1024" Closing="Window_Closing" WindowStartupLocation="CenterScreen" Height="520">
+    <Window.Resources>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment"
+                 Value="Center" />
+        </Style>
+        <Style x:Key="CenteredCell" TargetType="DataGridCell">
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="10,3,0,3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="CheckBox" TargetType="CheckBox">
+            <Setter Property="Margin" Value="10,3,0,3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="TextBox" TargetType="TextBox">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+        </Style>
+        <Style x:Key="DatePicker" TargetType="DatePicker">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="90"/>
+
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+        </Style>
+
+        <Style  TargetType="Button">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Calendar Name="GroupCalendar" Margin="3"
+                  SelectedDatesChanged="GroupCalendar_SelectedDatesChanged"
+                  SelectedDate="{Binding SelectedDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                  />
+        <Grid Grid.Column="1" Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="3" >
+            <Button Name="ExcelButton" Content="Экспорт в Excel" HorizontalAlignment="Left" Click="ExcelButton_Click"/>
+            <Button  Content="Ведомость" HorizontalAlignment="Left" Click="VedomostButton_Click"/>
+            </StackPanel>
+
+            <Button Content="Добавить из списка" Click="AddFromListButton_Click"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+                <Button Content="Отмена" Click="CancelButton_Click" />
+                <Button Content="Сохранить" Click="SaveButton_Click"/>
+            </StackPanel>
+            <DataGrid Margin="3" Name="PersonsListView" AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch"
+                      RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionMode="Single" VerticalAlignment="Stretch" 
+                      ItemsSource="{Binding Persons}" KeyUp="PersonsListView_KeyUp"   MouseDoubleClick="ListView_MouseDoubleClick" PreviewMouseDown="PersonsListView_PreviewMouseDown" Sorting="PersonsListView_Sorting"
+                      Grid.Row="1">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="№" Binding="{Binding Index}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="ФИО" Binding="{Binding Fio}" Width="*"/>
+                    <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDat, StringFormat=\{0:dd.MM.yyyy\}}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="Место рождения" Binding="{Binding MestoRozd}"/>
+                    <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" CellStyle="{StaticResource CenteredCell}"/>
+                    <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}" CellStyle="{StaticResource CenteredCell}"/>
+
+                    <DataGridTemplateColumn Header="Пройдено" Width="auto" SortMemberPath="IsSanGigObuchenie">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsSanGigObuchenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <!--ListView.Items>
+                            <local:PersonDocument Name="Паспорт"  />
+                            <local:PersonDocument Name="Прописка"  />
+                        </ListView.Items-->
+            <Grid HorizontalAlignment="Right" Margin="3" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="21*"/>
+                    <ColumnDefinition Width="59*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox TextWrapping="Wrap" Text="{Binding SelectedDate, StringFormat=\{0:dd.MM.yyyy\}}" Grid.Column="1" IsReadOnly="True"  MinWidth="50" Style="{DynamicResource TextBox}"/>
+                <TextBlock  Text="Дата"/>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Window>

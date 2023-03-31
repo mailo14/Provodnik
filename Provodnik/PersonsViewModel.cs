@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using LinqKit;
+using System.Data.Entity;
 
 namespace Provodnik
 {
@@ -59,6 +60,7 @@ namespace Provodnik
         public ObservableCollection<string> Cities { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Otryadi { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Grazdanstva { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> BolnicaNames { get; set; } = new ObservableCollection<string>();
 
         public ObservableCollection<string> Obucheniyas { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> MedKommDats { get; set; } = new ObservableCollection<string>();
@@ -74,6 +76,20 @@ namespace Provodnik
             {
                 _UchZavedenie = value;               
                 OnPropertyChanged();
+
+                if (!string.IsNullOrEmpty(value)) IsSgups = null;
+            }
+        }
+
+        bool? _IsSgups;
+        public bool? IsSgups
+        {
+            get => _IsSgups;
+            set
+            {
+                _IsSgups = value;               
+                OnPropertyChanged();
+                if (value.HasValue) UchZavedenie = null;
             }
         }
 
@@ -100,6 +116,18 @@ namespace Provodnik
                 OnPropertyChanged();
             }
         }
+
+        private string _NaprMedBolnicaName;
+        public string NaprMedBolnicaName
+        {
+            get => _NaprMedBolnicaName;
+            set
+            {
+                _NaprMedBolnicaName = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _Otryad;
         [DisplayName(DisplayName = "Отряд")]
         public string Otryad
@@ -118,6 +146,16 @@ namespace Provodnik
             set
             {
                 _IsNovichok = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool? _IsSovershennolentnii=null;
+        public bool? IsSovershennolentnii
+        {
+            get => _IsSovershennolentnii;
+            set
+            {
+                _IsSovershennolentnii = value;
                 OnPropertyChanged();
             }
         }
@@ -168,6 +206,7 @@ namespace Provodnik
             Cities.Clear(); foreach (var pp in repository.GetPersonCities()) Cities.Add(pp);
             Otryadi.Clear(); foreach (var pp in repository.GetOtryadi()) Otryadi.Add(pp);
             Grazdanstva.Clear(); foreach (var pp in repository.GetGrazdanstva()) Grazdanstva.Add(pp);
+            BolnicaNames.Clear(); foreach (var d in repository.GetBolnicaNames()) BolnicaNames.Add(d);
             UchZavedeniya.Clear(); foreach (var pp in repository.GetUchZavedeniya()) UchZavedeniya.Add(pp);
 
             Sezons.Clear(); foreach (var pp in repository.GetSezons()) Sezons.Add(pp);            Sezons.Insert(0, RepoConsts.NoSezons);
@@ -290,7 +329,8 @@ new ScanCheck{DisplayName="Миграционная карта и временн
                       foreach (var ec in ExtendedChecks) ec.IsChecked = null;
                       BirthFrom = BirthTo = null;
                       Otryad = UchZavedenie = Grazdanstvo = Obuchenie= MedKommDat= null;
-                      IsNovichok = null;
+                      IsNovichok = IsSovershennolentnii=null;
+                      
                       Gorod = null; VihodDat = null;
                      Sezon= new Repository().GetCurSezon();
 
@@ -476,12 +516,34 @@ private RelayCommand _FindCommand;
 
             if (IsNovichok.HasValue)
                 query = query.Where(pp => pp.IsNovichok == IsNovichok.Value);
+            if (IsSovershennolentnii.HasValue) {
+                query = from q in query
+                        let today = DateTime.Today
+                        let years = today.Year - q.BirthDat.Value.Year
+                        let birthdayThisYear = DbFunctions.AddYears(q.BirthDat.Value,years)
+                        let age =birthdayThisYear > today ? years - 1 : years
+
+                        where q.BirthDat.HasValue && (IsSovershennolentnii == true) ? age >= CommonConsts.Sovershennolentie : age < CommonConsts.Sovershennolentie
+                        select q;
+            }
             if (!string.IsNullOrWhiteSpace(Otryad))
                 query = query.Where(pp => pp.Otryad == Otryad);
             if (!string.IsNullOrWhiteSpace(UchZavedenie))
                 query = query.Where(pp => pp.UchZavedenie == UchZavedenie);
+            if (IsSgups.HasValue)
+            {
+                query = query.Where(pp => IsSgups.Value?( pp.UchZavedenie ==CommonConsts.Sgups ): (pp.UchZavedenie !=CommonConsts.Sgups));
+            }
             if (!string.IsNullOrWhiteSpace(Grazdanstvo))
                 query = query.Where(pp => pp.Grazdanstvo == Grazdanstvo);
+            if (!string.IsNullOrWhiteSpace(NaprMedBolnicaName))
+            {
+                if (NaprMedBolnicaName.Contains("ДоброМед"))
+                    query = query.Where(pp => pp.NaprMedBolnicaName.Contains("ДоброМед"));
+                else if (NaprMedBolnicaName.Contains("РЖД - Медицина"))
+                    query = query.Where(pp => pp.NaprMedBolnicaName.Contains("РЖД - Медицина"));
+                else query = query.Where(pp => pp.NaprMedBolnicaName == NaprMedBolnicaName);
+            }
             if (!string.IsNullOrWhiteSpace(Obuchenie))
             {
                 if (Obuchenie == RepoConsts.NoObuchenie)

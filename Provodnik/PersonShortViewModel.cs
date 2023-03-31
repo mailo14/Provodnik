@@ -33,6 +33,11 @@ namespace Provodnik
         public string MestoRozd { get; set; }
         public string PaspAdres { get; set; }
         public string UchZavedenie { get; set; }
+        public string UchebGruppa { get; set; }
+        public string NaprMedDepo { get; set; }
+        public bool IsNovichok { get; set; }
+        public string Novichok => IsNovichok ? "" : "старичок";
+
         public string UchFac { get; set; }
         public string Snils { get; set; }
         public string Inn { get; set; }
@@ -40,6 +45,8 @@ namespace Provodnik
         public bool IsPsih { get; set; }
         public DateTime? SanKnizkaDat { get; set; }
         public bool IsSanKnizka { get; set; }
+        public DateTime? SanGigObuchenieDat { get; set; }
+        public bool IsSanGigObuchenie { get; set; }
         public DateTime? ExamenDat { get; set; }
         public bool IsExamen { get; set; }
         public bool IsPraktika { get; set; }
@@ -76,6 +83,8 @@ namespace Provodnik
                 OnPropertyChanged();
             }
         }
+
+        public int? Vozrast => Helper.GetVozrast(BirthDat);
 
         public PersonsViewModel Parent { get; internal set; }
     }

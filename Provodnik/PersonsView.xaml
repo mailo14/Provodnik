@@ -73,6 +73,10 @@
         <!--Style x:Key="itemstyle" TargetType="{x:Type ListViewItem}">
             <EventSetter Event="MouseDoubleClick" Handler="HandleDoubleClick" />
         </-->
+        <local:AgeToColorConverter x:Key="AgeToColorConverter"/>
+        <Style TargetType="{x:Type DataGridRow}">
+                <Setter Property="Background" Value="{Binding Vozrast, Converter={StaticResource AgeToColorConverter}}" />
+        </Style>
     </Window.Resources>
     <Grid Margin="5">
         <Grid.RowDefinitions>
@@ -135,9 +139,12 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Дата рождения" Binding="{Binding Path=BirthDat,StringFormat=\{0:dd.MM.yyyy\}}" CellStyle="{StaticResource CenteredCell}"/>
+                <DataGridTextColumn Header="Возраст" Binding="{Binding Vozrast}" CellStyle="{StaticResource CenteredCell}"/>
                 <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" CellStyle="{StaticResource CenteredCell}"/>
                 <DataGridTextColumn Header="Отряд" Binding="{Binding Otryad}" CellStyle="{StaticResource CenteredCell}"/>
                 <DataGridTextColumn Header="Учебное заведение" Binding="{Binding UchZavedenie}" CellStyle="{StaticResource CenteredCell}"/>
+                <DataGridTextColumn Header="Группа обучения" Binding="{Binding UchebGruppa}" CellStyle="{StaticResource CenteredCell}"/>
+                <DataGridTextColumn Header="" Binding="{Binding Novichok}" CellStyle="{StaticResource CenteredCell}"/>
 
                 <DataGridTemplateColumn Header="Примечания" CanUserSort="True" SortMemberPath="Messages" >
                     <DataGridTemplateColumn.CellTemplate>

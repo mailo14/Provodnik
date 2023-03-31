@@ -82,6 +82,8 @@ namespace Provodnik
         public bool IsPsihZabral { get; set; }
         public DateTime? SanKnizkaDat { get; set; }
         public bool IsSanKnizka { get; set; }
+        public DateTime? SanGigObuchenieDat { get; set; }
+        public bool IsSanGigObuchenie { get; set; }
         public DateTime? MedKommDat { get; set; }
         public bool IsMedKomm { get; set; }
         public bool IsMedKommNeGoden { get; set; }
@@ -95,6 +97,7 @@ namespace Provodnik
         public DateTime? NaprMedVidanoDat { get; set; }
         public bool IsNaprMedVidano { get; set; }
         public bool IsTrudoustroen { get; set; }
+        public string TrudoustroenDepo { get; set; }
         public string VaccineSert { get; set; }
         public DateTime? VaccineSertDat { get; set; }
         public DateTime? VaccineSertDatTo { get; set; }
@@ -133,6 +136,8 @@ namespace Provodnik
         public string Messages { get; set; }
         public string Zametki { get; set; }
         public virtual List<PersonDoc> PersonDocs { get; set; }
+        public string NaprMedDepo { get;  set; }
+        public string NaprMedBolnicaName { get;  set; }
     }
 
 

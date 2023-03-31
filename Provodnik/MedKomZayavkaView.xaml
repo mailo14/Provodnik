@@ -99,7 +99,9 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <TextBlock Text="Наименование больницы" Grid.Column="2"/>
-            <TextBox Text="{Binding BolnicaName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="500" Style="{DynamicResource TextBox}" AcceptsReturn="True"/>
+            
+            <ComboBox Name="BolnicaNameComboBox" Text="{Binding BolnicaName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="500" Style="{DynamicResource ComboBox}"
+                          ItemsSource="{Binding BolnicaNames}" IsReadOnly="False"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3">
             <TextBlock Text="Адрес больницы" Grid.Column="2"/>
