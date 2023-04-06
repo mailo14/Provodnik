@@ -681,6 +681,17 @@ namespace Provodnik
             }
         }
 
+        private bool _InSpisokSb;
+        public bool InSpisokSb
+        {
+            get => _InSpisokSb;
+            set
+            {
+                _InSpisokSb = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _Dogovor;
         [DisplayName(DisplayName = "Номер договора")]
         public string Dogovor

@@ -198,6 +198,7 @@ namespace Provodnik
             var psw = new PersonsView(1);
             var pswVm=psw.DataContext as PersonsViewModel; pswVm.ReadyOnly = null; 
             pswVm.ExceptVibil = true;
+            pswVm.IsSanGigObuchenie = false;
 pswVm.PersonSearch = null; //run find, should be last            pswVm.FindCommand.Execute(null);//psw.FindButton_Click(null, null);    
 
 

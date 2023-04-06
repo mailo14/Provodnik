@@ -114,7 +114,9 @@
                 <ComboBox Text="{Binding MedKommDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="12" MinWidth="50" Style="{DynamicResource ComboBox}"
                       ItemsSource="{Binding MedKommDats}"  IsReadOnly="False"/>
 
+                <CheckBox Content="Сан.гиг.обучение" IsChecked="{Binding IsSanGigObuchenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"/>
                 <CheckBox Content="Трудоустроен" IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"/>
+                <CheckBox Content="В списке на проверку СБ" IsChecked="{Binding InSpisokSb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" />
             </WrapPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="3" VerticalAlignment="Top">

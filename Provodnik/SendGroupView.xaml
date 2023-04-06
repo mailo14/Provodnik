@@ -233,6 +233,7 @@
             <Button Content="Печать документов" Click="PrintButton_Click"/>
             <Button Content="ВСОП3" Click="PrintVSOP3Button_Click"/>
             <Button Content="Акт передачи заявлений на 4%" Click="PrintAct4Button_Click"/>
+            <Button Content="Список на проверку СБ" Click="PrintProverkaSBButton_Click"/>
         </StackPanel>
 
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="11">

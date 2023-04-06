@@ -138,6 +138,7 @@ namespace Provodnik
         public virtual List<PersonDoc> PersonDocs { get; set; }
         public string NaprMedDepo { get;  set; }
         public string NaprMedBolnicaName { get;  set; }
+        public bool InSpisokSb { get;  set; }
     }
 
 

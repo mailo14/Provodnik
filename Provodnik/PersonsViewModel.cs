@@ -329,7 +329,7 @@ new ScanCheck{DisplayName="Миграционная карта и временн
                       foreach (var ec in ExtendedChecks) ec.IsChecked = null;
                       BirthFrom = BirthTo = null;
                       Otryad = UchZavedenie = Grazdanstvo = Obuchenie= MedKommDat= null;
-                      IsNovichok = IsSovershennolentnii=null;
+                      IsNovichok = IsSovershennolentnii=IsTrudoustroen= InSpisokSb= IsSanGigObuchenie= null;
                       
                       Gorod = null; VihodDat = null;
                      Sezon= new Repository().GetCurSezon();
@@ -428,6 +428,12 @@ private RelayCommand _FindCommand;
 
                 if (IsTrudoustroen.HasValue)
                     query = query.Where(pp => pp.IsTrudoustroen == IsTrudoustroen.Value);
+
+                if (InSpisokSb.HasValue)
+                    query = query.Where(pp => pp.InSpisokSb == InSpisokSb.Value);
+
+                if (IsSanGigObuchenie.HasValue)
+                    query = query.Where(pp => pp.IsSanGigObuchenie == IsSanGigObuchenie.Value);
 
                 if (!string.IsNullOrWhiteSpace(Gorod))
                     query = query.Where(pp => pp.Gorod == null || pp.Gorod == Gorod);
@@ -808,6 +814,34 @@ private RelayCommand _FindCommand;
                 {
                     _IsTrudoustroen = value;
                     ReCalcReady();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        bool? _InSpisokSb;
+        public bool? InSpisokSb
+        {
+            get => _InSpisokSb;
+            set
+            {
+                if (_InSpisokSb != value)
+                {
+                    _InSpisokSb = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        bool? _IsSanGigObuchenie;
+        public bool? IsSanGigObuchenie
+        {
+            get => _IsSanGigObuchenie;
+            set
+            {
+                if (_IsSanGigObuchenie != value)
+                {
+                    _IsSanGigObuchenie = value;
                     OnPropertyChanged();
                 }
             }

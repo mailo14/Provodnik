@@ -390,6 +390,7 @@ namespace Provodnik
                     pe.IsTrudoustroen = d.IsTrudoustroen;
                     pe.TrudoustroenDepo = vm.Depo;
                     pe.Gorod = vm.City;
+                    pe.InSpisokSb = true;
                 }
                     db.SaveChanges();
 
@@ -599,6 +600,35 @@ namespace Provodnik
                 iRow++;
             }
             wordApp.Visible = true;
+        }
+
+        private void PrintProverkaSBButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as SendGroupViewModel;
+
+            excelReport excel = new excelReport();
+            excel.Init("Список на проверку СБ.xltx", $"Список на проверку СБ.xlsx", false, System.IO.Path.GetTempPath());//,visible:true);//, otchetDir: otchetDir);
+
+            int ri = 1;
+            var db = new ProvodnikContext();
+
+            foreach (var r in vm.Persons)
+            {
+                var person = db.Persons.Single(x => x.Id == r.PersonId);
+
+                ri++;
+                excel.cell[ri, 1].value2 = ri - 1;
+                excel.cell[ri, 2].value2 =r.Fio+Environment.NewLine+ r.BirthDat?.ToString("dd.MM.yyyy")+ Environment.NewLine + person.MestoRozd;
+                excel.cell[ri, 3].value2 = person.PaspAdres;
+                excel.cell[ri, 4].value2 = "Паспорт гражданина "+person.Grazdanstvo +":"+ Environment.NewLine
+                    +person.PaspSeriya+" "+person.PaspNomer+Environment.NewLine
+                    +Helper.FormatSnils(person.Snils) + Environment.NewLine
+                    +person.Inn;
+            }
+            excel.setAllBorders(excel.get_Range("A1", "D" + ri));
+            excel.get_Range("A1", "D" + ri).EntireRow.AutoFit();
+            excel.myExcel.Visible = true;
+            excel.Finish(false);
         }
     }
 }
