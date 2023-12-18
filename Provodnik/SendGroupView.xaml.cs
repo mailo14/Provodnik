@@ -64,7 +64,7 @@ namespace Provodnik
             excel.Init("ВСОП_1.xlsx", string.Format(@"ВСОП_1_{0}_{1}__{2}_{3}.xlsx",
                 vm.OtprDat.Value.ToString("dd.MM.yyyy"), 
                 "Новосибирск",
-                vm.City,
+                GetDepoCityForHeader(vm),
                 vm.Persons.Count), otchetDir: otchetDir);
 
             int            ri = 1;
@@ -105,7 +105,7 @@ namespace Provodnik
             excel.Init("ВСОП_2.xlsx", string.Format(@"ВСОП_2_{0}_{1}__{2}_{3}.xlsx",
                 vm.OtprDat.Value.ToString("dd.MM.yyyy"),
                 "Новосибирск",
-                vm.City,
+                GetDepoCityForHeader(vm),
                 vm.Persons.Count), otchetDir: otchetDir);
 
             int ri = 1;
@@ -130,20 +130,25 @@ namespace Provodnik
             excel.Finish();
         }
 
+        private string GetDepoCityForHeader(SendGroupViewModel vm)
+        {
+            return (vm.City == "Москва") ? vm.Depo.Replace(" ", "") : vm.City;
+        }
+
         public  void VSOP3(bool otdelno=false)//DateTime start, DateTime end, ProgressBar progress)
         {
             var vm = DataContext as SendGroupViewModel;
 
             excelReport excel = new excelReport();
-          if (!otdelno)  excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}__{2}_{3}.xlsx",
-                vm.OtprDat.Value.ToString("dd.MM.yyyy"), 
-                "Новосибирск",
-                (vm.City== "Москва")?vm.Depo.Replace(" ",""): vm.City,
-                vm.Persons.Count),otchetDir: otchetDir);
+            if (!otdelno) excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}__{2}_{3}.xlsx",
+                 vm.OtprDat.Value.ToString("dd.MM.yyyy"),
+                 "Новосибирск",
+                 GetDepoCityForHeader(vm),
+                 vm.Persons.Count), otchetDir: otchetDir);
             else excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}__{2}_{3}.xlsx",
                  vm.OtprDat.Value.ToString("dd.MM.yyyy"),
                  "Новосибирск",
-                (vm.City == "Москва") ? vm.Depo.Replace(" ", "") : vm.City,
+                GetDepoCityForHeader(vm),
                  vm.Persons.Count), true);
 
             int            ri = 1;
@@ -183,7 +188,7 @@ namespace Provodnik
 
             excelReport excel = new excelReport();
             excel.Init(/*(vm.City== "Москва")?"Ф6_Msk.xlsx":*/"Ф6_ost.xlsx",
-                $@"Ф6_{vm.OtprDat.Value.ToString("dd.MM.yyyy")}_Новосибирск__{ vm.City}_{vm.Persons.Count}.xlsx",
+                $@"Ф6_{vm.OtprDat.Value.ToString("dd.MM.yyyy")}_Новосибирск__{GetDepoCityForHeader(vm)}_{vm.Persons.Count}.xlsx",
                 otchetDir: otchetDir//,visible:true
                 );
 
@@ -442,7 +447,7 @@ namespace Provodnik
                 otchetDir = dialog.SelectedPath + @"\" + string.Format(@"{0}_{1}__{2}_{3}",
                 vm.OtprDat.Value.ToString("dd.MM.yyyy"),
                 "Новосибирск",
-                vm.City,
+                GetDepoCityForHeader(vm),
                 vm.Persons.Count);
 
                 DirectoryInfo di =new DirectoryInfo(otchetDir);
@@ -467,7 +472,7 @@ namespace Provodnik
                     PismoLgoti();/**/
                     ReestrPeredachi();
 
-                    string path = otchetDir + $@"\Ф6(Архив)_{vm.OtprDat.Value.ToString("dd.MM.yyyy")}_Новосибирск-{vm.City}_{vm.Persons.Count}чел";
+                    string path = otchetDir + $@"\Ф6(Архив)_{vm.OtprDat.Value.ToString("dd.MM.yyyy")}_Новосибирск-{GetDepoCityForHeader(vm)}_{vm.Persons.Count}чел";
                     if (!Directory.Exists(path))
                         Directory.CreateDirectory(path);
                     else;//TODO del?
@@ -569,7 +574,7 @@ namespace Provodnik
         {
             var vm = DataContext as SendGroupViewModel;
 
-            var path = (string.Format("{0}\\_шаблоны\\" + "Акт передачи заявлений на 4%.dotx", AppDomain.CurrentDomain.BaseDirectory));
+            var path = (string.Format("{0}\\_шаблоны\\" + "Акт передачи заявлений на 4.dotx", AppDomain.CurrentDomain.BaseDirectory));
             Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false };
             Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Add(path);
             aDoc.Activate();
