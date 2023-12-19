@@ -67,7 +67,7 @@
 
         <local:AgeToColorConverter x:Key="AgeToColorConverter"/>
         <Style TargetType="{x:Type DataGridRow}">
-                <Setter Property="Background" Value="{Binding Vozrast, Converter={StaticResource AgeToColorConverter}}" />
+                <Setter Property="Background" Value="{Binding Converter={StaticResource AgeToColorConverter}}" />
         </Style>
 
 

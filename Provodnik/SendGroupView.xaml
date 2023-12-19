@@ -91,7 +91,7 @@
             <TextBlock Text="Рег. отделение" Grid.Column="2"/>
             <ComboBox Name="RegOtdelenieComboBox" Text="{Binding RegOtdelenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="150" Style="{DynamicResource ComboBox}"/>
         </Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"  Grid.Row="1" > 
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"  Grid.Row="1" >
             <TextBlock Text="Город назначения"/>
             <ComboBox Name="CityComboBox" Text="{Binding City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="150" Style="{DynamicResource ComboBox}"
                           ItemsSource="{Binding Cities}" IsReadOnly="False"  />
@@ -99,7 +99,7 @@
             <TextBlock Text="Станция пересадки"  Grid.Column="2" />
             <ComboBox  Text="{Binding PeresadSt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="150" Style="{StaticResource ComboBox}"
                 ItemsSource="{Binding PeresadSts}" IsReadOnly="False" Margin="3"/>
-        </StackPanel> 
+        </StackPanel>
 
 
         <Grid   Grid.Row="5" VerticalAlignment="Top">
@@ -155,7 +155,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        
+
                         <DataGridTemplateColumn Header="Примечания" SortMemberPath="Messages">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -229,17 +229,24 @@
             </Grid>
         </Expander>
 
-        <StackPanel VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="11">
-            <Button Content="Печать документов" Click="PrintButton_Click"/>
-            <Button Content="ВСОП3" Click="PrintVSOP3Button_Click"/>
-            <Button Content="Акт передачи заявлений на 4%" Click="PrintAct4Button_Click"/>
-            <Button Content="Список на проверку СБ" Click="PrintProverkaSBButton_Click"/>
-        </StackPanel>
+        <Grid Grid.Row="11">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel VerticalAlignment="Top" Orientation="Horizontal" Grid.Column="0">
+                <Button Content="Печать документов" Click="PrintButton_Click" Padding="3,5"/>
+                <Button Content="ВСОП3" Click="PrintVSOP3Button_Click" Padding="3,5"/>
+                <Button Content="Акт передачи заявлений на 4%" Click="PrintAct4Button_Click" Padding="3,5"/>
+                <Button Content="Акт передачи документов" Click="PrintActDoc_Click" Padding="3,5"/>
+                <Button Content="Список на проверку СБ" Click="PrintProverkaSBButton_Click" Padding="3,5"/>
+            </StackPanel>
 
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="11">
-            <Button Content="Отмена" Click="CancelButton_Click" />
-            <Button Content="Сохранить" Click="SaveButton_Click"/>
-        </StackPanel>
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Orientation="Horizontal" Grid.Column="1">
+                <Button Content="Отмена" Click="CancelButton_Click" />
+                <Button Content="Сохранить" Click="SaveButton_Click"/>
+            </StackPanel>
+        </Grid>
         <StackPanel  Orientation="Horizontal" Grid.Row="3" >
             <TextBlock Text="Депо приписки в родительном падеже" Grid.Column="0"/>
             <TextBox Text="{Binding DepoRod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" MinWidth="150" Style="{DynamicResource TextBox}" Width="554"/>

@@ -269,13 +269,14 @@ pswVm.PersonSearch = null; //run find, should be last            pswVm.FindComma
 
             var path = (string.Format("{0}\\_шаблоны\\" + "Ведомость сан.гиг обучение.dotx", AppDomain.CurrentDomain.BaseDirectory));
             Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false };
-            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Open(path, ReadOnly: false, Visible: false);
+            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Add(path);
             aDoc.Activate();
 
             object missing = Missing.Value;
 
             Microsoft.Office.Interop.Word.Range range = aDoc.Content;
             range.Find.ClearFormatting();
+            range.Find.Execute(FindText: "{Count}", ReplaceWith: vm.Persons.Count(), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
             var table = aDoc.Tables[1];
             int iRow = 2;
 

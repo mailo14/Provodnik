@@ -364,6 +364,7 @@
                         <TextBlock Text="дата" Grid.Row="1" Grid.Column="1" Margin="10,7,3,7"/>
                         <DatePicker SelectedDate="{Binding SanKnizkaDat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2" Style="{DynamicResource DatePicker}"/>
                         <CheckBox Content="Получена" IsChecked="{Binding IsSanKnizka, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="10,8,0,8"/>
+                        <CheckBox Content="Своя санкнижка" IsChecked="{Binding IsSvoyaSanKnizka, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Margin="10,8,0,8" HorizontalAlignment="Left"/>
 
                         <TextBlock Text="Сан.гиг. обучение" Grid.Row="2" Margin="10,7,0,7"/>
                         <TextBlock Text="дата" Grid.Row="2" Grid.Column="1" Margin="10,7,3,7"/>

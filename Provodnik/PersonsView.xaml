@@ -75,7 +75,7 @@
         </-->
         <local:AgeToColorConverter x:Key="AgeToColorConverter"/>
         <Style TargetType="{x:Type DataGridRow}">
-                <Setter Property="Background" Value="{Binding Vozrast, Converter={StaticResource AgeToColorConverter}}" />
+            <Setter Property="Background" Value="{Binding Converter={StaticResource AgeToColorConverter}}" />
         </Style>
     </Window.Resources>
     <Grid Margin="5">
@@ -156,7 +156,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Заметки" Width="*" Binding="{Binding Zametki}"/>
             </DataGrid.Columns>
-            
+
         </DataGrid>
 
         <Button Name="AddToGroupButton" Content="Добавить выбранных в группу" Grid.Row="3" HorizontalAlignment="Right" Click="AddToGroupButton_Click"/>

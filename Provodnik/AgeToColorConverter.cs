@@ -13,10 +13,18 @@ namespace Provodnik
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var age = (int?)value;
-            return (age.HasValue && age < CommonConsts.Sovershennolentie) ?
-                new SolidColorBrush(Color.FromArgb(50,255,0,0))
-                : new SolidColorBrush(Colors.White);
+            var vm = value as PersonShortViewModel;
+            SolidColorBrush result = new SolidColorBrush(Colors.White);
+
+            var age = vm.Vozrast;
+            if (age.HasValue && age < CommonConsts.Sovershennolentie) result = new SolidColorBrush(Color.FromArgb(50, 255, 0, 0));
+            else
+            {
+                var ageOnYearStart=Helper.GetVozrast(vm.BirthDat,new DateTime(DateTime.Today.Year,1,1).AddDays(-1));
+                if (ageOnYearStart==19) result = new SolidColorBrush(Color.FromArgb(50, 250, 196, 81));
+            }
+
+            return result;
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {

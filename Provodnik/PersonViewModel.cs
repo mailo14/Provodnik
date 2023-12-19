@@ -613,8 +613,34 @@ namespace Provodnik
             get => _Sezon;
             set
             {
-                _Sezon = value;
-                OnPropertyChanged();
+                if (_Sezon != value)
+                {
+                    if (Id.HasValue && _Sezon != null)
+                    {
+                        var docTypesToClear = new[] { DocConsts.СогласиеПерс, DocConsts.ЗаключениеВЭК, DocConsts.ЗаключениеВЭК2, DocConsts.СправкаРСО, DocConsts.СправкаУчебы };
+                        var docsToClear = Documents.Where(x => docTypesToClear.Contains(x.DocTypeId)).ToList();
+                        if (docsToClear.Any())
+                        {
+                            if (MessageBox.Show("Будут удалены сканы «согласия на обработку ПД» , «заключения ВЭК1 и ВЭК2» и «справки - подтверждения РСО», «справки ВУЗ». Продолжить?", "", 
+                                MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes) == MessageBoxResult.Yes)
+                            {
+                                foreach (var dc in docsToClear)
+                                {
+                                    dc.Bitmap.Source = null;
+                                    dc.FileName = null;
+                                    dc.LocalFileName = null;
+
+                                    dc.Size = null;
+                                }
+                                RefreshScansSize();
+                                RefreshMedPsihOnScanChanded();        //Helper.RestorePersonDocuments(this, false, true);                        //                        IsMedKomm = false;
+                            }
+                        }                         
+                    }
+
+                    _Sezon = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -1063,6 +1089,17 @@ namespace Provodnik
             set
             {
                 _IsSanKnizka = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsSvoyaSanKnizka;
+        public bool IsSvoyaSanKnizka
+        {
+            get => _IsSvoyaSanKnizka;
+            set
+            {
+                _IsSvoyaSanKnizka = value;
                 OnPropertyChanged();
             }
         }

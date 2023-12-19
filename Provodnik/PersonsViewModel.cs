@@ -412,7 +412,7 @@ private RelayCommand _FindCommand;
                 if (PasportEntered.HasValue)
                     query = query.Where(pp => pp.AllPasport == PasportEntered.Value);
                 if (SanknizkaExist.HasValue)
-                    query = query.Where(pp => pp.IsSanKnizka == SanknizkaExist.Value);
+                    query = query.Where(pp => (pp.IsSanKnizka || pp.IsSvoyaSanKnizka) == SanknizkaExist.Value);
                                     
                 if (MedKommExist.HasValue)
                     //query = query.Where(pp => MedKommExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.ЗаключениеВЭК).FileName != null));

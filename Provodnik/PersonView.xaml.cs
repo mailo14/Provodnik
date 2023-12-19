@@ -119,6 +119,7 @@ namespace Provodnik
                     if (vm.Id.HasValue)
                     {
                         p = db.Persons.Single(pp => pp.Id == vm.Id.Value);
+                        var prevSezon = p.Sezon;
 
                         MainWindow.Mapper.Value.Map(vm, p);
                         var currents = vm.Documents.Where(pp => pp.Id.HasValue).Select(pp => pp.Id.Value).ToList();

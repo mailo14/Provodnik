@@ -266,7 +266,7 @@ namespace Provodnik
 
         }
 
-        public void ReestrPeredachi()
+        public void ReestrPeredachi(bool otdelno = false)
         {
             var vm = DataContext as SendGroupViewModel;
 
@@ -275,22 +275,21 @@ namespace Provodnik
             var pe = db.Persons.Where(pp => ids.Contains(pp.Id)).ToList();
             if (pe.Count == 0) return;
 
-
-            var path = (string.Format("{0}\\_шаблоны\\" + "Акт передачи документов.docx", AppDomain.CurrentDomain.BaseDirectory));
+            var path = (string.Format("{0}\\_шаблоны\\" + "Акт передачи документов.dotx", AppDomain.CurrentDomain.BaseDirectory));
             Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false };
-            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Open(path, ReadOnly: false, Visible: false);
+            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Add(path);
             aDoc.Activate();
 
             object missing = Missing.Value;
 
             Microsoft.Office.Interop.Word.Range range = aDoc.Content;
             range.Find.ClearFormatting();
-            
+
             range.Find.Execute(FindText: "{City}", ReplaceWith: vm.City, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
-            range.Find.Execute(FindText: "{Year}", ReplaceWith: vm.Persons.FirstOrDefault()?.Sezon??DateTime.Today.Year.ToString(), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Year}", ReplaceWith: vm.Persons.FirstOrDefault()?.Sezon ?? DateTime.Today.Year.ToString(), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
             range.Find.Execute(FindText: "{Filial}", ReplaceWith: vm.Filial, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
             range.Find.Execute(FindText: "{Sp}", ReplaceWith: vm.Sp, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
-            range.Find.Execute(FindText: "{Ochniki}", ReplaceWith: vm.Persons.Count(x=>x.UchForma== UchFormaConsts.Ochnaya), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Ochniki}", ReplaceWith: vm.Persons.Count(x => x.UchForma == UchFormaConsts.Ochnaya), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
             range.Find.Execute(FindText: "{Count}", ReplaceWith: vm.Persons.Count(), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
 
             range.Find.Execute(FindText: "{ВЧ}", ReplaceWith: vm.DepoRod, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
@@ -309,8 +308,17 @@ namespace Provodnik
                 iRow++;
             }
 
-            aDoc.SaveAs(FileName: otchetDir + $@"\Акт передачи документов.docx");
-            aDoc.Close();       }
+
+            if (!otdelno)
+            {
+                aDoc.SaveAs(FileName: otchetDir + $@"\Акт передачи документов.docx");
+                aDoc.Close();
+            }
+            else
+            {
+                wordApp.Visible = true;
+            }
+        }
 
         string otchetDir ;
         private void AddFromListButton_Click(object sender, RoutedEventArgs e)
@@ -634,6 +642,11 @@ namespace Provodnik
             excel.get_Range("A1", "D" + ri).EntireRow.AutoFit();
             excel.myExcel.Visible = true;
             excel.Finish(false);
+        }
+
+        private void PrintActDoc_Click(object sender, RoutedEventArgs e)
+        {
+            ReestrPeredachi(true);
         }
     }
 }

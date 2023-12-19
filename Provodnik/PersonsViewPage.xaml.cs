@@ -175,16 +175,21 @@ namespace Provodnik
             {
                 ri++;
                 excel.cell[ri, 1].value2 = ri - 1;
-                excel.cell[ri, 2].value2 = r.Fio;
-                //excel.cell[ri, 3].value2 = "АО \"ФПК\"";
-                excel.cell[ri, 4].value2 = r.BirthDat?.ToString("dd.MM.yyyy");
-                excel.cell[ri, 5].value2 = r.UchZavedenie;
-                excel.cell[ri, 6].value2 = r.UchFac;
-                excel.cell[ri, 7].value2 = r.Inn;
-                excel.cell[ri, 8].value2 = Helper.FormatSnils(r.Snils);
-                //excel.cell[ri, 9].value2 = "01.04.2021 - 31.12.2021 г.";
+                excel.cell[ri, 2].value2 = "Новосибирское РО";
+                var fio = new StringHelper().ParseFio(r.Fio);
+                excel.cell[ri, 3].value2 = fio[0];
+                excel.cell[ri, 4].value2 = fio[1];
+                excel.cell[ri, 5].value2 = fio[2];
+                excel.cell[ri, 6].value2 = r.BirthDat?.ToString("dd.MM.yyyy"); 
+                excel.cell[ri, 7].value2 =r.UchZavedenie;
+                excel.cell[ri, 8].value2 = r.UchFac; 
+                excel.cell[ri, 9].value2 = r.Inn;
+                excel.cell[ri, 10].value2 = Helper.FormatSnils(r.Snils);
+                excel.cell[ri, 11].value2 = "АО \"ФПК\"";
+                excel.cell[ri, 12].value2 = new DateTime(DateTime.Today.Year,4,1).ToString("dd.MM.yyyy");
+                excel.cell[ri, 13].value2 = new DateTime(DateTime.Today.Year, 12, 31).ToString("dd.MM.yyyy");
             }
-            excel.setAllBorders(excel.get_Range("A1", "I" + ri));
+            excel.setAllBorders(excel.get_Range("A1", "M" + ri));
             excel.myExcel.Visible = true;
         }
 

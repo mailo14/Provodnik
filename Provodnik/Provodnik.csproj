@@ -226,6 +226,10 @@
     <Compile Include="Migrations\202304060538007_init29.designer.cs">
       <DependentUpon>202304060538007_init29.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202312191214295_init30.cs" />
+    <Compile Include="Migrations\202312191214295_init30.designer.cs">
+      <DependentUpon>202312191214295_init30.cs</DependentUpon>
+    </Compile>
     <Compile Include="Obuchenie.xaml.cs">
       <DependentUpon>Obuchenie.xaml</DependentUpon>
     </Compile>
@@ -555,6 +559,9 @@
     <EmbeddedResource Include="Migrations\202304060538007_init29.resx">
       <DependentUpon>202304060538007_init29.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202312191214295_init30.resx">
+      <DependentUpon>202312191214295_init30.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -584,9 +591,6 @@
     <Content Include="_шаблоны\Направление мед.xltx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="_шаблоны\Акт передачи документов.docx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="_шаблоны\Справки РСО.xltx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -612,6 +616,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="publicProvodnik.snk" />
+    <Content Include="_шаблоны\Акт передачи документов.dotx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="pic\loading.gif" />
     <Content Include="_шаблоны\ВСОП_3.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

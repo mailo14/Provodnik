@@ -301,7 +301,7 @@ namespace Provodnik
 
             var path = (string.Format("{0}\\_шаблоны\\" + "Ведомость мед.комисии.dotx", AppDomain.CurrentDomain.BaseDirectory));
             Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false };
-            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Open(path, ReadOnly: false, Visible: false);
+            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Add(path);
             aDoc.Activate();
 
             object missing = Missing.Value;

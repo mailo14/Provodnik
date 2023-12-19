@@ -150,13 +150,13 @@ namespace Provodnik
             p.Documents = new ObservableCollection<PersonDocViewModel>(p.Documents.OrderBy(x => dtOrders[x.DocTypeId]));
         }
 
-        public static int? GetVozrast(DateTime? birthDat)
+        public static int? GetVozrast(DateTime? birthDat, DateTime? onDate=null)
         {
             if (!birthDat.HasValue) return null;
 
-            var today = DateTime.Today;
-            var result = today.Year- birthDat.Value.Year;
-            if (birthDat.Value.AddYears(result) > today) result--;
+            if (!onDate.HasValue) onDate=DateTime.Today;
+            var result = onDate.Value.Year- birthDat.Value.Year;
+            if (birthDat.Value.AddYears(result) > onDate.Value) result--;
 
             return result;
         }

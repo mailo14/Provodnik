@@ -82,6 +82,7 @@ namespace Provodnik
         public bool IsPsihZabral { get; set; }
         public DateTime? SanKnizkaDat { get; set; }
         public bool IsSanKnizka { get; set; }
+        public bool IsSvoyaSanKnizka { get; set; }
         public DateTime? SanGigObuchenieDat { get; set; }
         public bool IsSanGigObuchenie { get; set; }
         public DateTime? MedKommDat { get; set; }
