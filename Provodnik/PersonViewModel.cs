@@ -618,7 +618,7 @@ namespace Provodnik
                     if (Id.HasValue && _Sezon != null)
                     {
                         var docTypesToClear = new[] { DocConsts.СогласиеПерс, DocConsts.ЗаключениеВЭК, DocConsts.ЗаключениеВЭК2, DocConsts.СправкаРСО, DocConsts.СправкаУчебы };
-                        var docsToClear = Documents.Where(x => docTypesToClear.Contains(x.DocTypeId)).ToList();
+                        var docsToClear = Documents.Where(x => docTypesToClear.Contains(x.DocTypeId) && x.Size.HasValue).ToList();
                         if (docsToClear.Any())
                         {
                             if (MessageBox.Show("Будут удалены сканы «согласия на обработку ПД» , «заключения ВЭК1 и ВЭК2» и «справки - подтверждения РСО», «справки ВУЗ». Продолжить?", "", 
