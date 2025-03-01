@@ -326,5 +326,31 @@ namespace Provodnik
                 Helper.SetPersonShortIndexes(PersonsListView);
             }, null);
         }
+
+        private void SpisokButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as ObuchenieViewModel;
+
+            excelReport excel = new excelReport();
+            excel.Init("Список на обучение.xltx", $"Список на обучение{vm.UchebGruppa}.xlsx", false, System.IO.Path.GetTempPath());//,visible:true);//, otchetDir: otchetDir);
+
+            int ri = 1;
+            var db = new ProvodnikContext();
+
+            foreach (var r in vm.Persons)
+            {
+                ri++;
+                excel.cell[ri, 1].value2 = ri - 1;
+                excel.cell[ri, 2].value2 = r.Fio;
+                excel.cell[ri, 3].value2 = Helper.FormatPhone(r.Phone);
+                excel.cell[ri, 4].value2 = r.UchZavedenie;
+                excel.cell[ri, 5].value2 = r.BirthDat?.ToString("dd.MM.yyyy");
+                excel.cell[ri, 6].value2 = Helper.FormatSnils(r.Snils);
+            }
+            excel.setAllBorders(excel.get_Range("A1", "F" + ri));
+            excel.myExcel.Visible = true;
+            excel.Finish(false);
+
+        }
     }
 }

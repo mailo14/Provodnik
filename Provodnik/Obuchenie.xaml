@@ -103,7 +103,10 @@
 
             </Grid>
 
-            <Button Name="ExcelButton" Content="Экспорт в Excel" Grid.Row="3" HorizontalAlignment="Left" Click="ExcelButton_Click"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="3" >
+                <Button Content="Список на обучение" Grid.Row="3" HorizontalAlignment="Left" Click="SpisokButton_Click"/>
+                <Button Name="ExcelButton" Content="Экспорт в Excel" Grid.Row="3" HorizontalAlignment="Left" Click="ExcelButton_Click"/>
+            </StackPanel>
 
 
             <Button Content="Добавить из списка" Click="AddFromListButton_Click" Grid.Row="1"/>

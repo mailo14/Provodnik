@@ -207,6 +207,7 @@ namespace Provodnik
                      select new
                      {
                          p.UchebGruppa,
+                         p.UchebStartDat,
                          seliObuch = p.UchebGruppa != null,//UchebStartDat.HasValue,
                          vibilObuch = p.UchebGruppa != null && p.IsVibil, //p.VibilPrichina == "выбыл с обучения",
                          ostObuch = p.UchebGruppa != null && !p.IsVibil,//p.VibilPrichina != "выбыл с обучения",
@@ -221,14 +222,16 @@ namespace Provodnik
                          neGoden =p.IsMedKommNeGoden, //p.VibilPrichina == "не допущен медкомиссией", //"не годен",
                          trudoustroen=p.IsTrudoustroen,
                          p.IsNovichok ,
-                         medKnizkaPoluchena= p.IsNovichok && p.IsSanKnizka,
-                         medKnizkaZakazana= p.IsNovichok && p.SanKnizkaDat.HasValue
+                         medKnizkaPoluchena= p.IsSanKnizka || p.IsSvoyaSanKnizka,
+                         medKnizkaZakazana= p.SanKnizkaDat.HasValue || p.IsSvoyaSanKnizka
 
                      };
 
             int startCol = 2;
 
-            foreach (var r in qq.GroupBy(x => x.UchebGruppa).OrderBy(x => x.Key).Where(x => x.Key != null))
+            foreach (var r in qq
+                .Where(p=>p.UchebStartDat != null && p.UchebStartDat.Value.Year >= DateTime.Today.Year)
+                .GroupBy(x => x.UchebGruppa).OrderBy(x => x.Key).Where(x => x.Key != null))
             {
                 ri++;
                 excel.cell[ri, startCol + 2].value2 = r.Key;
@@ -243,9 +246,9 @@ namespace Provodnik
             {
                 ri++;
                 excel.cell[ri, startCol + 2].value2 = r.Key ? "Всего новички" : "Старики";
-                excel.cell[ri, startCol + 3].value2 = r.Count(x => x.seliObuch);
+                excel.cell[ri, startCol + 3].value2 = r.Key ? r.Count(x => x.seliObuch):r.Count();
                 excel.cell[ri, startCol + 4].value2 = r.Count(x => x.vibilObuch);
-                excel.cell[ri, startCol + 5].value2 = r.Count(x => x.ostObuch);
+                excel.cell[ri, startCol + 5].value2 = r.Key ? r.Count(x => x.ostObuch) : r.Count();
                 excel.cell[ri, startCol + 6].value2 = r.Count(x => x.IsExamen);
                 excel.cell[ri, startCol + 7].value2 = r.Count(x => x.poluchenoSvidet);
             }
@@ -262,7 +265,8 @@ namespace Provodnik
 
             ri++;
             excel.cell[ri, startCol + 2].value2 = "ИТОГО:";
-            excel.cell[ri, startCol + 3].Formula = excel.cell[ri, startCol + 7].Formula = "=R[-1]C+R[-2]C";
+            for (int i = 3; i <= 7; i++)
+                excel.cell[ri, startCol + i].Formula= "=R[-1]C+R[-2]C";
             for (int i = 8; i <= 15; i++)
             {
                 excel.mySheet.Range[excel.cell[2, startCol + i], excel.cell[ri - 1, startCol + i]].Merge();
@@ -274,6 +278,36 @@ namespace Provodnik
             excel.myExcel.Visible = true;
         }
 
+        private void ObuchenieButton_Click(object sender, RoutedEventArgs e)
+        {
+            excelReport excel = new excelReport();
+            excel.Init("Таблица обучение.xltx", $"Обучение { DateTime.Today.Year}.xlsx");//,visible:true);//, otchetDir: otchetDir);
+
+            int ri = 3;
+            var db = new ProvodnikContext();
+
+            var ids = vm.PersonList.Select(pp => pp.Id).ToList();
+            var qq = db.Persons.Where(p => ids.Contains(p.Id) && p.UchebEndDat.HasValue && p.UchebEndDat.Value.Year == DateTime.Today.Year)
+                .GroupBy(p => new { p.UchebGruppa, p.UchebStartDat, p.UchebEndDat })
+                .Select(x => new { x.Key.UchebGruppa, x.Key.UchebStartDat, x.Key.UchebEndDat, kolvo = x.Count() }).OrderBy(x=>x.UchebEndDat);
+                                 
+            foreach (var r in qq)
+            {
+                ri++;
+                excel.cell[ri, 1].value2 = ri - 3;
+                excel.cell[ri, 2].value2 = r.UchebGruppa;
+                excel.cell[ri, 3].value2 = r.UchebStartDat?.ToString("dd.MM.yyyy");
+                excel.cell[ri, 4].value2 = r.UchebEndDat?.ToString("dd.MM.yyyy");
+                excel.cell[ri, 5].value2 = r.kolvo;
+            }
+
+            ri++;
+            excel.cell[ri,1].value2 = "Всего:"; excel.mySheet.Range[excel.cell[ri, 1], excel.cell[ri , 4]].Merge();
+            excel.cell[ri, 5].Formula =  "=SUM(R4C:R[-1]C)";
+            
+            excel.setAllBorders(excel.get_Range("A4", "E" + ri));
+            excel.myExcel.Visible = true;
+        }
         private void ScansButton_Click(object sender, RoutedEventArgs e)
         {
 

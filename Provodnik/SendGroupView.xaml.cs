@@ -207,22 +207,22 @@ namespace Provodnik
 
             foreach (var r in rr)//vm.Persons)
             {
-                    ri++;
+                ri++;
 
-                excel.cell[ri, 1].value2 = ri-7;
-                excel.cell[ri, 2].value2 = r.Fio+Environment.NewLine+ (r.BirthDat.HasValue ? r.BirthDat.Value.ToString("dd.MM.yyyy") : "")
+                excel.cell[ri, 1].value2 = ri - 7;
+                excel.cell[ri, 2].value2 = r.Fio + Environment.NewLine + (r.BirthDat.HasValue ? r.BirthDat.Value.ToString("dd.MM.yyyy") : "")
                     + Environment.NewLine + r.MestoRozd;
                 excel.cell[ri, 3].value2 = "Проводник" + Environment.NewLine + "пассажирского" + Environment.NewLine + "вагона";
-                
+
                 excel.cell[ri, 5].value2 = r.PaspAdres;
                 excel.cell[ri, 6].value2 =
-                    (r.Grazdanstvo== "КЗ"? "Паспорт гр-на РК:" : "Паспорт гр-на РФ:")
-                    + Environment.NewLine + r.PaspSeriya+" "+r.PaspNomer
-                    +Environment.NewLine+ Helper.FormatSnils(r.Snils)
+                    (r.Grazdanstvo == "КЗ" ? "Паспорт гр-на РК:" : "Паспорт гр-на РФ:")
+                    + Environment.NewLine + r.PaspSeriya + " " + r.PaspNomer
+                    + Environment.NewLine + Helper.FormatSnils(r.Snils)
                     + Environment.NewLine + r.Inn;
 
                 excel.cell[ri, 7].value2 = (!string.IsNullOrWhiteSpace(vm.PeresadSt))
-                    ? $"Новосибирск – {vm.PeresadSt} – {vm.City} – {vm.PeresadSt} – Новосибирск"
+                    ? $"Новосибирск – {BuildPeresadStText(vm.PeresadSt, false)} – {vm.City} – {BuildPeresadStText(vm.PeresadSt,true)} – Новосибирск"
                     : $"Новосибирск – {vm.City} – Новосибирск";
 
                 excel.cell[ri, 11].value2 = vm.Uvolnenie.HasValue ? vm.Uvolnenie.Value.ToString("dd.MM.yyyy") : "";
@@ -231,8 +231,13 @@ namespace Provodnik
             excel.Finish();
         }
 
-        
-    public void PismoLgoti()
+        private static string BuildPeresadStText(string peresadSt, bool isReverse=false)
+        {
+            var list = isReverse? peresadSt.Split('-').Reverse(): peresadSt.Split('-');
+            return string.Join(" - ", list);
+        }
+
+        public void PismoLgoti()
         {
 
             var vm = DataContext as SendGroupViewModel;
@@ -513,7 +518,7 @@ namespace Provodnik
                             {
                                 var fileName = $@"{path}\{g.Key}\{fioInic}_{d.Description}.jpg";
 
-                                var result = client.DownloadFile(fileName, d.FileName, FtpLocalExists.Overwrite, FtpVerify.Retry);//, true, FtpVerify.Retry);
+                                var result = client.DownloadFile(fileName, @"http/" + d.FileName, FtpLocalExists.Overwrite, FtpVerify.Retry);//, true, FtpVerify.Retry);
                                 if (result != FtpStatus.Success)
                                     throw new Exception("Не удалось загрузить файл " + System.IO.Path.GetFileName(fileName));
                             }

@@ -11,7 +11,7 @@ namespace Provodnik
         public List<string> GetPersonCities()
         {
             return new ProvodnikContext().Persons.Select(pp => pp.Gorod).Distinct()
-                .Union(new List<string> { "Адлер", "Москва", "Санкт-Петербург", "Новороссийск", "Новосибирск" }).Distinct().OrderBy(pp => pp).ToList();
+                .Union(new List<string> { "Москва", "Новосибирск", "Адлер", "Екатеринбург", "Казань", "Санкт-Петербург" }).Distinct().OrderBy(pp => pp).ToList();
         }
         public List<string> GetCities()
         {
@@ -120,7 +120,7 @@ namespace Provodnik
                 App.ConfigureFtpClient(client);
                 client.Connect();
 
-                var remotePath = $@"ProvodnikDocs/" + personId.ToString();
+                var remotePath = @"http/" + $@"ProvodnikDocs/" + personId.ToString();
                 if (client.DirectoryExists(remotePath))
                     client.DeleteDirectory(remotePath);
             }
@@ -204,6 +204,38 @@ namespace Provodnik
             return qq;
         }
 
+        internal IEnumerable<string> GetTrudoustroistvoPeriods()
+        {
+            var db = new ProvodnikContext();
+            var qq = (from t in db.Trudoustroistva where t.StartDate.Year == DateTime.Now.Year select new {t.StartDate,t.EndDate }).Distinct().ToList()
+                .OrderBy(x=>x.StartDate)
+                .Select(x=>$"{x.StartDate.ToString("dd.MM.yyyy")}-{x.EndDate.ToString("dd.MM.yyyy")}").ToList();
+
+            //qq.Insert(0, RepoConsts.NoTrudoustroistvo);
+
+            return qq;
+        }
+
+        internal IEnumerable<string> GetTrudoustroistvoDepos()
+        {
+            var db = new ProvodnikContext();
+            var qq= (from t in db.Trudoustroistva where t.StartDate.Year == DateTime.Now.Year select t.Depo).Distinct().ToList();
+            
+            qq.Insert(0, RepoConsts.NoTrudoustroistvo);
+
+            return qq;
+        }
+
+        public List<string> GetTrudoustroenDepos()
+        {
+             var qq = (from p in new ProvodnikContext().Persons
+                      where p.TrudoustroenDepo!= null
+                      orderby p.TrudoustroenDepo descending
+                      select p.TrudoustroenDepo).Distinct().ToList();
+
+            return qq;
+        }
+
         public List<string> GetUchFacs(string uchZavedenie)
         {
             if (uchZavedenie == RepoConsts.NoUchZavedenie) return new List<string> { };
@@ -283,6 +315,7 @@ namespace Provodnik
         public const string NoObuchenie = "(нет)";
         public const string NoUchZavedenie = "не учится";
         public const string NoSezons = "(все)";
+        public const string NoTrudoustroistvo = "(нет)";
     }
 
 

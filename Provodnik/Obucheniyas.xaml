@@ -65,6 +65,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Button Content="Добавить группу" Click="AddFromListButton_Click"/>
+            <CheckBox Content="Скрыть группы прошлых лет" IsChecked="{Binding OnlyCurrentYear, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
             <DataGrid Margin="3" Name="PersonsListView"  Grid.Row="1" MinHeight="203" AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch" 
                    RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" SelectionMode="Single" VerticalAlignment="Stretch" 
                           

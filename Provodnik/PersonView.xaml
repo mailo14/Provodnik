@@ -194,13 +194,18 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="0*"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="26*"/>
+                        <ColumnDefinition Width="15*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="ФИО" Margin="10,6,0,6"/>
-                    <TextBlock Text="Отряд" Grid.Column="13" Margin="10,6,0,6"/>
+
+                    <CheckBox Content="Барабинск" IsChecked="{Binding IsBarabinsk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Grid.Column="13"/>
+                    <CheckBox Content="Куйбышев" IsChecked="{Binding IsKuibishev, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Grid.Column="14"/>
+                    <TextBlock Text="Отряд" Grid.Column="15" Margin="10,6,0,6"/>
                     <TextBlock Text="Гражданство" Grid.Column="8" Margin="10,6,0,6"/>
                     <TextBox Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="250" Style="{DynamicResource SpellCheckTextBox}"/>
                     <ComboBox Name="GrazdanstvoComboBox" Text="{Binding Grazdanstvo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="9" MinWidth="50"
@@ -208,7 +213,7 @@
                     <TextBlock Text="Возраст" Grid.Column="10" Margin="10,6,0,6"/>
                     <TextBox Text="{Binding Vozrast, Mode=OneWay}" Grid.Column="11" MinWidth="20" Style="{DynamicResource TextBox}" TextAlignment="Center" IsReadOnly="True"/>
 
-                    <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="14" MinWidth="80" Style="{DynamicResource ComboBox}"
+                    <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="16" MinWidth="80" Style="{DynamicResource ComboBox}"
                        IsEditable="True" ItemsSource="{Binding Otryadi}" IsReadOnly="False"/>
                     <TextBlock Text="Пол" Grid.Column="6" Margin="10,6,0,6"/>
                     <ComboBox Name="PolComboBox" Text="{Binding Pol, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="50"/>
@@ -248,7 +253,6 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Номер телефона"/>
                     <TextBlock Text="+7" Grid.Column="1"/>
@@ -259,6 +263,9 @@
                     <TextBox Text="{Binding Vk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="100" Style="{DynamicResource TextBox}"/>
                     <Button Content="перейти" Grid.Column="6" VerticalAlignment="Center" Click="Button_Click_3" Height="22" Padding="5,0"/>
                 </Grid>
+                <StackPanel Orientation="Horizontal"  Grid.Row="2" HorizontalAlignment="Right" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,5,8,0">
+                    <TextBlock Text="{Binding TrudoustroenLabel}" Grid.Column="8"/>
+                </StackPanel>
                 <Grid HorizontalAlignment="Stretch"  Margin="3,3,3,0" VerticalAlignment="Top" Grid.Row="3" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="80"/>
@@ -326,10 +333,10 @@
                     <ComboBox Name="GorodComboBox" Text="{Binding Gorod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="100" Style="{DynamicResource ComboBox}"
                        ItemsSource="{Binding Cities}" IsReadOnly="False" Margin="3,4,3,5" Height="22"/>
                     <CheckBox Content="В списке на проверку СБ" IsChecked="{Binding InSpisokSb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" Margin="10,8,0,8" />
-                    <CheckBox Content="Трудоустроен" IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" Margin="10,8,0,8" />
-                    <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Депо" Grid.Column="6" Margin="10,6,3,7"/>
-                    <TextBox Text="{Binding TrudoustroenDepo, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="30" Style="{DynamicResource TextBox}" IsEnabled="False"/>
+                    <CheckBox Visibility="Collapsed" Content="Трудоустроен" IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" Margin="10,8,0,8" />
+                    <StackPanel Visibility="Collapsed" Orientation="Horizontal">
+                        <TextBlock Text="Депо" Grid.Column="6" Margin="10,6,3,7"/>
+                        <TextBox Text="{Binding TrudoustroenDepo, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="30" Style="{DynamicResource TextBox}" IsEnabled="False"/>
                     </StackPanel>
                 </WrapPanel>
 

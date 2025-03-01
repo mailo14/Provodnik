@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -29,7 +28,8 @@ namespace Provodnik
 
         internal static Configuration CurrentConfig
         //   = new Configuration { DbConnection = "LocalConnection",FtpAdress= "127.0.0.1", FtpUser= "provodnikAdmin", FtpPassw= "Qwerty123" };
-             = new Configuration { DbConnection = "DefaultConnection" ,FtpAdress= "31.31.198.169", FtpUser="u0920601",FtpPassw= "XP83yno_" };
+        //     = new Configuration { DbConnection = "DefaultConnection" ,FtpAdress= "31.31.198.169", FtpUser="u0920601",FtpPassw= "XP83yno_" };
+        = new Configuration { DbConnection = "DefaultConnection" ,FtpAdress= ConfigurationManager.AppSettings["FtpAdress"], FtpUser= ConfigurationManager.AppSettings["FtpUser"], FtpPassw= ConfigurationManager.AppSettings["FtpPassw"] };
 
 
     public static void setCursor(bool wait = true, bool appStart = false)

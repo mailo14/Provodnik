@@ -162,6 +162,7 @@
             <Button Name="BadgesButton" Content="Бейджи" Click="BadgesButton_Click"/>
             <Button  Content="Справки РСО" Click="SpravkiPSOButton_Click"/>
             <Button  Content="Воронка" Click="VoronkaButton_Click"/>
+            <Button  Content="Обучение" Click="ObuchenieButton_Click"/>
             <Button  Content="Наличие сканов" Click="ScansButton_Click"/>
         </StackPanel>
         <Button Name="AddToGroupButton" Content="Добавить выбранных в группу" Grid.Row="3" HorizontalAlignment="Right" Click="AddToGroupButton_Click"/>

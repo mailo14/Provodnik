@@ -94,6 +94,9 @@
                 <TextBlock Text="Отряд" Grid.Column="2"/>
                 <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="80" Style="{DynamicResource ComboBox}"
                        IsEditable="True" ItemsSource="{Binding Otryadi}" IsReadOnly="False"/>
+
+                <CheckBox Content="Барабинск" IsChecked="{Binding IsBarabinsk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True" Margin="0,3"/>
+                <CheckBox Content="Куйбышев" IsChecked="{Binding IsKuibishev, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True" Margin="0,3"/>
                 
                 <TextBlock Text="Учебное заведение" Grid.Column="4"/>
                 <ComboBox Name="UchZavedenieComboBox" Text="{Binding UchZavedenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" MinWidth="70" Style="{DynamicResource ComboBox}"
@@ -105,6 +108,7 @@
                 
                 <CheckBox Content="Новичок" IsChecked="{Binding IsNovichok, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True"/>
                 <CheckBox Content="Совершеннолетний" IsChecked="{Binding IsSovershennolentnii, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True"/>
+                <CheckBox Content="Сдал экзамен" IsChecked="{Binding IsExamen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True"/>
 
                 <TextBlock Text="Группа обучения" Grid.Column="9"/>
                 <ComboBox Text="{Binding Obuchenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="10" MinWidth="50" Style="{DynamicResource ComboBox}"
@@ -115,8 +119,18 @@
                       ItemsSource="{Binding MedKommDats}"  IsReadOnly="False"/>
 
                 <CheckBox Content="Сан.гиг.обучение" IsChecked="{Binding IsSanGigObuchenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"/>
-                <CheckBox Content="Трудоустроен" IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"/>
+                <!--CheckBox Content="Трудоустроен в" IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"/>
+                <ComboBox Name="TrudoustroenDepoComboBox" Text="{Binding TrudoustroenDepo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="50" Style="{DynamicResource ComboBox}"
+                      ItemsSource="{Binding TrudoustroenDepos}"  IsReadOnly="False"/-->                
                 <CheckBox Content="В списке на проверку СБ" IsChecked="{Binding InSpisokSb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Трудоустройство в" Grid.Column="4" VerticalAlignment="Center" Margin="10,0,0,2"/>
+                    <ComboBox  Text="{Binding TrudoustroistvoDepo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="50" Style="{DynamicResource ComboBox}"
+                      ItemsSource="{Binding TrudoustroistvoDepos}"  IsReadOnly="False"/>
+                    <TextBlock Text="на период" Grid.Column="4" Margin="0,0,0,2"/>
+                    <ComboBox  Text="{Binding TrudoustroistvoPeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="50" Style="{DynamicResource ComboBox}"
+                      ItemsSource="{Binding TrudoustroistvoPeriods}"  IsReadOnly="False"/>
+                </StackPanel>
             </WrapPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="3,3,3,0" Grid.Row="3" VerticalAlignment="Top">

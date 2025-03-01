@@ -60,12 +60,16 @@ namespace Provodnik
         public ObservableCollection<string> Cities { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Otryadi { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Grazdanstva { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> TrudoustroenDepos { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> BolnicaNames { get; set; } = new ObservableCollection<string>();
 
         public ObservableCollection<string> Obucheniyas { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> MedKommDats { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> UchZavedeniya { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<string> Sezons { get; set; } = new ObservableCollection<string>();
+
+        public ObservableCollection<string> TrudoustroistvoDepos { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> TrudoustroistvoPeriods { get; set; } = new ObservableCollection<string>();
 
         string _UchZavedenie;
         [DisplayName(DisplayName = "Учебное заведение")]
@@ -93,6 +97,30 @@ namespace Provodnik
             }
         }
 
+        bool? _IsKuibishev;
+        public bool? IsKuibishev
+        {
+            get => _IsKuibishev;
+            set
+            {
+                _IsKuibishev = value;               
+                OnPropertyChanged();
+                if (value.HasValue) UchZavedenie = null;
+            }
+        }
+
+        bool? _IsBarabinsk;
+        public bool? IsBarabinsk
+        {
+            get => _IsBarabinsk;
+            set
+            {
+                _IsBarabinsk = value;               
+                OnPropertyChanged();
+                if (value.HasValue) UchZavedenie = null;
+            }
+        }
+
         string _Sezon;
         //[DisplayName(DisplayName = "Учебное заведение")]
         public string Sezon
@@ -113,6 +141,39 @@ namespace Provodnik
             set
             {
                 _Grazdanstvo = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _TrudoustroenDepo;
+        public string TrudoustroenDepo
+        {
+            get => _TrudoustroenDepo;
+            set
+            {
+                _TrudoustroenDepo = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _TrudoustroistvoDepo;
+        public string TrudoustroistvoDepo
+        {
+            get => _TrudoustroistvoDepo;
+            set
+            {
+                _TrudoustroistvoDepo = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _TrudoustroistvoPeriod;
+        public string TrudoustroistvoPeriod
+        {
+            get => _TrudoustroistvoPeriod;
+            set
+            {
+                _TrudoustroistvoPeriod = value;
                 OnPropertyChanged();
             }
         }
@@ -206,6 +267,7 @@ namespace Provodnik
             Cities.Clear(); foreach (var pp in repository.GetPersonCities()) Cities.Add(pp);
             Otryadi.Clear(); foreach (var pp in repository.GetOtryadi()) Otryadi.Add(pp);
             Grazdanstva.Clear(); foreach (var pp in repository.GetGrazdanstva()) Grazdanstva.Add(pp);
+            TrudoustroenDepos.Clear(); foreach (var pp in repository.GetTrudoustroenDepos()) TrudoustroenDepos.Add(pp);
             BolnicaNames.Clear(); foreach (var d in repository.GetBolnicaNames()) BolnicaNames.Add(d);
             UchZavedeniya.Clear(); foreach (var pp in repository.GetUchZavedeniya()) UchZavedeniya.Add(pp);
 
@@ -215,6 +277,9 @@ namespace Provodnik
             Obucheniyas.Clear(); foreach (var pp in repository.GetObucheniyas()) Obucheniyas.Add(pp);
 
             MedKommDats.Clear(); foreach (var pp in repository.GetMedKommDats()) MedKommDats.Add(pp);
+
+            TrudoustroistvoDepos.Clear(); foreach (var pp in repository.GetTrudoustroistvoDepos()) TrudoustroistvoDepos.Add(pp);
+            TrudoustroistvoPeriods.Clear(); foreach (var pp in repository.GetTrudoustroistvoPeriods()) TrudoustroistvoPeriods.Add(pp);
 
         }
 
@@ -328,8 +393,8 @@ new ScanCheck{DisplayName="Миграционная карта и временн
                       ReadyOnly = null;
                       foreach (var ec in ExtendedChecks) ec.IsChecked = null;
                       BirthFrom = BirthTo = null;
-                      Otryad = UchZavedenie = Grazdanstvo = Obuchenie= MedKommDat= null;
-                      IsNovichok = IsSovershennolentnii=IsTrudoustroen= InSpisokSb= IsSanGigObuchenie= null;
+                      Otryad = UchZavedenie = Grazdanstvo = Obuchenie= MedKommDat= TrudoustroenDepo = TrudoustroistvoDepo= TrudoustroistvoPeriod= null;
+                      IsNovichok = IsSovershennolentnii=IsTrudoustroen= InSpisokSb= IsSanGigObuchenie= IsBarabinsk=IsKuibishev=IsSgups = IsExamen = null;
                       
                       Gorod = null; VihodDat = null;
                      Sezon= new Repository().GetCurSezon();
@@ -431,6 +496,9 @@ private RelayCommand _FindCommand;
 
                 if (InSpisokSb.HasValue)
                     query = query.Where(pp => pp.InSpisokSb == InSpisokSb.Value);
+
+                if (IsExamen.HasValue)
+                    query = query.Where(pp => pp.IsExamen == IsExamen.Value);
 
                 if (IsSanGigObuchenie.HasValue)
                     query = query.Where(pp => pp.IsSanGigObuchenie == IsSanGigObuchenie.Value);
@@ -540,8 +608,44 @@ private RelayCommand _FindCommand;
             {
                 query = query.Where(pp => IsSgups.Value?( pp.UchZavedenie ==CommonConsts.Sgups ): (pp.UchZavedenie !=CommonConsts.Sgups));
             }
+            if (IsBarabinsk.HasValue)
+            {
+                query = query.Where(pp =>pp.IsBarabinsk == IsBarabinsk.Value);
+            }
+            if (IsKuibishev.HasValue)
+            {
+                query = query.Where(pp =>pp.IsKuibishev == IsKuibishev.Value);
+            }
             if (!string.IsNullOrWhiteSpace(Grazdanstvo))
                 query = query.Where(pp => pp.Grazdanstvo == Grazdanstvo);
+            if (!string.IsNullOrWhiteSpace(TrudoustroenDepo))
+                query = query.Where(pp => pp.TrudoustroenDepo == TrudoustroenDepo);
+
+             if (!string.IsNullOrWhiteSpace(TrudoustroistvoPeriod)){
+
+                var period=TrudoustroistvoPeriod.Split(new[] { '-'}).Select(x=>DateTime.Parse(x.Trim())).ToList();
+                var startDate = period[0];   var endDate = period[1];
+                query = query.Where(pp => (from t in db.Trudoustroistva
+                                           join tp in db.TrudoustroistvoPersons on t.Id equals tp.TrudoustroistvoId
+                                           where tp.PersonId == pp.Id && t.StartDate == startDate && t.EndDate== endDate
+                                           select t).Any());
+            }
+            if (!string.IsNullOrWhiteSpace(TrudoustroistvoDepo) )
+            {
+                if (TrudoustroistvoDepo == RepoConsts.NoTrudoustroistvo)
+                {
+                    query = query.Where(pp => (from t in db.Trudoustroistva
+                                               join tp in db.TrudoustroistvoPersons on t.Id equals tp.TrudoustroistvoId
+                                               where tp.PersonId == pp.Id && t.StartDate.Year == DateTime.Now.Year
+                                               select t).Any() == false);
+                }
+                else
+                    query = query.Where(pp => (from t in db.Trudoustroistva
+                                         join tp in db.TrudoustroistvoPersons on t.Id equals tp.TrudoustroistvoId
+                                         where tp.PersonId ==pp.Id && t.Depo == TrudoustroistvoDepo && t.StartDate.Year == DateTime.Now.Year
+                                         select t).Any());
+            }
+
             if (!string.IsNullOrWhiteSpace(NaprMedBolnicaName))
             {
                 if (NaprMedBolnicaName.Contains("ДоброМед"))
@@ -828,6 +932,20 @@ private RelayCommand _FindCommand;
                 if (_InSpisokSb != value)
                 {
                     _InSpisokSb = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        bool? _IsExamen;
+        public bool? IsExamen
+        {
+            get => _IsExamen;
+            set
+            {
+                if (_IsExamen != value)
+                {
+                    _IsExamen = value;
                     OnPropertyChanged();
                 }
             }

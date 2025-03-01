@@ -34,7 +34,19 @@ namespace Provodnik
         }
 
         public ObservableCollection<UchebGruppaViewModel> List { get; set; } = new ObservableCollection<UchebGruppaViewModel>();
-        
+
+        private bool _OnlyCurrentYear;
+        public bool OnlyCurrentYear
+        {
+            get => _OnlyCurrentYear;
+            set
+            {
+                _OnlyCurrentYear = value;
+                RefreshList();
+                OnPropertyChanged();
+            }
+        }
+
         public void RefreshList()
         {
             List.Clear();
@@ -43,9 +55,10 @@ namespace Provodnik
             yearStart = yearStart.AddDays(-yearStart.Day + 1).AddMonths(-yearStart.Month + 1);
             var qq = (from p in db.Persons
                  where //p.UchebStartDat > yearStart && 
-                 p.UchebGruppa != null
-                 orderby p.UchebStartDat descending
+                 p.UchebGruppa != null && (!OnlyCurrentYear || p.UchebStartDat!=null && p.UchebStartDat.Value.Year>=DateTime.Today.Year)
+                      orderby p.UchebStartDat descending
                  select new { p.UchebGruppa, p.UchebStartDat, p.UchebEndDat, p.UchebCentr }).Distinct()
+                 .OrderByDescending(x=>x.UchebStartDat)
                               .Select(pp => new UchebGruppaViewModel()
                               {
                                   UchebCentr = pp.UchebCentr,
@@ -67,7 +80,7 @@ namespace Provodnik
         {
             InitializeComponent();
             var vm = new ObucheniyasViewModel();
-            vm.RefreshList();
+            vm.OnlyCurrentYear = true;
             DataContext = vm;            
         }
 

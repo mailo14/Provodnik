@@ -31,6 +31,8 @@ namespace Provodnik
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<MedKomZayavka> MedKomZayavki { get; set; }
         public virtual DbSet<MedKomZayavkaPerson> MedKomZayavkaPersons { get; set; }
+        public virtual DbSet<Trudoustroistvo> Trudoustroistva { get; set; }
+        public virtual DbSet<TrudoustroistvoPerson> TrudoustroistvoPersons { get; set; }
     }
 
     [Table("Person")]
@@ -51,6 +53,8 @@ namespace Provodnik
         public string Sezon { get; set; }
         //[Index]
         public bool IsNovichok { get; set; }
+        public bool IsBarabinsk { get; set; }
+        public bool IsKuibishev { get; set; }
         public string Dogovor { get; set; }
         public DateTime? DogovorDat { get; set; }
         //[Index]
@@ -213,11 +217,30 @@ namespace Provodnik
         public DateTime? NaprMedPoluchenoDat { get; set; }
     }
 
+    [Table("Trudoustroistvo")]
+    public class Trudoustroistvo
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string Depo { get; set; }
+        public int Kolvo { get; set; }
+    }
+
     [Table("MedKomZayavkaPerson")]
     public class MedKomZayavkaPerson
     {
         public int Id { get; set; }
         public int MedKomZayavkaId { get; set; }
+        public int PersonId { get; set; }
+    }
+
+    [Table("TrudoustroistvoPerson")]
+    public class TrudoustroistvoPerson
+    {
+        public int Id { get; set; }
+        public int TrudoustroistvoId { get; set; }
         public int PersonId { get; set; }
     }
 

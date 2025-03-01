@@ -1,0 +1,78 @@
+﻿<Window x:Class="Provodnik.TrudoustroistvaView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        
+             xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation"
+             xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
+        xmlns:local="clr-namespace:Provodnik"
+        mc:Ignorable="d"
+        Title="Трудоустройство" Height="340.298" Width="580.093" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment"
+                 Value="Center" />
+        </Style>
+        <Style x:Key="CenteredCell" TargetType="DataGridCell">
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="10,3,0,3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="TextBox" TargetType="TextBox">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MinHeight" Value="22"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+        </Style>
+        <Style x:Key="ComboBox" TargetType="ComboBox">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="IsEditable" Value="True"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <EventSetter Event="GotFocus" Handler="ComboBox_GotFocus"/>
+
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+        </Style>
+        <Style x:Key="DatePicker" TargetType="DatePicker">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="90"/>
+
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+        </Style>
+        <Style  TargetType="Button">
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Padding" Value="15,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="3" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Button Content="Добавить" Click="Button_Click" Grid.Row="0"/>
+        <DataGrid x:Name="GroupsListView" SelectionMode="Single" ItemsSource="{Binding Persons}" Margin="3"
+                  MouseDoubleClick="ListView_MouseDoubleClick"  KeyUp="PersonsListView_KeyUp" Grid.Row="1"  AutoGenerateColumns="False" EnableRowVirtualization="True" HorizontalAlignment="Stretch" 
+                   RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" VerticalAlignment="Stretch" 
+                          >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" CanUserSort="True" SortMemberPath="Fio"/>
+                <DataGridTextColumn Header="Начало" Binding="{Binding Path=StartDate,StringFormat=\{0:dd.MM.yyyy\}}"/>
+                <DataGridTextColumn Header="Окончание" Binding="{Binding Path=EndDate,StringFormat=\{0:dd.MM.yyyy\}}"/>
+                <DataGridTextColumn Header="Депо" Binding="{Binding Depo}"/>
+                <DataGridTextColumn Header="Количество бойцов" Binding="{Binding Kolvo}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Window>

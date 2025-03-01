@@ -32,7 +32,7 @@
     <ProductName>АСУ Проводник</ProductName>
     <MinimumRequiredVersion>1.0.0.37</MinimumRequiredVersion>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>71</ApplicationRevision>
+    <ApplicationRevision>74</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -116,6 +116,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -153,7 +154,20 @@
     <Compile Include="AlarmsView.xaml.cs">
       <DependentUpon>AlarmsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202502081500340_init31.cs" />
+    <Compile Include="Migrations\202502081500340_init31.designer.cs">
+      <DependentUpon>202502081500340_init31.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TrudoustroistvoView.xaml.cs">
+      <DependentUpon>TrudoustroistvoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TrudoustroistvoPersonViewModel.cs" />
+    <Compile Include="TrudoustroistvoViewModel.cs" />
+    <Compile Include="TrudoustroistvoShortViewModel.cs" />
     <Compile Include="MedKomZayavkaShortViewModel.cs" />
+    <Compile Include="TrudoustroistvaView.xaml.cs">
+      <DependentUpon>TrudoustroistvaView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\202111280459299_init12.cs" />
     <Compile Include="Migrations\202111280459299_init12.designer.cs">
       <DependentUpon>202111280459299_init12.cs</DependentUpon>
@@ -229,6 +243,10 @@
     <Compile Include="Migrations\202312191214295_init30.cs" />
     <Compile Include="Migrations\202312191214295_init30.designer.cs">
       <DependentUpon>202312191214295_init30.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202410280421339_barabinsk.cs" />
+    <Compile Include="Migrations\202410280421339_barabinsk.designer.cs">
+      <DependentUpon>202410280421339_barabinsk.cs</DependentUpon>
     </Compile>
     <Compile Include="Obuchenie.xaml.cs">
       <DependentUpon>Obuchenie.xaml</DependentUpon>
@@ -355,6 +373,14 @@
     <Page Include="AlarmsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TrudoustroistvoView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TrudoustroistvaView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Obuchenie.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -562,6 +588,12 @@
     <EmbeddedResource Include="Migrations\202312191214295_init30.resx">
       <DependentUpon>202312191214295_init30.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202410280421339_barabinsk.resx">
+      <DependentUpon>202410280421339_barabinsk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502081500340_init31.resx">
+      <DependentUpon>202502081500340_init31.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -617,6 +649,12 @@
     </Content>
     <None Include="publicProvodnik.snk" />
     <Content Include="_шаблоны\Акт передачи документов.dotx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_шаблоны\Список на обучение.xltx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_шаблоны\Таблица обучение.xltx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="pic\loading.gif" />

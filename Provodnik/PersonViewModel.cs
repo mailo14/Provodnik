@@ -70,6 +70,13 @@ namespace Provodnik
 
                 MainWindow.Mapper.Value.Map(db.Persons.Single(pp => pp.Id == personId.Value), this);//must be after docs loaded
                                                                                                     // progressChanged(10);
+
+                var trudoustroen = (from t in db.Trudoustroistva
+                                    join tp in db.TrudoustroistvoPersons on t.Id equals tp.TrudoustroistvoId
+                                    where tp.PersonId == personId.Value && t.StartDate.Year == DateTime.Now.Year
+                                    select t).FirstOrDefault();
+                TrudoustroenLabel = trudoustroen == null ? ("Не трудоустроен"+(Pol== "женский" ?"а":""))
+                    : ($"Трудоустроен"+(Pol == "женский" ? "а" : "")+ " в {trudoustroen.Depo}" + Environment.NewLine + $"на период {trudoustroen.StartDate.ToString("dd.MM.yyyy")}-{trudoustroen.EndDate.ToString("dd.MM.yyyy")}");
             }
             else
             {
@@ -273,19 +280,19 @@ namespace Provodnik
                 await System.Threading.Tasks.Task.Run(
                     () =>
                     {
-                        /* using (var client = new FluentFTP.FtpClient())
+                        /**/ using (var client = new FluentFTP.FtpClient())
                          {
                              App.ConfigureFtpClient(client);
                              client.Connect();
-                             client.Download(out bytes, d.FileName);
+                             client.Download(out bytes, @"http/"+d.FileName);
                              //Thread.Sleep(2000);
-                         }*/
+                         }
 
-                        using (WebClient wc = new WebClient() { Credentials = new NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw) })
+                        /*using (WebClient wc = new WebClient() { Credentials = new NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw) })
                         {
-                            
-                               bytes = wc.DownloadData("http://u0920601.plsk.regruhosting.ru/" + d.FileName);
-                        }
+                            //bytes = wc.DownloadData(App.CurrentConfig.FtpAdress+" / " + d.FileName);
+                               //bytes = wc.DownloadData("http://u0920601.plsk.regruhosting.ru/" + d.FileName);
+                        }*/
                     });
 
                 //d.Bitmap.Source = ToBitmapSource(bytes);
@@ -570,6 +577,17 @@ namespace Provodnik
             }
         }
 
+        private string _TrudoustroenLabel;
+        public string TrudoustroenLabel
+        {
+            get => _TrudoustroenLabel;
+            set
+            {
+                _TrudoustroenLabel = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _BadgeRus;
         [DisplayName(DisplayName = "Бейдж на русском")]
         public string BadgeRus
@@ -703,6 +721,28 @@ namespace Provodnik
             set
             {
                 _IsNovichok = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsBarabinsk;
+        public bool IsBarabinsk
+        {
+            get => _IsBarabinsk;
+            set
+            {
+                _IsBarabinsk = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsKuibishev;
+        public bool IsKuibishev
+        {
+            get => _IsKuibishev;
+            set
+            {
+                _IsKuibishev = value;
                 OnPropertyChanged();
             }
         }
