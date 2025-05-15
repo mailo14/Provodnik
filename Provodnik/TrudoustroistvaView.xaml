@@ -9,7 +9,7 @@
              xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
         xmlns:local="clr-namespace:Provodnik"
         mc:Ignorable="d"
-        Title="Трудоустройство" Height="340.298" Width="580.093" WindowStartupLocation="CenterScreen">
+        Title="Распределение по городам" Height="340.298" Width="580.093" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment"
@@ -66,7 +66,7 @@
                    RowDetailsVisibilityMode="VisibleWhenSelected" IsReadOnly="True" VerticalAlignment="Stretch" 
                           >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Название" Binding="{Binding Name}" CanUserSort="True" SortMemberPath="Fio"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" CanUserSort="True" SortMemberPath="Name"/>
                 <DataGridTextColumn Header="Начало" Binding="{Binding Path=StartDate,StringFormat=\{0:dd.MM.yyyy\}}"/>
                 <DataGridTextColumn Header="Окончание" Binding="{Binding Path=EndDate,StringFormat=\{0:dd.MM.yyyy\}}"/>
                 <DataGridTextColumn Header="Депо" Binding="{Binding Depo}"/>

@@ -382,7 +382,7 @@ namespace Provodnik
                     {
                         person.IsTrudoustroen =false;
                         person.TrudoustroenDepo = null;
-                        person.Gorod = vm.City;
+                        person.Gorod = null;
 
                     }
                     db.SaveChanges();
@@ -564,11 +564,11 @@ namespace Provodnik
 
         private void PersonsListView_Sorting(object sender, DataGridSortingEventArgs e)
         {
-            this.Dispatcher.BeginInvoke((Action)delegate ()
+            /*this.Dispatcher.BeginInvoke((Action)delegate ()
             {
                 //runs after sorting is done
                 Helper.SetPersonShortIndexes(PersonsListView);
-            }, null);
+            }, null);*/
         }
 
         private void PrintVSOP3Button_Click(object sender, RoutedEventArgs e)
@@ -652,6 +652,13 @@ namespace Provodnik
         private void PrintActDoc_Click(object sender, RoutedEventArgs e)
         {
             ReestrPeredachi(true);
+        }
+
+        private void AllTrudoustroenButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as SendGroupViewModel;
+            foreach (var p in vm.Persons)
+                p.IsTrudoustroen = true;
         }
     }
 }

@@ -12,7 +12,7 @@
         
         xmlns:local="clr-namespace:Provodnik"
         mc:Ignorable="d"
-        Title="Карточка группы для отправки" Width="895.339" WindowStartupLocation="CenterScreen" SizeToContent="Height" Height="517.95">
+        Title="Карточка группы для отправки" Width="895.339" WindowStartupLocation="CenterScreen" Height="517.95">
     <Window.Resources>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment"
@@ -171,7 +171,7 @@
                     <Run Text="Количество:"/>
                     <Run Text="{Binding Persons.Count,Mode=OneWay}" FontWeight="Bold" />
                 </TextBlock>
-
+                <Button HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Content="Отметить всех трудоустроенными" Padding="15,2" Click="AllTrudoustroenButton_Click"/>
 
             </Grid>
         </Expander>

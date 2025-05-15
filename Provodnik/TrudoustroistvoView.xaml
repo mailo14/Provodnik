@@ -12,7 +12,7 @@
         
         xmlns:local="clr-namespace:Provodnik"
         mc:Ignorable="d"
-        Title="Трудоустройство" Width="769.129" WindowStartupLocation="CenterScreen" SizeToContent="Height" Height="413">
+        Title="Трудоустройство" Width="769.129" WindowStartupLocation="CenterScreen" Height="413">
     <Window.Resources>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="HorizontalContentAlignment"

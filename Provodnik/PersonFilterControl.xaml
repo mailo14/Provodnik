@@ -119,12 +119,15 @@
                       ItemsSource="{Binding MedKommDats}"  IsReadOnly="False"/>
 
                 <CheckBox Content="Сан.гиг.обучение" IsChecked="{Binding IsSanGigObuchenie, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"/>
-                <!--CheckBox Content="Трудоустроен в" IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"/>
-                <ComboBox Name="TrudoustroenDepoComboBox" Text="{Binding TrudoustroenDepo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="50" Style="{DynamicResource ComboBox}"
-                      ItemsSource="{Binding TrudoustroenDepos}"  IsReadOnly="False"/-->                
+                           
                 <CheckBox Content="В списке на проверку СБ" IsChecked="{Binding InSpisokSb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" />
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Трудоустройство в" Grid.Column="4" VerticalAlignment="Center" Margin="10,0,0,2"/>
+                    <CheckBox Content="Трудоустроен в" IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4"/>
+                    <ComboBox Name="TrudoustroenDepoComboBox" Text="{Binding TrudoustroenDepo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="50" Style="{DynamicResource ComboBox}"
+                      ItemsSource="{Binding TrudoustroenDepos}"  IsReadOnly="False"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Распределение в" Grid.Column="4" VerticalAlignment="Center" Margin="10,0,0,2"/>
                     <ComboBox  Text="{Binding TrudoustroistvoDepo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="50" Style="{DynamicResource ComboBox}"
                       ItemsSource="{Binding TrudoustroistvoDepos}"  IsReadOnly="False"/>
                     <TextBlock Text="на период" Grid.Column="4" Margin="0,0,0,2"/>

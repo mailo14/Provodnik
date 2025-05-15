@@ -75,8 +75,8 @@ namespace Provodnik
                                     join tp in db.TrudoustroistvoPersons on t.Id equals tp.TrudoustroistvoId
                                     where tp.PersonId == personId.Value && t.StartDate.Year == DateTime.Now.Year
                                     select t).FirstOrDefault();
-                TrudoustroenLabel = trudoustroen == null ? ("Не трудоустроен"+(Pol== "женский" ?"а":""))
-                    : ($"Трудоустроен"+(Pol == "женский" ? "а" : "")+ " в {trudoustroen.Depo}" + Environment.NewLine + $"на период {trudoustroen.StartDate.ToString("dd.MM.yyyy")}-{trudoustroen.EndDate.ToString("dd.MM.yyyy")}");
+                TrudoustroenLabel = trudoustroen == null ? ("Не распределен" + (Pol == "женский" ? "а" : ""))
+                    : ($"Распределен" + (Pol == "женский" ? "а" : "") + $" в депо {trudoustroen.Depo}" + Environment.NewLine + $"на период {trudoustroen.StartDate.ToString("dd.MM.yyyy")}-{trudoustroen.EndDate.ToString("dd.MM.yyyy")}");
             }
             else
             {

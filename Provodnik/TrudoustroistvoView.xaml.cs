@@ -86,6 +86,18 @@ namespace Provodnik
                                 select pd);
                 var personsToDeleteIds = toDelete.Select(x => x.PersonId).ToList();
                 db.TrudoustroistvoPersons.RemoveRange(toDelete);
+
+                foreach (var pId in personsToDeleteIds)                    
+                {
+                    var pe = db.Persons.First(pp => pp.Id == pId);
+                    if (pe.Gorod == "Новосибирск")
+                    {
+                        pe.IsTrudoustroen = false;
+                        pe.TrudoustroenDepo = null;
+                        pe.Gorod = null;
+                    }
+                }
+
                 db.SaveChanges();
             }
             else
@@ -105,7 +117,16 @@ namespace Provodnik
                     db.SaveChanges();
                 }
                 
+                if (vm.Depo?.Contains("Новосибирск")==true)
+                {
+                    var pe = db.Persons.First(pp => pp.Id == d.PersonId);
+                    pe.IsTrudoustroen = true;
+                    pe.TrudoustroenDepo = vm.Depo;
+                    pe.Gorod = "Новосибирск";
+                }
             }
+            db.SaveChanges();
+
             DialogResult = true;
         }
 
@@ -161,11 +182,11 @@ namespace Provodnik
 
         private void PersonsListView_Sorting(object sender, DataGridSortingEventArgs e)
         {
-            this.Dispatcher.BeginInvoke((Action)delegate ()
+            /*this.Dispatcher.BeginInvoke((Action)delegate ()
             {
                 //runs after sorting is done
                 Helper.SetPersonShortIndexes(PersonsListView);
-            }, null);
+            }, null);*/
         }
 
         private async void ExcelButton_Click(object sender, RoutedEventArgs e)

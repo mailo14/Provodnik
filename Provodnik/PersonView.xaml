@@ -333,8 +333,8 @@
                     <ComboBox Name="GorodComboBox" Text="{Binding Gorod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="100" Style="{DynamicResource ComboBox}"
                        ItemsSource="{Binding Cities}" IsReadOnly="False" Margin="3,4,3,5" Height="22"/>
                     <CheckBox Content="В списке на проверку СБ" IsChecked="{Binding InSpisokSb, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" Margin="10,8,0,8" />
-                    <CheckBox Visibility="Collapsed" Content="Трудоустроен" IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" Margin="10,8,0,8" />
-                    <StackPanel Visibility="Collapsed" Orientation="Horizontal">
+                    <CheckBox Content="Трудоустроен" IsChecked="{Binding IsTrudoustroen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="5" Margin="10,8,0,8" />
+                    <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Депо" Grid.Column="6" Margin="10,6,3,7"/>
                         <TextBox Text="{Binding TrudoustroenDepo, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="7" MinWidth="30" Style="{DynamicResource TextBox}" IsEnabled="False"/>
                     </StackPanel>

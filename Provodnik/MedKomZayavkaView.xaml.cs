@@ -222,11 +222,11 @@ namespace Provodnik
 
         private void PersonsListView_Sorting(object sender, DataGridSortingEventArgs e)
         {
-            this.Dispatcher.BeginInvoke((Action)delegate ()
+            /*this.Dispatcher.BeginInvoke((Action)delegate ()
             {
                 //runs after sorting is done
                 Helper.SetPersonShortIndexes(PersonsListView);
-            }, null);
+            }, null);*/
         }
     }
 }
