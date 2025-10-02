@@ -624,6 +624,18 @@ namespace Provodnik
             }
         }
 
+        private string _Tg;
+        [DisplayName(DisplayName = "Ссылка на Telegram")]
+        public string Tg
+        {
+            get => _Tg;
+            set
+            {
+                _Tg = value;
+                OnPropertyChanged();
+            }
+        }
+
         private string _Sezon;
         [DisplayName(DisplayName = "Сезон")]
         public string Sezon
@@ -653,7 +665,15 @@ namespace Provodnik
                                 RefreshScansSize();
                                 RefreshMedPsihOnScanChanded();        //Helper.RestorePersonDocuments(this, false, true);                        //                        IsMedKomm = false;
                             }
-                        }                         
+                        }
+
+                        NaprMedZakazanoDat=NaprMedPoluchenoDat = NaprMedVidanoDat = null;
+                        IsNaprMedZakazano = IsNaprMedPolucheno = IsNaprMedVidano = false; 
+                         IsNaprMedPoluchenoSOshibkoi = IsNaprMedPoluchenoNePoln= false;
+                        NaprMedBolnicaName = NaprMedDepo = null;
+
+                        IsTrudoustroen = false; TrudoustroenDepo = null; Gorod = null;
+                        IsNovichok = false;
                     }
 
                     _Sezon = value;
@@ -721,6 +741,17 @@ namespace Provodnik
             set
             {
                 _IsNovichok = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsKruglogodOtryad;
+        public bool IsKruglogodOtryad
+        {
+            get => _IsKruglogodOtryad;
+            set
+            {
+                _IsKruglogodOtryad = value;
                 OnPropertyChanged();
             }
         }

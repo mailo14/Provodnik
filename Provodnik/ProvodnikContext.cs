@@ -48,8 +48,10 @@ namespace Provodnik
         public string Grazdanstvo { get; set; }
         public string Phone { get; set; }
         public string Vk { get; set; }
+        public string Tg { get; set; }
         //[Index]
         public string Otryad { get; set; }
+        public bool IsKruglogodOtryad { get; set; }
         public string Sezon { get; set; }
         //[Index]
         public bool IsNovichok { get; set; }

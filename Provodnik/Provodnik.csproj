@@ -32,7 +32,7 @@
     <MinimumRequiredVersion>1.0.0.75</MinimumRequiredVersion>
     <WebPage>publish.htm</WebPage>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>78</ApplicationRevision>
+    <ApplicationRevision>79</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -158,6 +158,10 @@
     <Compile Include="Migrations\202502081500340_init31.cs" />
     <Compile Include="Migrations\202502081500340_init31.designer.cs">
       <DependentUpon>202502081500340_init31.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202510020914196_init32.cs" />
+    <Compile Include="Migrations\202510020914196_init32.designer.cs">
+      <DependentUpon>202510020914196_init32.cs</DependentUpon>
     </Compile>
     <Compile Include="TrudoustroistvoView.xaml.cs">
       <DependentUpon>TrudoustroistvoView.xaml</DependentUpon>
@@ -595,6 +599,9 @@
     <EmbeddedResource Include="Migrations\202502081500340_init31.resx">
       <DependentUpon>202502081500340_init31.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202510020914196_init32.resx">
+      <DependentUpon>202510020914196_init32.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -656,6 +663,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="_шаблоны\Таблица обучение.xltx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_шаблоны\Без медкомиссии.xltx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="pic\loading.gif" />

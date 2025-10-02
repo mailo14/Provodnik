@@ -210,6 +210,16 @@ namespace Provodnik
                 OnPropertyChanged();
             }
         }
+        private bool? _IsKruglogodOtryad=null;
+        public bool? IsKruglogodOtryad
+        {
+            get => _IsKruglogodOtryad;
+            set
+            {
+                _IsKruglogodOtryad = value;
+                OnPropertyChanged();
+            }
+        }
         private bool? _IsSovershennolentnii=null;
         public bool? IsSovershennolentnii
         {
@@ -394,7 +404,7 @@ new ScanCheck{DisplayName="Миграционная карта и временн
                       foreach (var ec in ExtendedChecks) ec.IsChecked = null;
                       BirthFrom = BirthTo = null;
                       Otryad = UchZavedenie = Grazdanstvo = Obuchenie= MedKommDat= TrudoustroenDepo = TrudoustroistvoDepo= TrudoustroistvoPeriod= null;
-                      IsNovichok = IsSovershennolentnii=IsTrudoustroen= InSpisokSb= IsSanGigObuchenie= IsBarabinsk=IsKuibishev=IsSgups = IsExamen = null;
+                      IsNovichok = IsSovershennolentnii=IsTrudoustroen= InSpisokSb= IsSanGigObuchenie= IsBarabinsk=IsKuibishev=IsSgups = IsExamen = IsKruglogodOtryad= null;
                       
                       Gorod = null; VihodDat = null;
                      Sezon= new Repository().GetCurSezon();
@@ -590,6 +600,10 @@ private RelayCommand _FindCommand;
 
             if (IsNovichok.HasValue)
                 query = query.Where(pp => pp.IsNovichok == IsNovichok.Value);
+
+            if (IsKruglogodOtryad.HasValue)
+                query = query.Where(pp => pp.IsKruglogodOtryad == IsKruglogodOtryad.Value);
+
             if (IsSovershennolentnii.HasValue) {
                 query = from q in query
                         let today = DateTime.Today

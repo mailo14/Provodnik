@@ -193,6 +193,39 @@ namespace Provodnik
             excel.myExcel.Visible = true;
         }
 
+        private void WithoutMedKommButton_Click(object sender, RoutedEventArgs e)
+        {
+            var db = new ProvodnikContext();
+
+            var ids = vm.PersonList.Select(pp => pp.Id).ToList();
+            var idsWithSpravka = new HashSet<int>(from p in db.Persons
+                                                  where ids.Contains(p.Id)
+                                                  where (db.PersonDocs.Count(ppp =>ppp.PersonId==p.Id && (ppp.DocTypeId == DocConsts.ЗаключениеВЭК || ppp.DocTypeId == DocConsts.ЗаключениеВЭК2) && ppp.FileName != null) == 2)
+                                                  select p.Id);
+
+            var persons = vm.PersonList.Where(p => !idsWithSpravka.Contains(p.Id));
+            if (!persons.Any())
+            {
+                MessageBox.Show("Справки есть у всех");
+                return;
+            }
+
+            excelReport excel = new excelReport();
+            excel.Init("Без медкомиссии.xltx", $"Без медкомиссии { DateTime.Now.Ticks}.xlsx");//,visible:true);//, otchetDir: otchetDir);
+
+            int ri = 1;
+            foreach (var r in persons)
+            {
+                ri++;
+                excel.cell[ri, 1].value2 = ri - 1;
+                excel.cell[ri, 2].value2 = r.Fio;
+                excel.cell[ri, 3].value2 = r.NaprMedVidanoDat?.ToString("dd.MM.yyyy"); 
+                excel.cell[ri, 4].value2 =r.NaprMedBolnicaName;
+            }
+            excel.setAllBorders(excel.get_Range("A1", "D" + ri));
+            excel.myExcel.Visible = true;
+        }
+
         private void VoronkaButton_Click(object sender, RoutedEventArgs e)
         {
             excelReport excel = new excelReport();

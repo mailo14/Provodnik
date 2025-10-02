@@ -95,7 +95,8 @@
                 <ComboBox Name="OtryadComboBox" Text="{Binding Otryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" MinWidth="80" Style="{DynamicResource ComboBox}"
                        IsEditable="True" ItemsSource="{Binding Otryadi}" IsReadOnly="False"/>
 
-                <CheckBox Content="Барабинск" IsChecked="{Binding IsBarabinsk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True" Margin="0,3"/>
+                <CheckBox Content="Круглогодичный отряд " IsChecked="{Binding IsKruglogodOtryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True"/>
+                <CheckBox Content="Барабинск " IsChecked="{Binding IsBarabinsk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True" Margin="0,3"/>
                 <CheckBox Content="Куйбышев" IsChecked="{Binding IsKuibishev, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True" Margin="0,3"/>
                 
                 <TextBlock Text="Учебное заведение" Grid.Column="4"/>

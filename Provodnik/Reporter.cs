@@ -56,7 +56,9 @@ namespace Provodnik
                             c++; excel.cell[ri, c].value2 = r.Pol;
                             c++; excel.cell[ri, c].value2 = Helper.FormatPhone(r.Phone);
                             c++; excel.cell[ri, c].value2 = r.Otryad;
+                            c++; excel.cell[ri, c].value2 = r.IsKruglogodOtryad ? "да" : "нет";
                             c++; excel.cell[ri, c].value2 = r.Vk;
+                            c++; excel.cell[ri, c].value2 = r.Tg;
                             c++; excel.cell[ri, c].value2 = r.Grazdanstvo;
 
                             c++; excel.cell[ri, c].value2 = r.IsNovichok ? "да" : "нет";

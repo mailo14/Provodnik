@@ -120,7 +120,7 @@ namespace Provodnik
                 if (vm.Depo?.Contains("Новосибирск")==true)
                 {
                     var pe = db.Persons.First(pp => pp.Id == d.PersonId);
-                    pe.IsTrudoustroen = true;
+                    //pe.IsTrudoustroen = true;
                     pe.TrudoustroenDepo = vm.Depo;
                     pe.Gorod = "Новосибирск";
                 }

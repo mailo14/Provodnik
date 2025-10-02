@@ -211,10 +211,10 @@ namespace Provodnik
 
                 excel.cell[ri, 1].value2 = ri - 7;
                 excel.cell[ri, 2].value2 = r.Fio + Environment.NewLine + (r.BirthDat.HasValue ? r.BirthDat.Value.ToString("dd.MM.yyyy") : "")
-                    + Environment.NewLine + r.MestoRozd;
+                    + Environment.NewLine + (r.Grazdanstvo == "КЗ" ? "KAZAKHSTAN" : r.MestoRozd);
                 excel.cell[ri, 3].value2 = "Проводник" + Environment.NewLine + "пассажирского" + Environment.NewLine + "вагона";
 
-                excel.cell[ri, 5].value2 = r.PaspAdres;
+                excel.cell[ri, 5].value2 = (r.Grazdanstvo == "КЗ" ? r.FactAdres : r.PaspAdres);
                 excel.cell[ri, 6].value2 =
                     (r.Grazdanstvo == "КЗ" ? "Паспорт гр-на РК:" : "Паспорт гр-на РФ:")
                     + Environment.NewLine + r.PaspSeriya + " " + r.PaspNomer
@@ -659,6 +659,13 @@ namespace Provodnik
             var vm = DataContext as SendGroupViewModel;
             foreach (var p in vm.Persons)
                 p.IsTrudoustroen = true;
+        }
+
+        private void AllNotTrudoustroenButton_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as SendGroupViewModel;
+            foreach (var p in vm.Persons)
+                p.IsTrudoustroen = false;
         }
     }
 }

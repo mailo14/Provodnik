@@ -60,6 +60,9 @@ namespace Provodnik
         public string Zametki{ get; set; }
      public string    Dogovor { get; set; }
         public string       Otryad { get; set; }
+        public string NaprMedBolnicaName { get; set; }
+        public DateTime? NaprMedPoluchenoDat { get; set; }
+        public DateTime? NaprMedVidanoDat { get; set; }
 
 
         public bool _IsSelected;
