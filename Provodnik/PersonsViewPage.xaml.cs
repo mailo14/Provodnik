@@ -235,8 +235,8 @@ namespace Provodnik
             var db = new ProvodnikContext();
 
             var ids = vm.PersonList.Select(pp => pp.Id).ToList();
-            var qq = from p in db.Persons
-                     where ids.Contains(p.Id)
+            var qq = (from p in db.Persons
+                     where ids.Contains(p.Id) && p.IsLeto==true
                      select new
                      {
                          p.UchebGruppa,
@@ -246,7 +246,6 @@ namespace Provodnik
                          ostObuch = p.UchebGruppa != null && !p.IsVibil,//p.VibilPrichina != "выбыл с обучения",
                          p.IsExamen,
                          //p.IsExamenFailed,
-                         //oshibokSvidet = p.IsSertificatError,
                          poluchenoSvidet = p.SertificatDat.HasValue,//db.PersonDocs.Any(x=>x.PersonId==p.Id && x.DocTypeId==DocConsts.СвидетельствоПрофессии && x.FileName!=null),
                          zakazanoNapr = p.IsNaprMedZakazano,
                          gotovoNapr = p.IsNaprMedPolucheno,
@@ -255,10 +254,10 @@ namespace Provodnik
                          neGoden =p.IsMedKommNeGoden, //p.VibilPrichina == "не допущен медкомиссией", //"не годен",
                          trudoustroen=p.IsTrudoustroen,
                          p.IsNovichok ,
-                         medKnizkaPoluchena= p.IsSanKnizka || p.IsSvoyaSanKnizka,
-                         medKnizkaZakazana= p.SanKnizkaDat.HasValue || p.IsSvoyaSanKnizka
+                         medKnizkaPoluchena= !p.IsNovichok || p.IsSanKnizka || p.IsSvoyaSanKnizka,
+                         medKnizkaZakazana = !p.IsNovichok || p.SanKnizkaDat.HasValue || p.IsSvoyaSanKnizka
 
-                     };
+                     }).ToList();
 
             int startCol = 2;
 

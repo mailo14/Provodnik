@@ -52,6 +52,7 @@ namespace Provodnik
         //[Index]
         public string Otryad { get; set; }
         public bool IsKruglogodOtryad { get; set; }
+        public bool IsLeto { get; set; }
         public string Sezon { get; set; }
         //[Index]
         public bool IsNovichok { get; set; }
@@ -310,9 +311,7 @@ namespace Provodnik
         public const int Миграционная2 = 18;
         public const int ВремРегистрация1 = 19;
         public const int ВремРегистрация2 = 20;
-        public const int СвидетельствоВакцинации = 21;
         public const int ТрудоваяКнижка1 = 22;
         public const int ТрудоваяКнижка2 = 23;
-        public const int СвидетельствоВакцинации2 = 24;
     }
 }

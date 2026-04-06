@@ -122,7 +122,7 @@ namespace Provodnik
             var allPasports = new string[]{ Fio,Phone,UchZavedenie,UchForma,Grazdanstvo//,Otryad
                 ,UchebCentr,(ExamenDat.HasValue) ? ExamenDat.ToString(): UchebEndDat.ToString()//TODO
                 ,RodPhone,RodFio
-                ,BirthDat.ToString(),PaspNomer,Snils,VaccineSert,VaccineSertDat.ToString() };
+                ,BirthDat.ToString(),PaspNomer,Snils };
 
             var allPasportsRus = new string[] { MestoRozd, PaspSeriya, PaspAdres, PaspKodPodr };
 
@@ -405,7 +405,7 @@ namespace Provodnik
                 .Matches(@"^\d{4}$").WithMessage("{PropertyName} должна содержать 4 цифры").When(vm => vm.Grazdanstvo != "КЗ");
             builder.RuleFor(vm => vm.PaspNomer).MyNotEmpty();
             builder.RuleFor(vm => vm.PaspNomer).Matches(@"^\d{6}$").WithMessage("{PropertyName} должен содержать 6 цифр").When(vm => vm.Grazdanstvo != "КЗ");
-            builder.RuleFor(vm => vm.PaspNomer).Matches(@"^\d{8}$").WithMessage("{PropertyName} должен содержать 8 цифр").When(vm => vm.Grazdanstvo == "КЗ");
+            builder.RuleFor(vm => vm.PaspNomer).Matches(@"^N\d{8}$").WithMessage("{PropertyName} должен иметь формат N + 8 цифр").When(vm => vm.Grazdanstvo == "КЗ");
             builder.RuleFor(vm => vm.PaspVidan).MyNotEmpty().When(vm => vm.Grazdanstvo != "КЗ");
             builder.RuleFor(vm => vm.VidanDat).MyNotEmptyDat();
             builder.RuleFor(vm => vm.PaspAdres).MyNotEmpty().When(vm => vm.Grazdanstvo != "КЗ");
@@ -429,10 +429,6 @@ namespace Provodnik
                 .When(vm => vm.IsVibil, isVibil => isVibil);
             ;//TODO .When(vm => UchZavedenie, uchZavedenie => !string.IsNullOrEmpty(uchZavedenie)).Between("1950", "2050");
             
-            builder.RuleFor(vm => vm.VaccineSert).MyNotEmpty();
-            builder.RuleFor(vm => vm.VaccineSertDat).MyNotEmptyDat();
-
-
             return builder.Build(this);
         }
 
@@ -752,6 +748,17 @@ namespace Provodnik
             set
             {
                 _IsKruglogodOtryad = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsLeto;
+        public bool IsLeto
+        {
+            get => _IsLeto;
+            set
+            {
+                _IsLeto = value;
                 OnPropertyChanged();
             }
         }
@@ -1404,28 +1411,6 @@ namespace Provodnik
             }
         }
 
-        private DateTime? _PraktikaDat;
-        public DateTime? PraktikaDat
-        {
-            get => _PraktikaDat;
-            set
-            {
-                _PraktikaDat = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _IsPraktika;
-        public bool IsPraktika
-        {
-            get => _IsPraktika;
-            set
-            {
-                _IsPraktika = value;
-                OnPropertyChanged();
-            }
-        }
-
         private bool _IsTrudoustroen;
         public bool IsTrudoustroen
         {
@@ -1491,69 +1476,7 @@ namespace Provodnik
                 OnPropertyChanged();
             }
         }
-
-        private bool _IsSertificatError;
-        public bool IsSertificatError
-        {
-            get => _IsSertificatError;
-            set
-            {
-                _IsSertificatError = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _SertificatError;
-        public string SertificatError
-        {
-            get => _SertificatError;
-            set
-            {
-                _SertificatError = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _VaccineSert;
-        [DisplayName(DisplayName = "Номер сертификата вакцинации")]
-        public string VaccineSert
-        {
-            get => _VaccineSert;
-            set
-            {
-                _VaccineSert = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private DateTime? _VaccineSertDat;
-        [DisplayName(DisplayName = "Дата выдачи сертификата вакцинации")]
-        public DateTime? VaccineSertDat
-        {
-            get => _VaccineSertDat;
-            set
-            {
-                _VaccineSertDat = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private DateTime? _VaccineSertDatTo;
-        public DateTime? VaccineSertDatTo
-        {
-            get => _VaccineSertDatTo;
-            set
-            {
-                _VaccineSertDatTo = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-
-
-
-
+        
         private string _Srez;
         [DisplayName(DisplayName = "Срез")]
         public string Srez

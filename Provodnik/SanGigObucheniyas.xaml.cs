@@ -262,36 +262,9 @@ pswVm.PersonSearch = null; //run find, should be last            pswVm.FindComma
         private void VedomostButton_Click(object sender, RoutedEventArgs e)
         {
             var vm = (DataContext as SanGigObucheniyasViewModel);
-
-            var db = new ProvodnikContext();
             if (vm.Persons.Count == 0) return;
 
-
-            var path = (string.Format("{0}\\_шаблоны\\" + "Ведомость сан.гиг обучение.dotx", AppDomain.CurrentDomain.BaseDirectory));
-            Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false };
-            Microsoft.Office.Interop.Word.Document aDoc = wordApp.Documents.Add(path);
-            aDoc.Activate();
-
-            object missing = Missing.Value;
-
-            Microsoft.Office.Interop.Word.Range range = aDoc.Content;
-            range.Find.ClearFormatting();
-            range.Find.Execute(FindText: "{Count}", ReplaceWith: vm.Persons.Count(), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
-            var table = aDoc.Tables[1];
-            int iRow = 2;
-
-            foreach (var p in vm.Persons)
-            {
-                if (iRow > 2) table.Rows.Add(ref missing);
-                table.Cell(iRow, 1).Range.Text = (iRow - 1).ToString() + '.';
-                table.Cell(iRow, 2).Range.Text = p.Fio;
-                table.Cell(iRow, 3).Range.Text = p.BirthDat?.ToString("dd.MM.yyyy");
-                table.Cell(iRow, 4).Range.Text = p.PaspAdres;
-                table.Cell(iRow, 5).Range.Text = "Проводник пассажирского вагона";
-
-                iRow++;
-            }
-            wordApp.Visible = true;
+            new Reporter().VedomostSanGig(vm.Persons.ToList());          
         }
     }
 }

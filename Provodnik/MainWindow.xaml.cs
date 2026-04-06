@@ -211,46 +211,68 @@ namespace Provodnik
         private void Patch_ExecOnceThanDelete()
         {
            /* var db = new ProvodnikContext();
-            string sqlQuery = "SELECT @@VERSION AS Version";
-            var result = db.Database.SqlQuery<string>(sqlQuery).FirstOrDefault();
-            result = result;
-             using (var db = new ProvodnikContext())
-             {
-                 foreach (var z in db.MedKomZayavki.OrderBy(x => x.Id).Select(x=>x).ToList())
-                 {
-                     foreach (var zp in db.MedKomZayavkaPersons.Select(x => x).Where(x => x.MedKomZayavkaId == z.Id))
-                     {
-                         var newDb = new ProvodnikContext();
-                         var person = newDb.Persons.FirstOrDefault(x => x.Id == zp.PersonId);
-                         if (person != null)
-                         {
-                             person.NaprMedDepo = z.Depo;
-                             person.NaprMedBolnicaName = z.BolnicaName;
-                         }
-                         newDb.SaveChanges();
-                     }
-                 }
+            int i = 0;
+            foreach (var pe in new ProvodnikContext().Persons)
+            {
+                //if (pe.Id < 5648) continue;
+                var pvm = new PersonViewModel(pe.Id, false);
+                pvm.FillMessagesAndAlls(pe);
+                
+                var dbP = db.Persons.First(x => x.Id == pe.Id);
+                dbP.AllScans=pe.AllScans;
+                dbP.Messages = pe.Messages;
+                dbP.AllPasport = pe.AllPasport;
+                i++;
+                if (i == 10)
+                {
+                    i = 0;
+                    db.SaveChanges();
+                    db = new ProvodnikContext();
+                }
+            }
+                db.SaveChanges();*/
+            return;
+            /* var db = new ProvodnikContext();
+             string sqlQuery = "SELECT @@VERSION AS Version";
+             var result = db.Database.SqlQuery<string>(sqlQuery).FirstOrDefault();
+             result = result;
+              using (var db = new ProvodnikContext())
+              {
+                  foreach (var z in db.MedKomZayavki.OrderBy(x => x.Id).Select(x=>x).ToList())
+                  {
+                      foreach (var zp in db.MedKomZayavkaPersons.Select(x => x).Where(x => x.MedKomZayavkaId == z.Id))
+                      {
+                          var newDb = new ProvodnikContext();
+                          var person = newDb.Persons.FirstOrDefault(x => x.Id == zp.PersonId);
+                          if (person != null)
+                          {
+                              person.NaprMedDepo = z.Depo;
+                              person.NaprMedBolnicaName = z.BolnicaName;
+                          }
+                          newDb.SaveChanges();
+                      }
+                  }
 
 
-             }
+              }
 
-             using (var db = new ProvodnikContext())
-             {
-                 foreach (var s in db.SendGroups.OrderBy(x => x.Id).ToList())
-                 {
-                     foreach (var sp in db.SendGroupPersons.Where(x => x.SendGroupId == s.Id))
-                     {
-                         var newDb = new ProvodnikContext();
-                         var person = newDb.Persons.FirstOrDefault(x => x.Id == sp.PersonId);
-                         if (person != null)
-                         {
-                             person.TrudoustroenDepo = s.Depo;
-                         }
-                         newDb.SaveChanges();
-                     }
-                 }
+              using (var db = new ProvodnikContext())
+              {
+                  foreach (var s in db.SendGroups.OrderBy(x => x.Id).ToList())
+                  {
+                      foreach (var sp in db.SendGroupPersons.Where(x => x.SendGroupId == s.Id))
+                      {
+                          var newDb = new ProvodnikContext();
+                          var person = newDb.Persons.FirstOrDefault(x => x.Id == sp.PersonId);
+                          if (person != null)
+                          {
+                              person.TrudoustroenDepo = s.Depo;
+                          }
+                          newDb.SaveChanges();
+                      }
+                  }
 
-             }*/
+              }*/
 
             return;
              
@@ -336,18 +358,6 @@ namespace Provodnik
         private void MedKommsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             new MedKomms().ShowDialog();
-            (MainFrame.Content as PersonsViewPage).vm.FindCommand.Execute(null);
-        }
-
-        private void PraktikasMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            new Praktikas().ShowDialog();
-            (MainFrame.Content as PersonsViewPage).vm.FindCommand.Execute(null);
-        }
-
-        private void ExamensMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            new Examens().ShowDialog();
             (MainFrame.Content as PersonsViewPage).vm.FindCommand.Execute(null);
         }
 

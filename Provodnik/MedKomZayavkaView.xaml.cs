@@ -49,17 +49,20 @@ namespace Provodnik
             foreach (var r in vm.Persons)
             {
                 ri++;
+                var pe = db.Persons.Find(r.PersonId);
                 excel.cell[ri, 1].value2 =ri-1;
                 excel.cell[ri,2].value2 = r.VihodDat?.ToString("dd.MM.yyyy");
                 excel.cell[ri, 3].value2 = vm.Depo;
                 excel.cell[ri,4].value2 = "Новосибирское РО";
-                excel.cell[ri, 5].value2 = r.Fio;
-                excel.cell[ri, 6].value2 = r.BirthDat?.ToString("dd.MM.yyyy");
-                excel.cell[ri, 7].value2 = Helper.FormatSnils(db.Persons.SingleOrDefault(x=>x.Id==r.PersonId)?.Snils);
-                excel.cell[ri, 8].value2 =vm.BolnicaName;
-                excel.cell[ri, 9].value2 = vm.BolnicaAdres;
+                excel.cell[ri, 5].value2 = pe.Grazdanstvo;
+                excel.cell[ri, 6].value2 = pe.UchForma == UchFormaConsts.Ochnaya ? "да" : "нет";
+                excel.cell[ri, 7].value2 = r.Fio;
+                excel.cell[ri, 8].value2 = r.BirthDat?.ToString("dd.MM.yyyy");
+                excel.cell[ri, 9].value2 = Helper.FormatSnils(db.Persons.SingleOrDefault(x=>x.Id==r.PersonId)?.Snils);
+                excel.cell[ri, 10].value2 =vm.BolnicaName;
+                excel.cell[ri, 11].value2 = vm.BolnicaAdres;
             }
-            excel.setAllBorders(excel.get_Range("A1", "I" + ri));
+            excel.setAllBorders(excel.get_Range("A1", "K" + ri));
             excel.myExcel.Visible = true;
             excel.Finish(false);
         }

@@ -220,6 +220,16 @@ namespace Provodnik
                 OnPropertyChanged();
             }
         }
+        private bool? _IsLeto=null;
+        public bool? IsLeto
+        {
+            get => _IsLeto;
+            set
+            {
+                _IsLeto = value;
+                OnPropertyChanged();
+            }
+        }
         private bool? _IsSovershennolentnii=null;
         public bool? IsSovershennolentnii
         {
@@ -404,7 +414,7 @@ new ScanCheck{DisplayName="Миграционная карта и временн
                       foreach (var ec in ExtendedChecks) ec.IsChecked = null;
                       BirthFrom = BirthTo = null;
                       Otryad = UchZavedenie = Grazdanstvo = Obuchenie= MedKommDat= TrudoustroenDepo = TrudoustroistvoDepo= TrudoustroistvoPeriod= null;
-                      IsNovichok = IsSovershennolentnii=IsTrudoustroen= InSpisokSb= IsSanGigObuchenie= IsBarabinsk=IsKuibishev=IsSgups = IsExamen = IsKruglogodOtryad= null;
+                      IsNovichok = IsSovershennolentnii=IsTrudoustroen= InSpisokSb= IsSanGigObuchenie= IsBarabinsk=IsKuibishev=IsSgups = IsExamen = IsKruglogodOtryad= IsLeto= null;
                       
                       Gorod = null; VihodDat = null;
                      Sezon= new Repository().GetCurSezon();
@@ -493,8 +503,6 @@ private RelayCommand _FindCommand;
                     //query = query.Where(pp => MedKommExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.ЗаключениеВЭК).FileName != null));
                     query = query.Where(pp => MedKommExist.Value == (pp.PersonDocs.Count(ppp => (ppp.DocTypeId == DocConsts.ЗаключениеВЭК || ppp.DocTypeId == DocConsts.ЗаключениеВЭК2) && ppp.FileName != null) == 2));
                 //query = query.Where(pp => pp.IsMedKomm== MedKommExist.Value);
-                if (PraktikaExist.HasValue)
-                    query = query.Where(pp => pp.IsPraktika == PraktikaExist.Value);
                 if (ExamenExist.HasValue)
                     query = query.Where(pp => ExamenExist.Value == (pp.PersonDocs.FirstOrDefault(ppp => ppp.DocTypeId == DocConsts.СвидетельствоПрофессии).FileName != null));
                 //query = query.Where(pp => pp.IsExamen== ExamenExist.Value);
@@ -603,6 +611,18 @@ private RelayCommand _FindCommand;
 
             if (IsKruglogodOtryad.HasValue)
                 query = query.Where(pp => pp.IsKruglogodOtryad == IsKruglogodOtryad.Value);
+
+            if (IsLeto.HasValue)
+                query = query.Where(pp => pp.IsLeto == IsLeto.Value);
+            /*{
+                if (IsKruglogodOtryad.HasValue)
+                    query = query.Where(pp => pp.IsLeto == IsLeto.Value);
+                else 
+                {
+                    if (IsLeto == true) query = query.Where(pp => pp.IsLeto == true || pp.IsKruglogodOtryad == true);
+                    else query = query.Where(pp => pp.IsLeto == false && pp.IsKruglogodOtryad == false);
+                }
+            }*/
 
             if (IsSovershennolentnii.HasValue) {
                 query = from q in query
@@ -774,7 +794,6 @@ private RelayCommand _FindCommand;
                        PasportEntered =
                        SanknizkaExist =
                        MedKommExist =
-                       PraktikaExist =
                     ExamenExist =
                     AllScansExist =            //ActualOnly
                   value;
@@ -792,7 +811,6 @@ private RelayCommand _FindCommand;
                PasportEntered ,
                SanknizkaExist,
                MedKommExist ,
-               PraktikaExist,
             ExamenExist ,
             AllScansExist,            //ActualOnly
         };
@@ -886,21 +904,6 @@ private RelayCommand _FindCommand;
                 if (_ExamenExist != value)
                 {
                     _ExamenExist = value;
-                    ReCalcReady();
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        bool? _PraktikaExist;
-        public bool? PraktikaExist
-        {
-            get => _PraktikaExist;
-            set
-            {
-                if (_PraktikaExist != value)
-                {
-                    _PraktikaExist = value;
                     ReCalcReady();
                     OnPropertyChanged();
                 }

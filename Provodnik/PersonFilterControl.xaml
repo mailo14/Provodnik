@@ -80,7 +80,6 @@
                 <CheckBox Content="Введены данные для ВСОП" IsChecked="{Binding PasportEntered, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
                 <CheckBox Content="Получена санкнижка" IsChecked="{Binding SanknizkaExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
                 <CheckBox Content="Получено заключение ВЭК" IsChecked="{Binding MedKommExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
-                <CheckBox Content="Пройдена практика" IsChecked="{Binding PraktikaExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
                 <CheckBox Content="Получено свидетельство" IsChecked="{Binding ExamenExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
                 <CheckBox Content="Добавлены все сканы" IsChecked="{Binding AllScansExist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsThreeState="True"/>
                 <!--CheckBox Content="Только актуализированные" IsChecked="{Binding ActualOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/-->
@@ -96,6 +95,7 @@
                        IsEditable="True" ItemsSource="{Binding Otryadi}" IsReadOnly="False"/>
 
                 <CheckBox Content="Круглогодичный отряд " IsChecked="{Binding IsKruglogodOtryad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True"/>
+                <CheckBox Content="Лето " IsChecked="{Binding IsLeto, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True"/>
                 <CheckBox Content="Барабинск " IsChecked="{Binding IsBarabinsk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True" Margin="0,3"/>
                 <CheckBox Content="Куйбышев" IsChecked="{Binding IsKuibishev, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="8" Style="{DynamicResource CheckBox}" IsThreeState="True" Margin="0,3"/>
                 

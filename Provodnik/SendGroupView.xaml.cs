@@ -56,20 +56,18 @@ namespace Provodnik
             (sender as ComboBox).IsDropDownOpen = true;
         }
 
-        public  void VSOP1()//DateTime start, DateTime end, ProgressBar progress)
+        public  void VSOP1(SendGroupViewModelDto vm)//DateTime start, DateTime end, ProgressBar progress)
         {
-            var vm = DataContext as SendGroupViewModel;
-
             excelReport excel = new excelReport();
-            excel.Init("ВСОП_1.xlsx", string.Format(@"ВСОП_1_{0}_{1}__{2}_{3}.xlsx",
+            excel.Init("ВСОП_1.xlsx", string.Format(@"ВСОП_1_{0}_{1}{2}_{3}.xlsx",
                 vm.OtprDat.Value.ToString("dd.MM.yyyy"), 
                 "Новосибирск",
-                GetDepoCityForHeader(vm),
-                vm.Persons.Count), otchetDir: otchetDir);
+               (vm.City!= "Новосибирск"? ("__" +GetDepoCityForHeader(vm)):""),
+                vm.Ids.Count), otchetDir: otchetDir);
 
             int            ri = 1;
             var db = new ProvodnikContext();
-            var ids= vm.Persons.Select(pp=>pp.PersonId).ToList();
+            var ids= vm.Ids;
             var rr = db.Persons.Where(pp => ids.Contains(pp.Id));
             foreach (var r in rr)//vm.Persons)
             {
@@ -78,10 +76,6 @@ namespace Provodnik
                 excel.cell[ri, 2].value2 = r.Fio;
                 excel.cell[ri, 3].value2 = vm.Depo;
                 excel.cell[ri, 4].value2 = Helper.FormatPhone(r.Phone);
-
-                excel.cell[ri, 5].value2 = r.VaccineSert;
-                excel.cell[ri, 6].value2 = r.VaccineSertDat?.ToString("dd.MM.yyyy");
-
 
                 excel.cell[ri, 7].value2 = r.UchZavedenie;
                 excel.cell[ri, 8].value2 = r.UchForma;
@@ -105,7 +99,7 @@ namespace Provodnik
             excel.Init("ВСОП_2.xlsx", string.Format(@"ВСОП_2_{0}_{1}__{2}_{3}.xlsx",
                 vm.OtprDat.Value.ToString("dd.MM.yyyy"),
                 "Новосибирск",
-                GetDepoCityForHeader(vm),
+                GetDepoCityForHeader(new SendGroupViewModelDto( vm)),
                 vm.Persons.Count), otchetDir: otchetDir);
 
             int ri = 1;
@@ -130,7 +124,7 @@ namespace Provodnik
             excel.Finish();
         }
 
-        private string GetDepoCityForHeader(SendGroupViewModel vm)
+        private string GetDepoCityForHeader(SendGroupViewModelDto vm)
         {
             return (vm.City == "Москва") ? vm.Depo.Replace(" ", "") : vm.City;
         }
@@ -140,15 +134,15 @@ namespace Provodnik
             var vm = DataContext as SendGroupViewModel;
 
             excelReport excel = new excelReport();
-            if (!otdelno) excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}__{2}_{3}.xlsx",
+            if (!otdelno) excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}{2}_{3}.xlsx",
                  vm.OtprDat.Value.ToString("dd.MM.yyyy"),
                  "Новосибирск",
-                 GetDepoCityForHeader(vm),
+                 (vm.City != "Новосибирск" ? ("__" + GetDepoCityForHeader(new SendGroupViewModelDto(vm))) : ""),
                  vm.Persons.Count), otchetDir: otchetDir);
-            else excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}__{2}_{3}.xlsx",
+            else excel.Init("ВСОП_3.xlsx", string.Format(@"ВСОП_3_{0}_{1}{2}_{3}.xlsx",
                  vm.OtprDat.Value.ToString("dd.MM.yyyy"),
                  "Новосибирск",
-                GetDepoCityForHeader(vm),
+               (vm.City != "Новосибирск" ? ("__" + GetDepoCityForHeader(new SendGroupViewModelDto(vm))) : ""),
                  vm.Persons.Count), true);
 
             int            ri = 1;
@@ -182,26 +176,24 @@ namespace Provodnik
             excel.setAllBorders(excel.get_Range("B2", "M" + ri));  
             excel.Finish(!otdelno);
         }
-        public  void F6()//DateTime start, DateTime end, ProgressBar progress)
+        public  void F6( SendGroupViewModelDto vm)//DateTime start, DateTime end, ProgressBar progress)
         {
-            var vm = DataContext as SendGroupViewModel;
-
             excelReport excel = new excelReport();
             excel.Init(/*(vm.City== "Москва")?"Ф6_Msk.xlsx":*/"Ф6_ost.xlsx",
-                $@"Ф6_{vm.OtprDat.Value.ToString("dd.MM.yyyy")}_Новосибирск__{GetDepoCityForHeader(vm)}_{vm.Persons.Count}.xlsx",
+                $@"Ф6_{vm.OtprDat.Value.ToString("dd.MM.yyyy")}_Новосибирск__{GetDepoCityForHeader(vm)}_{vm.Ids.Count}.xlsx",
                 otchetDir: otchetDir//,visible:true
                 );
 
             int            ri =7;
             var db = new ProvodnikContext();
-            var ids= vm.Persons.Select(pp=>pp.PersonId).ToList();
+            var ids= vm.Ids;
             var rr = db.Persons.Where(pp => ids.Contains(pp.Id));
 
             excel.cell[4, 1].value2 = vm.DepoRod;// new Repository().GetF6Depo(vm.City, vm.Depo);
 
-            if (vm.Persons.Count > 1)
+            if (vm.Ids.Count > 1)
             {
-                excel.get_Range("A9", "A" + (8 + vm.Persons.Count - 1)).EntireRow.Select();
+                excel.get_Range("A9", "A" + (8 + vm.Ids.Count - 1)).EntireRow.Select();
                 excel.myExcel.Selection.Insert(Excel.XlInsertShiftDirection.xlShiftDown, Excel.XlInsertFormatOrigin.xlFormatFromLeftOrAbove);
             }
 
@@ -237,13 +229,10 @@ namespace Provodnik
             return string.Join(" - ", list);
         }
 
-        public void PismoLgoti()
+        public void PismoLgoti(SendGroupViewModelDto vm)
         {
-
-            var vm = DataContext as SendGroupViewModel;
-
             var db = new ProvodnikContext();
-            var ids = vm.Persons.Select(pp => pp.PersonId);
+            var ids = vm.Ids;
             var pe =            db.Persons.Where(pp => ids.Contains(pp.Id) && !(/*pp.HasLgota*/pp.UchForma == UchFormaConsts.Ochnaya)).ToList();
             if (pe.Count == 0) return;
 
@@ -271,14 +260,13 @@ namespace Provodnik
 
         }
 
-        public void ReestrPeredachi(bool otdelno = false)
+        public void ReestrPeredachi(SendGroupViewModelDto vm,bool otdelno = false)
         {
-            var vm = DataContext as SendGroupViewModel;
-
             var db = new ProvodnikContext();
-            var ids = vm.Persons.Select(pp => pp.PersonId);
+            var ids = vm.Ids;
             var pe = db.Persons.Where(pp => ids.Contains(pp.Id)).ToList();
             if (pe.Count == 0) return;
+            var persons = db.Persons.Where(pp => ids.Contains(pp.Id)).ToList();
 
             var path = (string.Format("{0}\\_шаблоны\\" + "Акт передачи документов.dotx", AppDomain.CurrentDomain.BaseDirectory));
             Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application { Visible = false };
@@ -290,24 +278,25 @@ namespace Provodnik
             Microsoft.Office.Interop.Word.Range range = aDoc.Content;
             range.Find.ClearFormatting();
 
+
             range.Find.Execute(FindText: "{City}", ReplaceWith: vm.City, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
-            range.Find.Execute(FindText: "{Year}", ReplaceWith: vm.Persons.FirstOrDefault()?.Sezon ?? DateTime.Today.Year.ToString(), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Year}", ReplaceWith: persons.FirstOrDefault()?.Sezon ?? DateTime.Today.Year.ToString(), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
             range.Find.Execute(FindText: "{Filial}", ReplaceWith: vm.Filial, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
             range.Find.Execute(FindText: "{Sp}", ReplaceWith: vm.Sp, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
-            range.Find.Execute(FindText: "{Ochniki}", ReplaceWith: vm.Persons.Count(x => x.UchForma == UchFormaConsts.Ochnaya), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
-            range.Find.Execute(FindText: "{Count}", ReplaceWith: vm.Persons.Count(), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Ochniki}", ReplaceWith: persons.Count(x => x.UchForma == UchFormaConsts.Ochnaya), Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
+            range.Find.Execute(FindText: "{Count}", ReplaceWith: vm.Ids.Count, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
 
             range.Find.Execute(FindText: "{ВЧ}", ReplaceWith: vm.DepoRod, Replace: Microsoft.Office.Interop.Word.WdReplace.wdReplaceAll);
 
             var table = aDoc.Tables[3];
             int iRow = 2;
 
-            foreach (var p in vm.Persons)
+            foreach (var p in persons)
             {
                 if (iRow > 2) table.Rows.Add(ref missing);
                 table.Cell(iRow, 1).Range.Text = (iRow - 1).ToString() + '.';
                 table.Cell(iRow, 2).Range.Text = p.Fio;
-                table.Cell(iRow, 3).Range.Text = p.UchForma;
+                table.Cell(iRow, 3).Range.Text = p.UchForma == UchFormaConsts.Ochnaya ? "да" : "нет";
                 table.Cell(iRow, 4).Range.Text = "ЕСТЬ";
 
                 iRow++;
@@ -322,6 +311,7 @@ namespace Provodnik
             else
             {
                 wordApp.Visible = true;
+                wordApp.Activate();
             }
         }
 
@@ -445,10 +435,10 @@ namespace Provodnik
             DialogResult = false;
         }
 
-        private void PrintButton_Click(object sender, RoutedEventArgs e)
+        private async void PrintButton_Click(object sender, RoutedEventArgs e)
         {
             var vm = this.DataContext as SendGroupViewModel;
-            if (!vm.OtprDat.HasValue || new[] { vm.City, vm.Depo, vm.DepoRod }.Any(x=>string.IsNullOrWhiteSpace(x)))
+            if (!vm.OtprDat.HasValue || new[] { vm.City, vm.Depo, vm.DepoRod }.Any(x => string.IsNullOrWhiteSpace(x)))
             {
                 MessageBox.Show("Заполните поля Дата отправления, Город назначения, Депо приписки, Депо приписки в родительном падеже");
                 return;
@@ -460,10 +450,10 @@ namespace Provodnik
                 otchetDir = dialog.SelectedPath + @"\" + string.Format(@"{0}_{1}__{2}_{3}",
                 vm.OtprDat.Value.ToString("dd.MM.yyyy"),
                 "Новосибирск",
-                GetDepoCityForHeader(vm),
+                GetDepoCityForHeader(new SendGroupViewModelDto(vm)),
                 vm.Persons.Count);
 
-                DirectoryInfo di =new DirectoryInfo(otchetDir);
+                DirectoryInfo di = new DirectoryInfo(otchetDir);
                 if (di.Exists)
                     try
                     {
@@ -471,68 +461,96 @@ namespace Provodnik
                     }
                     catch (Exception exx)
                     {
-                        MessageBox.Show("Невозможно удалить существующую папку "+otchetDir
-                            +Environment.NewLine+"закройте открытые документы");
+                        MessageBox.Show("Невозможно удалить существующую папку " + otchetDir
+                            + Environment.NewLine + "закройте открытые документы");
                         return;
                     }
-
-                App.setCursor(true);
                 try
                 {
-                    VSOP1();// VSOP2();
-                    //VSOP3();
-                    F6();
-                    PismoLgoti();/**/
-                    ReestrPeredachi();
-
-                    string path = otchetDir + $@"\Ф6(Архив)_{vm.OtprDat.Value.ToString("dd.MM.yyyy")}_Новосибирск-{GetDepoCityForHeader(vm)}_{vm.Persons.Count}чел";
-                    if (!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
-                    else;//TODO del?
-
-
-                    var ids = vm.Persons.Select(pp => pp.PersonId).ToList();
-                    var db = new ProvodnikContext();
-                    //foreach (var d in vm.Persons)
-
-                    var qq = (from p in db.Persons
-                              join pd in db.PersonDocs on p.Id equals pd.PersonId
-                              join pdt in db.DocTypes on pd.DocTypeId equals pdt.Id
-                              where ids.Contains(p.Id) && pd.FileName != null
-                              group new { pdt.Description, pd.FileName } by p.Fio into gr
-                              select gr).ToList();//new { p.Fio, pdt.Description, pd.FileName }
-
-                    using (var client = new FluentFTP.FtpClient())
-                    {
-                        App.ConfigureFtpClient(client);
-                        client.Connect();
-
-                        foreach (var g in qq)
+                    // await new ProgressRunner().RunAsync(doAction);      
+                    await new ProgressRunner().RunAsync(
+                        new Action<ProgressHandler>((progressChanged) =>
                         {
-                            var fio = new StringHelper().ParseFio(g.Key);
-                            var fioInic = fio[0];
-                            if (fio[1].Length > 0) fioInic += $" {fio[1][0]}.";
-                            if (fio[2].Length > 0) fioInic += $" {fio[2][0]}.";
 
-                            foreach (var d in g)
+                            progressChanged(1, "Формирование документов");
+
+                            progressChanged(5);
+
+                            //App.setCursor(true);
+                            try
                             {
-                                var fileName = $@"{path}\{g.Key}\{fioInic}_{d.Description}.jpg";
+                                SendGroupViewModelDto vm1=null;
+                                Dispatcher.Invoke((Action)(() =>
+                                {
+                                    vm1 = new SendGroupViewModelDto(vm);
+                                }));
 
-                                var result = client.DownloadFile(fileName, @"http/" + d.FileName, FtpLocalExists.Overwrite, FtpVerify.Retry);//, true, FtpVerify.Retry);
-                                if (result != FtpStatus.Success)
-                                    throw new Exception("Не удалось загрузить файл " + System.IO.Path.GetFileName(fileName));
+                                VSOP1(vm1);// VSOP2();
+                                           //VSOP3();
+                                if (vm1.City != "Новосибирск")
+                                {
+                                    F6(vm1);
+                                    PismoLgoti(vm1);
+                                }
+                                ReestrPeredachi(vm1);
+
+                                string path = otchetDir;
+                                if (vm1.City != "Новосибирск") path += $@"\Ф6(Архив)_{vm1.OtprDat.Value.ToString("dd.MM.yyyy")}_Новосибирск-{GetDepoCityForHeader(vm1)}_{vm1.Ids.Count}чел";
+                                else path += $@"\{vm1.OtprDat.Value.ToString("dd.MM.yyyy")}_Новосибирск_{vm1.Ids.Count}чел";
+                                if (!Directory.Exists(path))
+                                    Directory.CreateDirectory(path);
+                                else;//TODO del?
+
+
+                                var db = new ProvodnikContext();
+                                //foreach (var d in vm.Persons)
+
+                                var qq = (from p in db.Persons
+                                          join pd in db.PersonDocs on p.Id equals pd.PersonId
+                                          join pdt in db.DocTypes on pd.DocTypeId equals pdt.Id
+                                          where vm1.Ids.Contains(p.Id) && pd.FileName != null
+                                          group new { pdt.Description, pd.FileName } by p.Fio into gr
+                                          select gr).ToList();//new { p.Fio, pdt.Description, pd.FileName }
+
+                                using (var client = new FluentFTP.FtpClient())
+                                {
+                                    App.ConfigureFtpClient(client);
+                                    client.Connect();
+                                    var share = 95.0 / qq.Count;
+
+                                    foreach (var g in qq)
+                                    {
+                                        var fio = new StringHelper().ParseFio(g.Key);
+                                        var fioInic = fio[0];
+                                        if (fio[1].Length > 0) fioInic += $" {fio[1][0]}.";
+                                        if (fio[2].Length > 0) fioInic += $" {fio[2][0]}.";
+
+                                        foreach (var d in g)
+                                        {
+                                            var fileName = $@"{path}\{g.Key}\{fioInic}_{d.Description}.jpg";
+
+                                            var result = client.DownloadFile(fileName, @"http/" + d.FileName, FtpLocalExists.Overwrite, FtpVerify.Retry);//, true, FtpVerify.Retry);
+                                            if (result != FtpStatus.Success)
+                                                throw new Exception("Не удалось загрузить файл " + System.IO.Path.GetFileName(fileName));
+                                        }
+                                        /*using (WebClient wc = new WebClient() { Credentials = new NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw) })
+                                        {
+                                           wc.DownloadFile("http://u0920601.plsk.regruhosting.ru/" + d.FileName,fileName);
+                                        bytes = wc.DownloadData("http://u0920601.plsk.regruhosting.ru/" + d.FileName);
+                                        }*/
+                                        progressChanged(share);
+                                    }
+                                }
                             }
-                            /*using (WebClient wc = new WebClient() { Credentials = new NetworkCredential(App.CurrentConfig.FtpUser, App.CurrentConfig.FtpPassw) })
-                            {
-                               wc.DownloadFile("http://u0920601.plsk.regruhosting.ru/" + d.FileName,fileName);
-                            bytes = wc.DownloadData("http://u0920601.plsk.regruhosting.ru/" + d.FileName);
-                            }*/
-                        }
-                    }
-                }
-                catch (Exception ex) { MessageBox.Show(ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error); }
+                            catch (Exception ex) { MessageBox.Show(ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error); }
 
-                App.setCursor(false);
+                            //App.setCursor(false);
+                        })
+
+
+                    );
+                }
+                catch (Exception ex) { MessageBox.Show(ex.Message); }
                 System.Diagnostics.Process.Start(otchetDir);
             }
         }
@@ -618,6 +636,7 @@ namespace Provodnik
                 iRow++;
             }
             wordApp.Visible = true;
+            wordApp.Activate();
         }
 
         private void PrintProverkaSBButton_Click(object sender, RoutedEventArgs e)
@@ -651,7 +670,8 @@ namespace Provodnik
 
         private void PrintActDoc_Click(object sender, RoutedEventArgs e)
         {
-            ReestrPeredachi(true);
+            var vm = DataContext as SendGroupViewModel;
+            ReestrPeredachi(new SendGroupViewModelDto(vm), true);
         }
 
         private void AllTrudoustroenButton_Click(object sender, RoutedEventArgs e)
@@ -667,5 +687,36 @@ namespace Provodnik
             foreach (var p in vm.Persons)
                 p.IsTrudoustroen = false;
         }
+
+        
+    }
+    public class SendGroupViewModelDto
+        {
+
+            public SendGroupViewModelDto(SendGroupViewModel vm)
+            {
+                Ids = vm.Persons.Select(pp => pp.PersonId).ToList();
+                City = vm.City;
+                OtprDat = vm.OtprDat;
+                Depo = vm.Depo;
+                RegOtdelenie = vm.RegOtdelenie;
+            DepoRod = vm.DepoRod;
+            Sp = vm.Sp;
+            Filial = vm.Filial;
+            PeresadSt = vm.PeresadSt;
+            Uvolnenie = vm.Uvolnenie;
+            }
+
+
+            public List<int> Ids { get; internal set; }
+            public string City { get; private set; }
+            public DateTime? OtprDat { get; private set; }
+            public string Depo { get; private set; }
+            public string RegOtdelenie { get; private set; }
+        public string DepoRod { get; private set; }
+        public string Sp { get; private set; }
+        public string Filial { get; private set; }
+        public string PeresadSt { get; private set; }
+        public DateTime? Uvolnenie { get; private set; }
     }
 }

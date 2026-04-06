@@ -32,7 +32,7 @@
     <MinimumRequiredVersion>1.0.0.75</MinimumRequiredVersion>
     <WebPage>publish.htm</WebPage>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>79</ApplicationRevision>
+    <ApplicationRevision>81</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -162,6 +162,10 @@
     <Compile Include="Migrations\202510020914196_init32.cs" />
     <Compile Include="Migrations\202510020914196_init32.designer.cs">
       <DependentUpon>202510020914196_init32.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202601241827299_init33.cs" />
+    <Compile Include="Migrations\202601241827299_init33.designer.cs">
+      <DependentUpon>202601241827299_init33.cs</DependentUpon>
     </Compile>
     <Compile Include="TrudoustroistvoView.xaml.cs">
       <DependentUpon>TrudoustroistvoView.xaml</DependentUpon>
@@ -356,12 +360,6 @@
     <Compile Include="MedKomms.xaml.cs">
       <DependentUpon>MedKomms.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Praktikas.xaml.cs">
-      <DependentUpon>Praktikas.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Examens.xaml.cs">
-      <DependentUpon>Examens.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Sanknizki.xaml.cs">
       <DependentUpon>Sanknizki.xaml</DependentUpon>
     </Compile>
@@ -437,14 +435,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Praktikas.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Examens.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="SanGigObucheniyas.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -514,6 +504,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001121313525_init4.resx">
       <DependentUpon>202001121313525_init4.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001130634412_init5.resx">
       <DependentUpon>202001130634412_init5.cs</DependentUpon>
@@ -550,6 +541,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111281632562_init16.resx">
       <DependentUpon>202111281632562_init16.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202111290514097_init17.resx">
       <DependentUpon>202111290514097_init17.cs</DependentUpon>
@@ -574,12 +566,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202203261658509_init24.resx">
       <DependentUpon>202203261658509_init24.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202204131250044_init25.resx">
       <DependentUpon>202204131250044_init25.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202207030523439_init26.resx">
       <DependentUpon>202207030523439_init26.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202208261613082_init27.resx">
       <DependentUpon>202208261613082_init27.cs</DependentUpon>
@@ -595,6 +589,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202410280421339_barabinsk.resx">
       <DependentUpon>202410280421339_barabinsk.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202502081500340_init31.resx">
       <DependentUpon>202502081500340_init31.cs</DependentUpon>
@@ -602,11 +597,16 @@
     <EmbeddedResource Include="Migrations\202510020914196_init32.resx">
       <DependentUpon>202510020914196_init32.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202601241827299_init33.resx">
+      <DependentUpon>202601241827299_init33.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -666,6 +666,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="_шаблоны\Без медкомиссии.xltx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_шаблоны\Бейджи.xltx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="pic\loading.gif" />
